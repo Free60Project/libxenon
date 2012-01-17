@@ -22,5 +22,6 @@ void vm_create_user_mapping(uint32_t virt_addr, uint64_t phys_addr, int size, in
 void vm_destroy_user_mapping(uint32_t virt_addr, int size);
 void vm_set_user_mapping_flags(uint32_t virt_addr, int size, int wimg);
 void vm_set_user_mapping_segfault_handler(vm_segfault_handler_t handler);
+uint32_t vm_is_address_valid(uint32_t virt_addr);
 
 #endif

@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configurationDescriptor version="79">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
-    <df name="browser"
-        root="C:/X360 Hack/x360dev/ppc/libxenon/devkitxenon/examples/xenon/file/browser">
-      <df name="build">
-      </df>
-      <df name="source">
-        <in>main.c</in>
-      </df>
-    </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
                    projectFiles="false"

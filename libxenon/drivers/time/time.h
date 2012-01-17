@@ -5,9 +5,13 @@
 extern "C" {
 #endif
 
-extern void udelay(int);
-extern void mdelay(int);
-extern void delay(int);
+unsigned long long get_system_time();
+void set_system_time(unsigned long long time);
+unsigned long long get_clock_time();
+void stall_execution(int i); // Stalls processor for i microseconds
+void udelay(int);
+void mdelay(int);
+void delay(int);
 
 #ifdef __cplusplus
 };

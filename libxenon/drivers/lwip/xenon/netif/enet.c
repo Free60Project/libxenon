@@ -12,6 +12,7 @@
 #include <xenon_nand/xenon_config.h>
 #include <ppc/cache.h>
 #include <pci/io.h>
+#include <debug.h>
 #include <xenon_smc/xenon_gpio.h>
 
 #define TX_DESCRIPTOR_NUM 0x10
@@ -180,7 +181,7 @@ err_t enet_init(struct netif *netif)
 
 	netif->hwaddr_len = 6;
 	netif->mtu = 1500;
-	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
+	netif->flags |= NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
 
 #if LWIP_NETIF_HOSTNAME
     netif->hostname = "XeLL";
@@ -289,22 +290,22 @@ static struct pbuf *enet_linkinput(struct enet_context *context)
 	memdcbf(d, 0x10);
 	if (__builtin_bswap32(d[1]) & 0x80000000) /* check ownership */
 	{
-//		printf("no data!\n");
+		//printf("no data!\n");
 		return 0;
 	}
 
-//	printf("RX descriptor %d contains data!\n", context->rx_descriptor_rptr);
-//	printf("%08x %08x %08x %08x\n",
-//		__builtin_bswap32(d[0]),
-//		__builtin_bswap32(d[1]),
-//		__builtin_bswap32(d[2]),
-//		__builtin_bswap32(d[3]));
+	printf("RX descriptor %d contains data!\n", context->rx_descriptor_rptr);
+	printf("%08x %08x %08x %08x\n",
+		__builtin_bswap32(d[0]),
+		__builtin_bswap32(d[1]),
+		__builtin_bswap32(d[2]),
+		__builtin_bswap32(d[3]));
 
 	int size = __builtin_bswap32(d[0]) & 0xFFFF;
 	void *phys_addr = context->rx_receive_base + context->rx_descriptor_rptr * MTU;
 	memdcbf(phys_addr, size);
 
-	// hexdump(phys_addr, size);
+	buffer_dump(phys_addr, size);
 
 	struct pbuf *p = pbuf_alloc(PBUF_RAW, size, PBUF_POOL), *q;
 
@@ -382,39 +383,46 @@ enet_input(struct netif *netif)
 	struct enet_context *context = (struct enet_context *) netif->state;
 	struct eth_hdr *ethhdr;
 	struct pbuf *p;
-
+        
 	p = enet_linkinput(context);
 
 	if (p == NULL)
 		return;
-
+        
 #if LINK_STATS
 	lwip_stats.link.recv++;
 #endif /* LINK_STATS */
 
 	ethhdr = p->payload;
 
-	switch (htons(ethhdr->type))
+        // pass to network layer
+	netif->input(p, netif);
+        
+        //not used anymore, tcpip thread handles all
+	/*switch (htons(ethhdr->type))
 	{
-		/* IP packet? */
+		// IP packet? 
 	case ETHTYPE_IP:
-		/* update ARP table */
-		etharp_ip_input(netif, p);
-		/* skip Ethernet header */
+            printf("\n\n\n********* ENET_INPUT- IP *********\n\n\n");
+		// update ARP table
+		//etharp_ip_input(netif, p);
+		// skip Ethernet header
 		pbuf_header(p, -sizeof(struct eth_hdr));
-		/* pass to network layer */
+		// pass to network layer
 		netif->input(p, netif);
 		break;
 
 	case ETHTYPE_ARP:
-		/* pass p to ARP module	*/
-		etharp_arp_input(netif, context->ethaddr, p);
+                printf("\n\n\n********* ENET_INPUT- ARP *********\n\n\n");
+		//* pass p to ARP module
+                netif->input(p, netif);
+		//etharp_arp_input(netif, context->ethaddr, p);
 		break;
 	default:
-		pbuf_free(p);
-		p = NULL;
+		//pbuf_free(p);
+		//p = NULL;
 		break;
-	}
+	}*/
 }
 
 int cnt;

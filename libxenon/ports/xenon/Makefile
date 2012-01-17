@@ -6,9 +6,13 @@ LD=$(CROSS)ld
 AS=$(CROSS)as
 STRIP=$(CROSS)strip
 
-ifeq ($(strip $(DEVKITXENON)),)
-$(error "please set DEVKITXENON")
-endif
+prefix:=$(DEVKITXENON)
+LIBDIR:=usr/lib
+INCLUDEDIR:=usr/include
+
+#ifeq ($(strip $(DEVKITXENON)),)
+#$(error "please set DEVKITXENON")
+#endif
 
 # ipv4 or ipv6
 LWIP_MODE = ipv4
@@ -20,7 +24,7 @@ INCLUDES = -I ../../drivers -I ../../include \
 
 CFLAGS = -g -mcpu=cell -mtune=cell -Os \
 	-maltivec \
-	-ffunction-sections -fdata-sections \
+	-ffunction-sections -fno-builtin-printf -fdata-sections \
 	-Wall -Wno-format -Wno-attributes -I. -DBYTE_ORDER=BIG_ENDIAN \
 	-m32 -fno-pic -mpowerpc64 \
 	-D_CFE_=1 -DENDIAN_BIG=1 \
@@ -86,34 +90,48 @@ LIBOBJS = crti.o crtn.o \
 	../../drivers/xenos/xe.o \
 	../../drivers/xenos/xenos.o \
 	../../drivers/xenos/xenos_edid.o \
+	../../drivers/lwip/api/api_lib.o \
+	../../drivers/lwip/api/api_msg.o \
+	../../drivers/lwip/api/err.o \
+	../../drivers/lwip/api/netbuf.o \
+	../../drivers/lwip/api/netifapi.o \
+	../../drivers/lwip/api/sockets.o \
+	../../drivers/lwip/api/tcpip.o \
+	../../drivers/lwip/core/def.o \
+	../../drivers/lwip/core/dhcp.o \
 	../../drivers/lwip/core/init.o \
-	../../drivers/lwip/core/tcp_in.o \
+	../../drivers/lwip/core/ipv4/icmp.o \
 	../../drivers/lwip/core/ipv4/inet_chksum.o \
 	../../drivers/lwip/core/ipv4/inet.o \
+	../../drivers/lwip/core/ipv4/ip_addr.o \
+	../../drivers/lwip/core/ipv4/ip_frag.o \
+	../../drivers/lwip/core/ipv4/ip.o \
 	../../drivers/lwip/core/mem.o \
 	../../drivers/lwip/core/memp.o \
 	../../drivers/lwip/core/netif.o \
 	../../drivers/lwip/core/pbuf.o \
+	../../drivers/lwip/core/raw.o \
 	../../drivers/lwip/core/stats.o \
 	../../drivers/lwip/core/sys.o \
+	../../drivers/lwip/core/tcp_in.o \
 	../../drivers/lwip/core/tcp.o \
-	../../drivers/lwip/core/ipv4/ip_addr.o \
-	../../drivers/lwip/core/ipv4/icmp.o \
-	../../drivers/lwip/core/ipv4/ip.o \
-	../../drivers/lwip/core/ipv4/ip_frag.o \
 	../../drivers/lwip/core/tcp_out.o \
+	../../drivers/lwip/core/timers.o \
 	../../drivers/lwip/core/udp.o \
 	../../drivers/lwip/netif/etharp.o \
 	../../drivers/lwip/netif/loopif.o \
-	../../drivers/lwip/core/dhcp.o \
-	../../drivers/lwip/core/raw.o \
-	../../drivers/lwip/core/def.o \
-	../../drivers/lwip/core/timers.o \
-	../../drivers/lwip/xenon/src/lib.o \
 	../../drivers/lwip/xenon/netif/enet.o \
-	../../drivers/network/network.o\
+	../../drivers/lwip/xenon/src/lib.o \
+	../../drivers/lwip/xenon/src/sys_arch.o \
+	../../drivers/network/network.o \
 	../../drivers/elf/elf.o \
-	../../drivers/elf/elf_run.o
+	../../drivers/elf/elf_run.o \
+	../../drivers/threads/threads.o \
+	../../drivers/threads/c_threads.o \
+	../../drivers/threads/debug.o \
+	../../drivers/threads/c_debug.o \
+	../../drivers/threads/gdb.o \
+	../../drivers/threads/mutex.o
 
 
 # Build rules
@@ -142,18 +160,23 @@ libxenon.a: $(LIBOBJS)
 	ar rc $@ $(LIBOBJS)
 
 install: libxenon.a
-	mkdir -p $(DEVKITXENON)/usr/lib/
-	cp libxenon.a $(DEVKITXENON)/usr/lib/
-	mkdir -p $(DEVKITXENON)/usr/include/
-	cp -r ../../drivers/* $(DEVKITXENON)/usr/include/
-	cp ../../include/* $(DEVKITXENON)/usr/include/
-	mkdir -p $(DEVKITXENON)/usr/include/lwip/
-	cp ../../drivers/lwip/include/lwip/* $(DEVKITXENON)/usr/include/lwip/
-	cp ../../drivers/lwip/include/$(LWIP_MODE)/lwip/* $(DEVKITXENON)/usr/include/lwip/
-	mkdir -p $(DEVKITXENON)/usr/include/netif/
-	cp ../../drivers/lwip/include/netif/* $(DEVKITXENON)/usr/include/netif/
-	mkdir -p $(DEVKITXENON)/usr/include/arch/
-	cp ../../drivers/lwip/xenon/include/arch/* $(DEVKITXENON)/usr/include/arch/
-	mkdir -p $(DEVKITXENON)/usr/include/sys/
-	cp ../../drivers/newlib/dirent.h $(DEVKITXENON)/usr/include/sys/
-	find $(DEVKITXENON)/usr/include/ -type f \! -name "*.h" -delete
+	test -d $(DESTDIR)/$(prefix)/$(LIBDIR)/ || mkdir -p $(DESTDIR)/$(prefix)/$(LIBDIR)/
+	test -d $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/ || mkdir -p $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/
+	test -d $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/lwip/ || mkdir -p $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/lwip/
+	test -d $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/netif/ || mkdir -p $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/netif/
+	test -d $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/arch/ || mkdir -p $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/arch/
+	test -d $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/sys/ || mkdir -p $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/sys/
+	install -m 0644 libxenon.a $(DESTDIR)/$(prefix)/$(LIBDIR)/
+	cp -r ../../drivers/* $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/
+	cp ../../include/* $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/
+	cp ../../drivers/lwip/include/lwip/* $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/lwip/
+	cp ../../drivers/lwip/include/$(LWIP_MODE)/lwip/* $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/lwip/
+	cp ../../drivers/lwip/include/netif/* $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/netif/
+	cp ../../drivers/lwip/xenon/include/arch/* $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/arch/
+	install -m 0664 ../../drivers/newlib/dirent.h $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/sys/
+	install -m 0775 ../../../devkitxenon/rules $(DESTDIR)/$(prefix)/
+	install -m 0664 ../../../devkitxenon/app.lds $(DESTDIR)/$(prefix)/
+	install -m 0664 ../../startup/xenon/crt1.o $(DESTDIR)/$(prefix)/xenon/lib/
+	install -m 0664 crti.o $(DESTDIR)/$(prefix)/xenon/lib/
+	install -m 0664 crtn.o $(DESTDIR)/$(prefix)/xenon/lib/
+	find $(DESTDIR)/$(prefix)/$(INCLUDEDIR)/ -type f \! -name "*.h" -delete

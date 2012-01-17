@@ -16,6 +16,8 @@
 #include "lwip/ip.h"
 #include "lwip/udp.h"
 #include "lwip/tcp.h"
+#include "lwip/tcpip.h"
+#include "lwip/netifapi.h"
 #include "lwip/tcp_impl.h"
 
 struct netif netif;
@@ -39,9 +41,9 @@ void network_init()
 #endif /* STATS */
 	printf(" * initializing lwip 1.4.0...\n");
 
-	last_tcp=mftb();
-	last_dhcp_fine=mftb();
-	last_dhcp_coarse=mftb();
+	//last_tcp=mftb();
+	//last_dhcp_fine=mftb();
+	//last_dhcp_coarse=mftb();
 
 	//printf(" * configuring device for DHCP...\r\n");
 	/* Start Network with DHCP */
@@ -49,19 +51,21 @@ void network_init()
 	IP4_ADDR(&gateway, 0,0,0,0);
 	IP4_ADDR(&ipaddr, 0,0,0,0);
 
-	lwip_init();  //lwip 1.4.0 RC2
-	//printf("ok now the NIC\n");
+	//lwip_init();  //lwip 1.4.0 RC2
+        tcpip_init(NULL, NULL); //used in NO_SYS=0 environment
+        //printf("ok now the NIC\n");
 
-	if (!netif_add(&netif, &ipaddr, &netmask, &gateway, NULL, enet_init, ip_input)){
+	if (netifapi_netif_add(&netif, &ipaddr, &netmask, &gateway, NULL, enet_init, tcpip_input) != ERR_OK){
 		printf(" ! netif_add failed!\n");
 		return;
 	}
-	netif_set_default(&netif);
+	netifapi_netif_set_default(&netif);
 
+        
 	printf(" * requesting dhcp...");
 	//dhcp_set_struct(&netif, &netif_dhcp);
-	dhcp_start(&netif);
-
+	netifapi_dhcp_start(&netif);
+        /*
 	dhcp_wait=mftb();
 	int i = 0;
 	while (netif.ip_addr.addr==0 && i < 60) {
@@ -78,15 +82,15 @@ void network_init()
 	if (netif.ip_addr.addr) {
 		printf("success\n");
 	} else {
-		printf("failed\n");
+		printf("failed\n"); 
 		printf(" * now assigning a static ip\n");
 
 		IP4_ADDR(&ipaddr, 192, 168, 1, 99);
 		IP4_ADDR(&gateway, 192, 168, 1, 1);
-		IP4_ADDR(&netmask, 255, 255, 255, 0);
-		netif_set_addr(&netif, &ipaddr, &netmask, &gateway);
-		netif_set_up(&netif);
-	}
+		IP4_ADDR(&netmask, 255, 255, 0, 0);
+		netifapi_netif_set_addr(&netif, &ipaddr, &netmask, &gateway);
+		netifapi_netif_set_up(&netif);
+	//}*/
 }
 
 void network_poll()
@@ -94,9 +98,9 @@ void network_poll()
 
 	// sys_check_timeouts();
 
-	now=mftb();
+	//now=mftb();
 	enet_poll(&netif);
-
+/*
 	if (tb_diff_msec(now, last_tcp) >= TCP_TMR_INTERVAL)
 	{
 		last_tcp=mftb();
@@ -113,7 +117,7 @@ void network_poll()
 	{
 		last_dhcp_coarse=mftb();
 		dhcp_coarse_tmr();
-	}
+	}*/
 }
 
 void network_print_config()

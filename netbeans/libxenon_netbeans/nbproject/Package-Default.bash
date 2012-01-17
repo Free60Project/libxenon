@@ -6,7 +6,7 @@
 
 # Macros
 TOP=`pwd`
-CND_PLATFORM=Xenon-Linux-x86
+CND_PLATFORM=XENON_GNU-Linux-x86
 CND_CONF=Default
 CND_DISTDIR=dist
 CND_BUILDDIR=build

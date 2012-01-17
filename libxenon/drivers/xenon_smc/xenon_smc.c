@@ -294,3 +294,12 @@ void xenon_smc_set_fan_algorithm(int algorithm)
 	uint8_t buf[16] = {0x88, algorithm};
 	xenon_smc_send_message(buf);
 }
+
+unsigned long long xenon_smc_query_realtime_clock(void)
+{
+    uint8_t buf[16] = {0x04};
+    xenon_smc_send_message(buf);
+    xenon_smc_receive_response(buf);
+    
+    return -1;
+}

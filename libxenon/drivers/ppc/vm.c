@@ -18,7 +18,7 @@ uint32_t pagetable[] __attribute__ ((section (".pagetable"))) = {
 	0, /* zero "page", should pagefault */
 	0,
 	(0x20000000000ULL >> 10) | VM_WIMG_GUARDED, // CPU stuff
-	0, 
+	0,
 	
 	-1, -1, -1, -1, // 1GB user pages
 
@@ -112,4 +112,17 @@ void vm_set_user_mapping_flags(uint32_t virt_addr, int size, int wimg)
 void vm_set_user_mapping_segfault_handler(vm_segfault_handler_t handler)
 {
 	vm_segfault_handler=handler;
+}
+
+uint32_t vm_is_address_valid(uint32_t virt_addr)
+{
+    if(pagetable[virt_addr >> 28] == 0)
+        return 0;
+    if(pagetable[virt_addr >> 28] != -1)
+        return 1;
+    
+    if(userpagetable[vm_common_check_get_idx(virt_addr,0)] == 0)
+        return 0;
+    
+    return 1;
 }

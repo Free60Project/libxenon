@@ -7,12 +7,13 @@
 #include <debug.h>
 #include <sys/time.h>
 
-
 #include <fat/fat_rb.h>
 #include <fat/file_rb.h>
 #include <newlib/vfs.h>
 #include <xenon_soc/xenon_power.h>
 #include <xenon_smc/xenon_smc.h>
+#include <ppc/atomic.h>
+#include <threads/threads.h>
 
 #include <usb/usbmain.h>
 
@@ -54,6 +55,7 @@ ssize_t vfs_console_write(struct vfs_file_s *file, const void *src, size_t len)
 	size_t i;
 	for (i = 0; i < len; ++i)
 		putch(((const char*)src)[i]);
+        
 	return len;
 }
 
@@ -383,8 +385,10 @@ void _exit(int status)
 {
 	char s[256];
 	int i,stuck=0;
+        
+        //threading_shutdown();
 	
-	sprintf(s,"[Exit] with code %d\n", status);
+	sprintf(s,"\n[Exit] with code %d\n", status);
 	vfs_console_write(NULL,s,strlen(s));
 
 	for(i=0;i<6;++i)
@@ -428,7 +432,6 @@ int unlink(const char *file)
 {
 	return -1;
 }
-
 
 #if 1
 // 22 nov 2005 

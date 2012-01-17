@@ -22,6 +22,20 @@ static inline void  std(volatile void *addr, uint64_t v)
 	asm volatile ("isync");
 }
 
+static inline uint32_t lwz(volatile void *addr)
+{
+    uint32_t i;
+    asm volatile ("lwz %0, 0(%1)" : "=r" (i) : "b" (addr));
+    return i;
+}
+
+static inline void stw(volatile void *addr, uint32_t v)
+{
+        asm volatile ("stw %1, 0(%0)" : : "b" (addr), "r" (v));
+        asm volatile ("eieio");
+        asm volatile ("isync");
+}
+
 #ifdef __cplusplus
 };
 #endif

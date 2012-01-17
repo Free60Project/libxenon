@@ -417,6 +417,7 @@ sys_restart_timeouts(void)
 void
 sys_timeouts_mbox_fetch(sys_mbox_t *mbox, void **msg)
 {
+    printf("sys_timeouts_mbox_fetch()\n");
   u32_t time_needed;
   struct sys_timeo *tmptimeout;
   sys_timeout_handler handler;
@@ -424,14 +425,17 @@ sys_timeouts_mbox_fetch(sys_mbox_t *mbox, void **msg)
 
  again:
   if (!next_timeout) {
+      printf("No Timeout, sys_arch_mbox_fetch(mbox, msg, 0)\n");
     time_needed = sys_arch_mbox_fetch(mbox, msg, 0);
   } else {
     if (next_timeout->time > 0) {
+        //printf("Have timeout, fetching with timeout of %i\n", next_timeout->time);
       time_needed = sys_arch_mbox_fetch(mbox, msg, next_timeout->time);
     } else {
+        //printf("No time! timing out!\n");
       time_needed = SYS_ARCH_TIMEOUT;
     }
-
+    //printf("time_needed: %i (timeout=%i)\n", time_needed, SYS_ARCH_TIMEOUT);
     if (time_needed == SYS_ARCH_TIMEOUT) {
       /* If time == SYS_ARCH_TIMEOUT, a timeout occured before a message
          could be fetched. We should now call the timeout handler and
@@ -457,8 +461,10 @@ sys_timeouts_mbox_fetch(sys_mbox_t *mbox, void **msg)
       LWIP_TCPIP_THREAD_ALIVE();
 
       /* We try again to fetch a message from the mbox. */
+      //printf("Starting over, we didnt get a message\n");
       goto again;
     } else {
+        
       /* If time != SYS_ARCH_TIMEOUT, a message was received before the timeout
          occured. The time variable is set to the number of
          milliseconds we waited for the message. */

@@ -1,6 +1,7 @@
 #ifndef XENONSPRS_H_
 #define XENONSPRS_H_
 
+#define dec		22
 #define esr 		62
 #define ivpr 		63
 #define pid 		48

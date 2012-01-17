@@ -141,6 +141,7 @@ tcpip_thread(void *arg)
       LWIP_ASSERT("tcpip_thread: invalid message", 0);
       break;
     }
+    printf("TCPIP_THREAD loop complete\n");
   }
 }
 
@@ -182,9 +183,11 @@ tcpip_input(struct pbuf *p, struct netif *inp)
     msg->msg.inp.p = p;
     msg->msg.inp.netif = inp;
     if (sys_mbox_trypost(&mbox, msg) != ERR_OK) {
+        printf("trypost FAIL!!\n");
       memp_free(MEMP_TCPIP_MSG_INPKT, msg);
       return ERR_MEM;
     }
+    printf("tcpip_input finish!\n");
     return ERR_OK;
   }
   return ERR_VAL;
@@ -305,14 +308,16 @@ tcpip_apimsg(struct api_msg *apimsg)
   /* catch functions that don't set err */
   apimsg->msg.err = ERR_VAL;
 #endif
-  
+  printf("tcpip_apimsg()\n");
   if (sys_mbox_valid(&mbox)) {
+      printf("mbox valid!\n");
     msg.type = TCPIP_MSG_API;
     msg.msg.apimsg = apimsg;
     sys_mbox_post(&mbox, &msg);
     sys_arch_sem_wait(&apimsg->msg.conn->op_completed, 0);
     return apimsg->msg.err;
   }
+  else { printf("mbox not valid!\n"); }
   return ERR_VAL;
 }
 

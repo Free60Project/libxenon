@@ -72,10 +72,12 @@ netconn_new_with_proto_and_callback(enum netconn_type t, u8_t proto, netconn_cal
 
   conn = netconn_alloc(t, callback);
   if (conn != NULL) {
+      printf("conn not null!\n");
     msg.function = do_newconn;
     msg.msg.msg.n.proto = proto;
     msg.msg.conn = conn;
     if (TCPIP_APIMSG(&msg) != ERR_OK) {
+        printf("TCPIP_APIMSG FAIL\n");
       LWIP_ASSERT("freeing conn without freeing pcb", conn->pcb.tcp == NULL);
       LWIP_ASSERT("conn has no op_completed", sys_sem_valid(&conn->op_completed));
       LWIP_ASSERT("conn has no recvmbox", sys_mbox_valid(&conn->recvmbox));

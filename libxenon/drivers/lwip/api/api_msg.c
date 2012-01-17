@@ -565,7 +565,7 @@ netconn_alloc(enum netconn_type t, netconn_callback callback)
 {
   struct netconn *conn;
   int size;
-
+  printf("netconn_alloc()\n");
   conn = (struct netconn *)memp_malloc(MEMP_NETCONN);
   if (conn == NULL) {
     return NULL;

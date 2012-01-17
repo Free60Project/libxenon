@@ -2,27 +2,50 @@
 
 # originally written by Uwe Hermann <uwe@hermann-uwe.de>, released as public domain.
 # changed for xenon by Felix Domke <tmbinc@elitedvb.net>, still public domain
+# cleanup by Austin Morton <amorton@juvsoft.com>, still public domain
 
-TARGET=xenon
-PREFIX=/usr/local/xenon # Install location of your final toolchain
-PARALLEL=""		# Or: PARALLEL="-j 2"
-
-BINUTILS_TAR=binutils-2.22
-BINUTILS=binutils-2.22
-GCC=gcc-4.6.1
-NEWLIB=newlib-1.17.0
-GDB=gdb-6.8
-
+#User configurables
+PARALLEL="-j 5"		# Or: PARALLEL="-j 2"
+LOGFILE="`pwd`/build.log" # path to the logfile
 BUILD_BINUTILS=true
 BUILD_GCC=true
 BUILD_NEWLIB=true
 BUILD_GCC_SECOND=true
 
-# path to the logfile
-LOGFILE="`pwd`/build.log"
+#===============================================================================
+#DO NOT EDIT BELOW THIS LINE UNLESS YOU HAVE A CLUE
+#===============================================================================
+
+TARGET=xenon
+PREFIX=/usr/local/xenon # Install location of your final toolchain
+
+BINUTILS=binutils-2.22
+BINUTILS_ARCHIVE=$BINUTILS.tar.bz2
+BINUTILS_URL=http://ftp.gnu.org/gnu/binutils/$BINUTILS_ARCHIVE
+BINUTILS_CFG="--enable-multilib --disable-nls --disable-werror"
+
+GCC=gcc-4.6.1
+GCC_ARCHIVE=$GCC.tar.bz2
+GCC_URL=ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC_ARCHIVE
+GCC1_CFG="--disable-decimal-float --disable-libmudflap --disable-libssp \
+--disable-nls --disable-shared --enable-altivec --enable-interwork --enable-languages=c \
+--with-cpu=cell --with-gmp=/opt/local --with-libiconv-prefix=/opt/local \
+--with-mpfr=/opt/local --with-newlib --without-headers"
+GCC2_CFG="--disable-decimal-float --disable-libgomp --disable-libmudflap \
+--disable-libquadmath --disable-libssp --disable-linux-futex --disable-nls \
+--disable-shared --disable-threads --enable-altivec --enable-cxx-flags=-G0 \
+--enable-languages=c,c++ --with-cpu=cell --with-gmp=/opt/local \
+--with-libiconv-prefix=/opt/local --with-mpfr=/opt/local --with-newlib"
+
+NEWLIB=newlib-1.17.0
+NEWLIB_ARCHIVE=$NEWLIB.tar.gz
+NEWLIB_URL=ftp://sources.redhat.com/pub/newlib/$NEWLIB_ARCHIVE
+NEWLIB_CFG="--enable-multilib --disable-nls --enable-newlib-io-long-long --enable-newlib-io-long-double"
+
+GDB=gdb-6.8
 
 # variables to check if we are running a debian distribution
-LSBRELEASE="`lsb_release -a`"
+LSBRELEASE="`lsb_release -is 2>/dev/null`"
 SEARCH_UBUNTU="Ubuntu"
 SEARCH_DEBIAN="Debian"
 DEB=false
@@ -32,167 +55,111 @@ export PATH="$PATH:$PREFIX/bin"
 export DEVKITXENON="/usr/local/xenon"
 export PATH="$PATH:\$DEVKITXENON/bin:\$DEVKITXENON/usr/bin"
 
-# function to compile and install libxenon
-function libxenon_install
-{
-	rm -rf free60 &>/dev/null
-
-	#check if git is present to download and install libxenon
-	git &>/dev/null
-	RETVAL=$?
-
-	if [ $RETVAL -eq 1 ]; then
-#		echo -e "Downloading libxenon..."
-#		git clone git://free60.git.sourceforge.net/gitroot/free60/free60 >> $LOGFILE 2>&1
-		echo -e "Building libxenon..."
-		make -C ../libxenon/ports/xenon libxenon.a >> $LOGFILE 2>&1 || exit 0
-		make -C ../libxenon/ports/xenon install >> $LOGFILE 2>&1 || exit 0
-		cp  ../devkitxenon/app.lds ../devkitxenon/rules $PREFIX/
-		# startup crt fix
-		cp ../libxenon/startup/xenon/crt1.o /usr/local/xenon/xenon/lib/
-		cp ../libxenon/ports/xenon/crti.o /usr/local/xenon/xenon/lib/
-		cp ../libxenon/ports/xenon/crtn.o /usr/local/xenon/xenon/lib/
-		echo
-		echo -e "libxenon installed successfully"
-		echo
-	else
-		echo
-		echo -e "git is needed to download libxenon, install it and run this script again with \"libxenon\" as argument"
-		echo -e "If you are running debian/ubuntu : sudo apt-get install git"
-		echo
-	fi
+#download_archive component_name dest_file url
+function download_archive {
+    name=$1
+    dst=$2
+    url=$3
+    if [ ! -e $dst ]; then
+        echo -e "Downloading $name..."
+        wget -c $url >> $LOGFILE 2>&1 || fail_exit "$name download failed"
+        echo -e "Done"
+    fi
 }
-
-function toolchain_install
-{
+#unpack_archive component_name archive
+function unpack_archive {
+    name=$1
+    archive=$2
+    if [ ! -e $archive ]; then
+        fail_exit "$archive not found!"
+    fi
+    echo -e "Unpacking $name..."
+    tar xf $archive >> $LOGFILE 2>&1 || fail_exit "$archive unpack failed"
+    cat $name.diff | patch -p0 >> $LOGFILE 2>&1 || fail_exit "$name patch failed"
+    echo -e "Done"
+}
+#component_install component_name configure_flags
+function component_install {
+    name=$1
+    cfg="$2"
+    build="all"
+    install="install"
+    if [ "$cfg" == "$GCC1_CFG" ]; then
+        build="all-gcc"
+        install="install-gcc"
+    fi
+    if [ "$name" == "$NEWLIB" ]; then
+        export CFLAGS="$CFLAGS -DHAVE_BLKSIZE"
+    fi
+    mkdir build && cd build
+    echo -e "Configuring $name..."
+    ../$name/configure --target=$TARGET --prefix=$PREFIX $cfg >> $LOGFILE 2>&1 \
+        || fail_exit "Failed to configure $name"
+    echo -e "Building $name, this could take a while..."
+    make $PARALLEL $build >> $LOGFILE 2>&1 || fail_exit "Failed to build $name"
+    make DESTDIR=$DESTDIR $install >> $LOGFILE 2>&1 || fail_exit "Failed to install $name"
+    cd ..
+    rm -rf build
+    echo -e "Done"
+}
+#component_full component_name component_archive url configure_flags
+function component_full {
+    download_archive $1 $2 $3
+	unpack_archive $1 $2
+	component_install $1 "$4"
+}
+function toolchain_install {
 	# Make working directory
-	echo -e "Creating final xenon toolchain directory: $PREFIX"
-	if [ ! -d $PREFIX ]; then
-		mkdir $PREFIX
-		chown -R `whoami`:`whoami` $PREFIX
-	fi;
-
-	# Check if binutils sources are available, download it if needed
-	if [ ! -f "$BINUTILS.tar.bz2" ]; then
-		echo -e "Downloading $BINUTILS.tar.bz2"
-		wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS_TAR.tar.bz2 || exit 0
-	fi;
-
-	# Check if gcc sources are available, download it if needed
-	if [ ! -f "$GCC.tar.bz2" ]; then
-		echo -e "Downloading $GCC.tar.bz2"
-		wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2 || exit 0
-	fi;
-
-	# Check if newlib sources are available, download it if needed
-	if [ ! -f "$NEWLIB.tar.gz" ]; then
-		echo -e "Downloading $NEWLIB.tar.gz"
-		wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz || exit 0
-	fi;
-
-	rm -rf build
-
-	mkdir build
-
+	echo -e "Creating final xenon toolchain directory: $DESTDIR/$PREFIX"
+	if [ ! -d $DESTDIR/$PREFIX ]; then
+		mkdir $DESTDIR/$PREFIX
+		chown -R `whoami`:`whoami` $DESTDIR/$PREFIX
+	fi
+	
 	if $BUILD_BINUTILS; then
-	echo -e "Extracting binutils..."
-	tar xfj $BINUTILS_TAR.tar.bz2 >> $LOGFILE 2>&1 && cat binutils.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-	cd build
-	echo -e "Configuring binutils..."
-	../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib   --disable-nls --disable-werror >> $LOGFILE 2>&1 || exit 0
-	echo -e "Building binutils, this could take a while..."
-	make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-	make install >> $LOGFILE 2>&1 || exit 0
-	cd ..
-	rm -rf build/*;
-	echo -e "Done"
-	fi; 
-
+	    component_full $BINUTILS $BINUTILS_ARCHIVE $BINUTILS_URL "$BINUTILS_CFG"
+	fi
+	
 	if $BUILD_GCC; then
-	echo -e "Extracting gcc..."
-	tar xfj $GCC.tar.bz2 >> $LOGFILE 2>&1 && cat $GCC.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-	cd build
-	echo -e "Configuring gcc..."
-	../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local -enable-interwork \
-		--enable-languages="c" --without-headers --disable-shared \
-		--with-newlib --disable-libmudflap --disable-libssp --disable-nls --disable-shared --without-headers \
-		--disable-decimal-float --enable-altivec\
-		  --with-gmp=/opt/local --with-mpfr=/opt/local --with-cpu=cell >> $LOGFILE 2>&1 || exit 0 
-	echo -e "Building gcc, this could take a while..."
-	make $PARALLEL all-gcc >> $LOGFILE 2>&1 || exit 0
-	make install-gcc >> $LOGFILE 2>&1 || exit 0
-	cd ..
-	rm -rf build/*
-	echo -e "Done"
-	fi;
-
+	    component_full $GCC $GCC_ARCHIVE $GCC_URL "$GCC1_CFG"
+	fi
+	
 	if $BUILD_NEWLIB; then
-	echo -e "Extracting newlib..."
-	tar xfz $NEWLIB.tar.gz >> $LOGFILE 2>&1 && cat newlib.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-	cd build
-	echo -e "Configuring newlib..."
-	../$NEWLIB/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib --disable-nls CFLAGS='-DHAVE_BLKSIZE' --enable-newlib-io-long-long --enable-newlib-io-long-double >> $LOGFILE 2>&1 || exit 0
-	echo -e "Building newlib, this could take a while..."
-	make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-	make install >> $LOGFILE 2>&1 || exit 0
-	cd ..
-	#rm -rf build/*
-	echo -e "Done"
-	fi 
-
+	    component_full $NEWLIB $NEWLIB_ARCHIVE $NEWLIB_URL "$NEWLIB_CFG"
+	fi
+	
 	if $BUILD_GCC_SECOND; then
-	# Yes, you need to build gcc again!
-	cd build
-	echo -e "Configuring gcc - 2nd pass..."
-	../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local \
-		  --with-cpu=cell \
-		   --with-gmp=/opt/local --with-mpfr=/opt/local --disable-decimal-float --disable-libquadmath \
-		 --enable-languages=c,c++ --disable-libssp --with-newlib --enable-cxx-flags="-G0" \
-		 --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-altivec --disable-threads --disable-libgomp \
-		 	>> $LOGFILE 2>&1 || exit 0
-	echo -e "Building gcc - 2nd pass, this could take a while..."
-	make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-	make install >> $LOGFILE 2>&1 || exit 0
-	cd ..
-	rm -rf build/*
-	echo -e "Done"
+	    component_full $GCC $GCC_ARCHIVE $GCC_URL "$GCC2_CFG"
 	fi
 
-	rm -rf build
-
+}
+#fail_exit fail_message
+function fail_exit {
+    RED='\e[0;31m'
+	NC='\e[0m'
+    echo -e "${RED}FAILURE!!!${NC}"
+    echo -e $1
+    echo -e "Check the build log for more details"
+    echo -e "$LOGFILE"
+    exit 1
 }
 
-function cube
-{
-	rm -rf free60 &>/dev/null
-	rm cube.elf32 &>/dev/null
-
-	#check if git is present to download and install libxenon
-	git &>/dev/null
-	RETVAL=$?
-
-	if [ $RETVAL -eq 1 ]; then
-
-		echo -e "Downloading Cube Sample"
-		git clone git://free60.git.sourceforge.net/gitroot/free60/free60 >> $LOGFILE 2>&1
-		echo -e "Building Cube Sample..."
-		make -C free60/devkitxenon/examples/xenon/graphics/cube >> $LOGFILE 2>&1
-		cp free60/devkitxenon/examples/xenon/graphics/cube/cube.elf32 .
-		echo
-		echo -e "cube.elf32 compiled, run it via xell"
-		echo		
-		
-	else
-		echo
-		echo -e "git is needed to download libxenon, install it and run this script again with \"libxenon\" as argument"
-		echo -e "If you are running debian/ubuntu : sudo apt-get install git"
-		echo
-	fi
-	exit 0	
+function libxenon_install {
+    echo -e "Building libxenon..."
+    make -C ../libxenon/ports/xenon libxenon.a >> $LOGFILE 2>&1 || fail_exit "libxenon build failed"
+    make DESTDIR=$DESTDIR -C ../libxenon/ports/xenon install >> $LOGFILE 2>&1 || fail_exit "libxenon install failed"
+    echo -e "libxenon installed successfully"
 }
-
-function all_done
-{
+function cube {
+    rm cube.elf32 &>/dev/null
+    
+    echo -e "Building Cube Sample..."
+    make -C ../devkitxenon/examples/xenon/graphics/cube clean >> $LOGFILE 2>&1 || fail_exit "failed cleaning cube sample"
+    make -C ../devkitxenon/examples/xenon/graphics/cube >> $LOGFILE 2>&1 || fail_exit "failed building cube sample"
+    cp ../devkitxenon/examples/xenon/graphics/cube/cube.elf32 .
+    echo -e "cube.elf32 compiled, run it via xell"
+}
+function all_done {
 	RED='\e[0;31m'
 	NC='\e[0m'
 
@@ -205,22 +172,13 @@ function all_done
 	echo -e "export PATH=\"\$PATH:\$DEVKITXENON/bin:\$DEVKITXENON/usr/bin\""
 	echo -e "${NC}"
 }
-
-function check_debian
-{
-	if `echo $LSBRELEASE | grep "$SEARCH_UBUNTU" >> $LOGFILE 2>&1`
-	then
-  		DEB=true
-	fi
-
-	if `echo $LSBRELEASE | grep "$SEARCH_DEBIAN" >> $LOGFILE 2>&1`
+function check_debian {
+	if `echo $LSBRELEASE | grep "[$SEARCH_UBUNTU|$SEARCH_DEBIAN]" >> $LOGFILE 2>&1`
 	then
   		DEB=true
 	fi
 }
-
-function check_build-essential
-{
+function check_build-essential {
 	echo -e "Ubuntu or Debian is detected."
 	dpkg -s build-essential >> $LOGFILE 2>&1
 
@@ -239,27 +197,47 @@ function check_build-essential
 }
 
 # start
-rm $LOGFILE &>/dev/null
+#rm $LOGFILE &>/dev/null
 
-if [ "$1" == "toolchain" ]; then
-	check_debian
+case "$1" in
+toolchain)
+    check_debian
 	if $DEB; then
 		check_build-essential
 	fi
-	toolchain_install
-	libxenon_install
-	all_done
-elif [ "$1" == "libxenon" ]; then
-	libxenon_install
-elif [ "$1" == "cube" ]; then
-	cube
-else
-	echo -e "Usage:"
-	echo -e "\"$0 toolchain\" (install toolchain + libxenon)"
-	echo -e "\"$0 libxenon\" (install or update libxenon)"
-	echo -e "\"$0 cube\" (compile the cube sample)"
-	echo
-	exit 0
-fi;
+    toolchain_install
+    libxenon_install
+    all_done
+;;
 
+libxenon) libxenon_install
+;;
 
+cube) cube
+;;
+
+binutils) component_full $BINUTILS $BINUTILS_ARCHIVE $BINUTILS_URL "$BINUTILS_CFG"
+;;
+
+gcc1) component_full $GCC $GCC_ARCHIVE $GCC_URL "$GCC1_CFG"
+;;
+
+newlib) component_full $NEWLIB $NEWLIB_ARCHIVE $NEWLIB_URL "$NEWLIB_CFG"
+;;
+
+gcc2) component_full $GCC $GCC_ARCHIVE $GCC_URL "$GCC2_CFG"
+;;
+
+*)
+echo -e "Usage:
+\t\"$0 toolchain\"\t(install toolchain + libxenon)
+\t\"$0 libxenon\"\t(install or update libxenon)
+\t\"$0 cube\"\t\t(compile the cube sample)
+
+Advanced Usage:
+\t\"$0 {}\"\t(install or update {binutils,gcc1,newlib,gcc2})
+"
+;;
+esac
+
+exit 0

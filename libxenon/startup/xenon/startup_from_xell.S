@@ -84,7 +84,7 @@ after_slb:
 	ori %r5, %r5, 0x1000 // Machine check enable
 	ori %r5, %r5, 0x2000 // FP available
 	oris %r5, %r5, 0x200 // Vector avail
-//	ori %r5, %r5, 0x8000 // EE
+	// ori %r5, %r5, 0x8000 // External Interrupt enable
 	ori %r5, %r5, 0x10 // data relocate
 	ori %r5, %r5, 0x20 // instruction relocate
 	rldicl %r5, %r5, 0, 1 // clear SF (set 32bit mode)
@@ -93,8 +93,10 @@ after_slb:
 	li %r3, 0
 	mtspr lpidr, %r3
 
-	mfspr %r5, lpcr
-	ori %r5, %r5, 0x402 // software tlb reload + force RMCI
+	//mfspr %r5, lpcr
+	//ori %r5, %r5, 0x402 // software tlb reload + force RMCI
+        //li %r3, 0xC
+        li %r5, 0x402
 	mtspr lpcr, %r5
 
 	li %r3, 1  // hrmor
@@ -114,6 +116,24 @@ after_slb:
 	sub %r3, %r4, %r3
 
 	mtsprg1 %r3 // HV context base
+
+        lis %r13, 0
+        oris %r13, %r13, processor_blocks@h
+        ori %r13, %r13, processor_blocks@l
+        mfspr %r3, pir
+        slwi %r3, %r3, 12 // 0x1000 bytes of processor space per thread
+        add %r13, %r13, %r3 // Processor data
+        
+        mr %r3, %r13
+        lis %r4, 0x8000
+        andc %r3, %r3, %r4
+        mtspr hsprg0, %r3 // Physical address of the processor data
+
+        mfspr %r4, pir
+        stb %r4, 0x140(%r3) // What processor are we?
+        
+        li %r4, 2
+        stb %r4, 0x141(%r3) // Irq
 
 	lis %r3,8
 	subf %r1, %r3, %r1
@@ -217,8 +237,9 @@ return_to_xell:
 		addi    %r5,%r5,4
 		bdnz    1b
 
-		/* Clear IR/DR, set 64 bit mode and jump to Xell*/
+		/* Clear IR/DR/EE, set 64 bit mode and jump to Xell*/
 	li	%r4,0x30
+        ori     %r4,%r4,0x8000
 	mfmsr	%r3
 	andc	%r3,%r3,%r4
 	lis 	%r4,0x8000

@@ -35,11 +35,41 @@
 #ifndef __SYS_C64_H__
 #define __SYS_C64_H__
 
-#define SYS_MBOX_NULL 0
-#define SYS_SEM_NULL  0
+#include <threads/mutex.h>
+#include <threads/threads.h>
+//#include <lwip/timers.h>
 
-typedef int sys_sem_t;
-typedef int sys_mbox_t;
-typedef int sys_thread_t;
+/* let sys.h use binary semaphores for mutexes */
+#define LWIP_COMPAT_MUTEX 1
+
+#define SYS_SEM_NULL  NULL
+#define SYS_MBOX_NULL NULL
+
+#define sys_sem_valid(sema) ((sema != NULL) && ((sema)->sem != NULL))
+#define sys_sem_set_invalid(sema) ((sema)->sem = NULL)
+#define sys_mbox_valid(mbox) ((mbox != NULL) && ((mbox)->sem != NULL))
+#define sys_mbox_set_invalid(mbox) ((mbox)->sem = NULL)
+
+
+struct _sys_sem {
+    MUTEX *sem;
+};
+typedef struct _sys_sem sys_sem_t;
+
+#ifndef MAX_QUEUE_ENTRIES
+#define MAX_QUEUE_ENTRIES 100
+#endif
+struct lwip_mbox {
+  MUTEX *sem;
+  void *q_mem[MAX_QUEUE_ENTRIES];
+  u32_t head, tail;
+};
+typedef struct lwip_mbox sys_mbox_t;
+
+struct _sys_thread_data {
+    struct sys_timeo *timeouts;
+} sys_thread_data_t;
+//only need a PTHREAD, other bits stored in the thread itself
+typedef PTHREAD sys_thread_t;
 
 #endif /* __SYS_C64_H__ */

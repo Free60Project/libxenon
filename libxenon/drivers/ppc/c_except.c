@@ -7,10 +7,13 @@
 #include <ppc/cache.h>
 #include <ppc/register.h>
 #include <xetypes.h>
+#include <threads/threads.h>
+#include <threads/debug.h>
 
 #define CPU_STACK_TRACE_DEPTH		10
 
 static char text[4096]="\0";
+char exception_stack[4096]={0};
  
 typedef struct _framerec {
 	struct _framerec *up;
@@ -71,16 +74,68 @@ void crashdump(u32 exception,u64 * context)
 	console_set_colors(0x000080ff, 0xffffffff);
 	console_init();
 	console_clrscr();
-	
-	if (exception){
-		sprintf(text,"\nException vector! (%p)\n\n",exception);
-	}else{
-		strcpy(text,"\nSegmentation fault!\n\n");
-	}
+        
+        switch(exception)
+        {
+            case 0x200:
+                strcpy(text,"\nMachine Check!\n\n");
+                break;
+            case 0x380:
+                strcpy(text,"\nData SegFault!\n\n");
+                break;
+            case 0x480:
+                strcpy(text,"\nInstruction SegFault!\n\n");
+                break;
+            case 0x500:
+                strcpy(text,"\nExternal Interrupt!\n\n");
+                break;
+            case 0x600:
+                strcpy(text,"\nAlignment!\n\n");
+                break;
+            case 0x700:
+                strcpy(text,"\nProgram Interrupt!\n\n");
+                break;
+            case 0x800:
+                strcpy(text,"\nFPU Unavailable!\n\n");
+                break;
+            case 0x900:
+                strcpy(text,"\nDecrementer!\n\n");
+                break;
+            case 0x980:
+                strcpy(text,"\nHV Decrementer!\n\n");
+                break;
+            case 0xC00:
+                strcpy(text,"\nSystem Call!\n\n");
+                break;
+            case 0xD00:
+                strcpy(text,"\nTrace!\n\n");
+                break;
+            case 0xE00:
+                strcpy(text,"\nFPU Assist!\n\n");
+                break;
+            case 0xF20:
+                strcpy(text,"\nVPU Unavailable!\n\n");
+                break;
+            case 0x1600:
+                strcpy(text,"\nMaintenance!\n\n");
+                break;
+            case 0x1700:
+                strcpy(text,"\nVMX Assist!\n\n");
+                break;
+            case 0x1800:
+                strcpy(text,"\nThermal Managment!\n\n");
+                break;
+            case 0:
+                strcpy(text,"\nSegmentation Fault!\n\n");
+                break;
+            default:
+                sprintf(text,"\nException Vector! (%p)\n\n",exception);
+                break;
+        }
 		
 	flush_console();
 	
-	sprintf(text,"%spir=%016llx dar=%016llx\nsr0=%016llx sr1=%016llx lr=%016llx\n\n",
+	sprintf(text,"%spir=%016llx dar=%016llx\nIar=%016llx Msr=%016llx lr=%016llx\n\n",
 			text,context[39],context[38],context[36],context[37],context[32]);
 	
 	flush_console();

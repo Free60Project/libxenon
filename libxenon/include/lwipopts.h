@@ -37,18 +37,22 @@
 #include <string.h>
 #include <stdio.h>
 
-#define NO_SYS                  1
-#define NO_SYS_NO_TIMERS		1
-#define ETHARP_TRUST_IP_MAC		1
+#define NO_SYS                  0
+#define NO_SYS_NO_TIMERS		0
+#define ETHARP_TRUST_IP_MAC		0
+#define ETHARP_TCPIP_INPUT              1
+#define LWIP_TCPIP_CORE_LOCKING 0
 
 #define LWIP_CALLBACK_API       1
 #define LWIP_TCP                1
 #define LWIP_UDP                1
 #define LWIP_DHCP               1
-#define LWIP_SOCKET             0
-#define LWIP_NETCONN            0
+#define LWIP_SOCKET             1
+#define LWIP_NETCONN            1
 #define LWIP_NETIF_HOSTNAME     1
+#define LWIP_NETIF_API          1
 
+#define LWIP_PROVIDE_ERRNO      1
 #define MEM_ALIGNMENT           4
 #define MEM_SIZE                (4 * 1024 * 1024)
 #define MEMP_NUM_PBUF           1024
@@ -56,8 +60,8 @@
 #define MEMP_NUM_TCP_PCB        20
 #define MEMP_NUM_TCP_PCB_LISTEN 16
 #define MEMP_NUM_TCP_SEG        128
-#define MEMP_NUM_NETBUF         0
-#define MEMP_NUM_NETCONN        0
+#define MEMP_NUM_NETBUF         2
+#define MEMP_NUM_NETCONN        4
 #define MEMP_NUM_SYS_TIMEOUT    20
 #define PBUF_POOL_SIZE          512
 #define TCP_TTL                 255
@@ -65,16 +69,55 @@
 #define TCP_MSS                 1476
 #define TCP_SND_BUF             (8 * TCP_MSS)
 #define TCP_WND                 (4 * TCP_MSS)
-#define ARP_QUEUEING            1
+#define ARP_QUEUEING            0
 #define IP_FORWARD              0
 #define IP_OPTIONS              1
 #define DHCP_DOES_ARP_CHECK     1
 
 
-//#define LWIP_DEBUG 					1
-//#define DHCP_DEBUG                    LWIP_DBG_ON
-//#define NETIF_DEBUG                   LWIP_DBG_ON
-//#define TIMERS_DEBUG                  LWIP_DBG_ON
-//#define LWIP_DEBUG_TIMERNAMES			1
+#define LWIP_STATS_DISPLAY            1
+
+#define LWIP_DEBUG_TIMERNAMES         1
+
+#define LWIP_DEBUG                    1
+#define LWIP_DBG_MIN_LEVEL            LWIP_DBG_LEVEL_ALL
+
+
+#define DBG_ON                          LWIP_DBG_ON
+
+#define ETHARP_DEBUG                    DBG_ON
+#define NETIF_DEBUG                     DBG_ON
+#define PBUF_DEBUG                      DBG_ON
+#define API_LIB_DEBUG                   DBG_ON
+#define API_MSG_DEBUG                   DBG_ON
+#define SOCKETS_DEBUG                   DBG_ON
+#define ICMP_DEBUG                      DBG_ON
+#define IGMP_DEBUG                      DBG_ON
+#define INET_DEBUG                      DBG_ON
+#define IP_DEBUG                        DBG_ON
+#define IP_REASS_DEBUG                  DBG_ON
+#define RAW_DEBUG                       DBG_ON
+#define MEM_DEBUG                       DBG_ON
+#define MEMP_DEBUG                      DBG_ON
+#define SYS_DEBUG                       DBG_ON
+#define TIMERS_DEBUG                    DBG_ON
+#define TCP_DEBUG                       DBG_ON
+#define TCP_INPUT_DEBUG                 DBG_ON
+#define TCP_FR_DEBUG                    DBG_ON
+#define TCP_RTO_DEBUG                   DBG_ON
+#define TCP_CWND_DEBUG                  DBG_ON
+#define TCP_WND_DEBUG                   DBG_ON
+#define TCP_OUTPUT_DEBUG                DBG_ON
+#define TCP_RST_DEBUG                   DBG_ON
+#define TCP_QLEN_DEBUG                  DBG_ON
+#define UDP_DEBUG                       DBG_ON
+#define TCPIP_DEBUG                     DBG_ON
+#define PPP_DEBUG                       DBG_ON
+#define SLIP_DEBUG                      DBG_ON
+#define DHCP_DEBUG                      DBG_ON
+#define AUTOIP_DEBUG                    DBG_ON
+#define SNMP_MSG_DEBUG                  DBG_ON
+#define SNMP_MIB_DEBUG                  DBG_ON
+#define DNS_DEBUG                       DBG_ON
 
 #endif /* __LWIPOPTS_H__ */

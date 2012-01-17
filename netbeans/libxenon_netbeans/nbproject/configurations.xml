@@ -23,12 +23,6 @@
                 <in>xee.c</in>
                 <in>xee.h</in>
               </df>
-              <in>cube.elf.s</in>
-            </df>
-          </df>
-          <df name="profiling">
-            <df name="source">
-              <in>main.c</in>
             </df>
           </df>
         </df>
@@ -253,6 +247,7 @@
         </df>
         <df name="newlib">
           <in>dirent.h</in>
+          <in>malloc_lock.h</in>
           <in>newlib.c</in>
           <in>vfs.h</in>
         </df>
@@ -288,6 +283,19 @@
           <in>vm.c</in>
           <in>vm.h</in>
           <in>xenonsprs.h</in>
+        </df>
+        <df name="threads">
+          <in>c_debug.c</in>
+          <in>c_threads.c</in>
+          <in>debug.S</in>
+          <in>debug.h</in>
+          <in>debug_defines.h</in>
+          <in>gdb.c</in>
+          <in>gdb.h</in>
+          <in>mutex.c</in>
+          <in>mutex.h</in>
+          <in>threads.S</in>
+          <in>threads.h</in>
         </df>
         <df name="time">
           <in>time.c</in>
@@ -421,7 +429,7 @@
     <conf name="Default" type="0">
       <toolsSet>
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
-        <compilerSet>Xenon|GNU</compilerSet>
+        <compilerSet>XENON_GNU|GNU</compilerSet>
       </toolsSet>
       <makefileType>
         <makeTool>

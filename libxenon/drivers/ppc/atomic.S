@@ -27,28 +27,49 @@ atomic_clearset:
 	stwcx. %r6, 0, %r3
 	bne-   1b
 	blr
+.globl atomic_compareswap
+atomic_compareswap:
+        li     %r7, 0
+        mfmsr  %r8
+1:
+        mtmsrd %r7, 1 // Turn off interrupts
+        lwarx  %r6, 0, %r3
+        mr     %r9, %r6 // Save value in r9
+        cmplwi cr7, %r6, %r5
+        bne    cr7, 2f
+        mr     %r6, %r4
+2:
+        stwcx. %r6, 0, %r3
+        mtmsrd %r8, 1 // Restore them to what they were before
+        bne    1b // If unable to store, retry
+        mr     %r3, %r9
+        lwsync
+        blr
 
 	// thanks cOz for the following :)
 .globl lock
 lock:
+        li      %r8, 0
+1:
+        mfmsr   %r7
+        mtmsrd  %r8, 1 // Disable interrupts
         lwarx   %r4, 0, %r3
-        cmplwi  %r4, 0
-        bc	6, eq, spinner
-        stwcx.  %r3, 0, %r3
-        bc      6, eq, spinner
-        sync    1  // lwsync
-        .long   0x7FFFFB78 // db16cyc - AIX for 16 cycle delay
+        cmplwi  cr7, %r4, 0
+        bne     cr7, 2f // If r4 is not zero, dont modify
+        mr      %r4, %r3
+2:
+        stwcx.  %r4, 0, %r3
+        mtmsrd  %r7, 1 // Restore interrupts
+        bne     cr7, 3f // r4 was not zero, lock again
+        bne     3f // Reservation invalid, lock again
+        lwsync
         blr
-spinner:
-        .long   0x7FFFFB78 // db16cyc - AIX for 16 cycle delay
-        lwz     %r4, 0(%r3)
-        cmplwi  %r4, 0
-        bc      15, eq, lock
-        b       spinner
- 
+3:
+        db16cyc
+        b       1b
 .globl unlock
 unlock:
         li      %r4, 0
-        sync    1  // lwsync
+        lwsync
         stw     %r4, 0(%r3)
         blr

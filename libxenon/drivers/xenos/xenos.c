@@ -4,6 +4,7 @@
 #include <xenon_smc/xenon_smc.h>
 #include <xenon_smc/xenon_gpio.h>
 #include <xenon_nand/xenon_config.h>
+#include <xb360/xb360.h>
 #include <pci/io.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1144,7 +1145,7 @@ void xenos_autoset_mode(void)
 
 void xenos_init(int videoMode)
 {
-    xenos_id=read32(0xd0010000)>>16;
+    xenos_id=xenon_get_XenosID();
     printf("Xenos GPU ID=%04x\n", (unsigned int)xenos_id);
 
     xenos_init_phase0();

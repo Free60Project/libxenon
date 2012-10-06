@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <time/time.h>
+#include <xb360/xb360.h>
 #include "xenon_sfcx.h"
 
 struct sfc sfc = {0};
@@ -502,6 +503,11 @@ int sfcx_read_metadata_type(void)
 
 unsigned int sfcx_init(void)
 {
+	if ((xenon_get_PCIBridgeRevisionID() >= 0x70) && (sfcx_readreg(SFCX_PHISON) != 0)) {
+		printf(" ! SFCX: Unsupported Type - PHISON eMMC\n");
+		return 3;
+	}
+	
 	unsigned int config = sfcx_readreg(SFCX_CONFIG);
 
 	if (sfc.initialized) return config;

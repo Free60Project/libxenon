@@ -11,6 +11,7 @@
 #define SFCX_PHYSICAL			0x18
 #define SFCX_DPHYSADDR			0x1C
 #define SFCX_MPHYSADDR			0x20
+#define SFCX_PHISON				0xFC
 
 //Commands for Command Register
 #define PAGE_BUF_TO_REG			0x00 			//Read page buffer to data register

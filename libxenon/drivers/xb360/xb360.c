@@ -383,20 +383,40 @@ int updateXeLL(void * addr, unsigned len)
     return -1; // if this point is reached, updating xell failed
 }
 
-unsigned int xenon_get_console_type()
+unsigned int xenon_get_DVE()
 {
-    unsigned int PVR, PCIBridgeRevisionID, consoleVersion, tmp;
-    uint32_t DVEversion;
-    
-    PCIBridgeRevisionID = ((read32(0xd0000008) << 24) >> 24);
-    consoleVersion = (read32(0xd0010000) >> 16) & 0xFFFF;
-    
-    xenon_smc_ana_read(0xfe, &DVEversion);
+	unsigned int DVEversion, tmp;
+	xenon_smc_ana_read(0xfe, &DVEversion);
     tmp = DVEversion;
     tmp = (tmp & ~0xF0) | ((DVEversion >> 12) & 0xF0);
-    DVEversion = tmp & 0xFF;
+    return (tmp & 0xFF);
+}
 
-    asm volatile("mfpvr %0" : "=r" (PVR));
+unsigned int xenon_get_PCIBridgeRevisionID()
+{
+	return ((read32(0xd0000008) << 24) >> 24);
+}
+
+unsigned int xenon_get_CPU_PVR()
+{
+	unsigned int PVR;
+	asm volatile("mfpvr %0" : "=r" (PVR));
+	return PVR;
+}
+
+unsigned int xenon_get_XenosID()
+{
+	return ((read32(0xd0010000) >> 16) & 0xFFFF);
+}
+
+int xenon_get_console_type()
+{
+    unsigned int PVR, PCIBridgeRevisionID, consoleVersion, DVEversion;
+    
+    PCIBridgeRevisionID = xenon_get_PCIBridgeRevisionID();
+    consoleVersion = xenon_get_XenosID();
+    DVEversion = xenon_get_DVE();
+    PVR = xenon_get_CPU_PVR();
     
     if(PVR == 0x710200 || PVR == 0x710300)
     {
@@ -418,7 +438,7 @@ unsigned int xenon_get_console_type()
         }
         else if(consoleVersion >= 0x5841 && consoleVersion < 0x5851)
         {
-			if (PCIBridgeRevisionID == 0x90)
+			if (DVEversion >= 0x20)
 				return REV_CORONA;
 			else
 				return REV_TRINITY;

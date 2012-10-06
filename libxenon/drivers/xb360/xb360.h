@@ -108,6 +108,10 @@ int kv_get_dvd_key(unsigned char *dvd_key);
 int kv_get_key(unsigned char keyid, unsigned char *keybuf, int *keybuflen, unsigned char *keyvault);
 void print_cpu_dvd_keys(void);
 int updateXeLL(void * addr, unsigned len);
-unsigned int xenon_get_console_type(void);
+unsigned int xenon_get_DVE();
+unsigned int xenon_get_PCIBridgeRevisionID();
+unsigned int xenon_get_CPU_PVR();
+unsigned int xenon_get_XenosID();
+int xenon_get_console_type(void);
 
 #endif /* XB360_H_ */

@@ -267,7 +267,9 @@ void xenon_smc_power_reboot(void)
 
 void xenon_smc_start_bootanim(void)
 {
-	uint8_t buf[16] = {0x8c, 0x03, 0x01};
+	uint8_t buf[16] = {0x8c, 0x01, 0x00,0,0,0,0,0,0,0,0,0,0,0,0,0};
+	xenon_smc_send_message(buf);
+	buf[2] = 0x01;
 	xenon_smc_send_message(buf);
 }
 

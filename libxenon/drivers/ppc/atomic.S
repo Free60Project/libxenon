@@ -1,3 +1,4 @@
+#include "xenonsprs.h"
 
 	// Taken from: http://www.ibm.com/developerworks/library/pa-atom/ 
 .globl atomic_inc
@@ -28,27 +29,33 @@ atomic_clearset:
 	bne-   1b
 	blr
 
-	// thanks cOz for the following :)
+// thanks cOz for the following :)
 .globl lock
 lock:
+        li      %r8, 0
+1:
+        mfmsr   %r7
+		mtmsrd  %r8, 1
         lwarx   %r4, 0, %r3
-        cmplwi  %r4, 0
-        bc	6, eq, spinner
-        stwcx.  %r3, 0, %r3
-        bc      6, eq, spinner
-        sync    1  // lwsync
-        .long   0x7FFFFB78 // db16cyc - AIX for 16 cycle delay
+        cmplwi  cr7, %r4, 0
+        bne     cr7, 2f
+		mr      %r4, %r3
+2:
+        stwcx.  %r4, 0, %r3
+        mtmsrd  %r7, 1
+        bne     cr7, 2f
+        bne     2f
+        lwsync
         blr
-spinner:
-        .long   0x7FFFFB78 // db16cyc - AIX for 16 cycle delay
-        lwz     %r4, 0(%r3)
-        cmplwi  %r4, 0
-        bc      15, eq, lock
-        b       spinner
+2:
+        db16cyc
+        b 1b
  
 .globl unlock
 unlock:
         li      %r4, 0
         sync    1  // lwsync
         stw     %r4, 0(%r3)
+        li      %r4, -1
+        mtspr   hdec, %r4 // reset the hypervisor decrementer to fix a lock issue
         blr

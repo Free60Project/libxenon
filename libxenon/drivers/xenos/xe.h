@@ -96,6 +96,8 @@ struct XenosLock
 
 #define XE_SHADER_MAX_INSTANCES 16
 
+#pragma pack(push,1)
+
 struct XenosShader
 {
 	void *shader;
@@ -111,22 +113,27 @@ struct XenosShaderHeader
 	u32 magic;
 	u32 offset;
 	
-	u32 _[3];
+	u32 unk1[3];
 
 	u32 off_constants, off_shader;
+
+	u32 unk2[2];
 };
 
 struct XenosShaderData
 {
 	u32 sh_off, sh_size;
 	u32 program_control, context_misc;
-	u32 _[2];
+	
+	u32 unk1[4];
 };
 
 struct XenosShaderVertex
 {
 	u32 cnt0, cnt_vfetch, cnt2;
 };
+
+#pragma pack(pop)
 
 #define SWIZZLE_XYZW 0x688
 #define SWIZZLE_XYZ1 0xA88 // 101 010 001 000
@@ -264,6 +271,7 @@ struct XenosDevice
 	volatile unsigned int *regs;
 
 	struct XenosSurface tex_fb;
+	struct XenosSurface default_fb;
 	
 	struct XenosSurface *rt;
 	int last_wptr;
@@ -271,7 +279,8 @@ struct XenosDevice
 	int vp_xres, vp_yres;
 	int frameidx;
 	
-	u32 clearcolor;
+	u32 clear_color;
+	u32 clear_stencil_z;
 	int msaa_samples;
 
 	struct XenosVertexBuffer *vb_current, *vb_head;
@@ -308,6 +317,7 @@ void Xe_ResolveInto(struct XenosDevice *xe, struct XenosSurface *surface, int so
 	   (reason: resolve cannot handle arbitrary shapes) */
 void Xe_Clear(struct XenosDevice *xe, int flags);
 struct XenosSurface *Xe_GetFramebufferSurface(struct XenosDevice *xe);
+void Xe_SetFrameBufferSurface(struct XenosDevice *xe, struct XenosSurface *fb);
 
 void Xe_Execute(struct XenosDevice *xe);
 void Xe_Sync(struct XenosDevice *xe);

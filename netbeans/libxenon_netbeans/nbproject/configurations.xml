@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="84">
+<configurationDescriptor version="79">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df name="devkitxenon" root="../../devkitxenon">
       <df name="examples">
@@ -25,6 +25,11 @@
               </df>
             </df>
           </df>
+          <df name="profiling">
+            <df name="source">
+              <in>main.c</in>
+            </df>
+          </df>
         </df>
       </df>
     </df>
@@ -40,13 +45,27 @@
         <df name="diskio">
           <in>ata.c</in>
           <in>ata.h</in>
-          <in>disc_io.h</in>
+          <in>disk_rb.c</in>
+          <in>disk_rb.h</in>
+          <in>diskio.c</in>
+          <in>diskio.h</in>
+          <in>dvd.h</in>
         </df>
         <df name="elf">
           <in>elf.c</in>
           <in>elf.h</in>
           <in>elf_abi.h</in>
           <in>elf_run.S</in>
+        </df>
+        <df name="fat">
+          <in>dir_rb.c</in>
+          <in>dir_rb.h</in>
+          <in>fat.c</in>
+          <in>fat.h</in>
+          <in>fat_rb.c</in>
+          <in>fat_rb.h</in>
+          <in>file_rb.c</in>
+          <in>file_rb.h</in>
         </df>
         <df name="input">
           <in>input.c</in>
@@ -55,18 +74,6 @@
         <df name="iso9660">
           <in>iso9660.c</in>
           <in>iso9660.h</in>
-        </df>
-        <df name="libfdt">
-          <in>fdt.c</in>
-          <in>fdt.h</in>
-          <in>fdt_ro.c</in>
-          <in>fdt_rw.c</in>
-          <in>fdt_strerror.c</in>
-          <in>fdt_sw.c</in>
-          <in>fdt_wip.c</in>
-          <in>libfdt.h</in>
-          <in>libfdt_env.h</in>
-          <in>libfdt_internal.h</in>
         </df>
         <df name="lwip">
           <df name="api">
@@ -244,8 +251,10 @@
           <in>network.h</in>
         </df>
         <df name="newlib">
+          <in>dirent.h</in>
+          <in>malloc_lock.h</in>
           <in>newlib.c</in>
-          <in>xenon_syscalls.c</in>
+          <in>vfs.h</in>
         </df>
         <df name="nocfe">
           <in>cfe.h</in>
@@ -296,7 +305,6 @@
           <in>dev_usb_klsi.c</in>
           <in>dev_usb_pegasus.c</in>
           <in>dev_usb_rtek.c</in>
-          <in>dummy.c</in>
           <in>klsi_fw.h</in>
           <in>ohci.c</in>
           <in>ohci.h</in>
@@ -320,7 +328,6 @@
         <df name="utils">
           <in>debug.c</in>
           <in>gmon.c</in>
-          <in>gmon.h</in>
           <in>unicode_rb.c</in>
           <in>unicode_rb.h</in>
         </df>
@@ -329,10 +336,6 @@
           <in>xenon_config.h</in>
           <in>xenon_sfcx.c</in>
           <in>xenon_sfcx.h</in>
-        </df>
-        <df name="xenon_post">
-          <in>xenon_post.c</in>
-          <in>xenon_post.h</in>
         </df>
         <df name="xenon_smc">
           <in>xenon_gpio.c</in>
@@ -370,22 +373,6 @@
         </df>
       </df>
       <df name="include">
-        <df name="machine">
-          <df name="powerpc">
-            <df name="machine">
-              <in>_types.h</in>
-            </df>
-            <df name="sys">
-              <in>lock.h</in>
-              <in>stdio.h</in>
-            </df>
-          </df>
-        </df>
-        <df name="sys">
-          <in>dirent.h</in>
-          <in>iosupport.h</in>
-          <in>statvfs.h</in>
-        </df>
         <in>byteswap.h</in>
         <in>cache.h</in>
         <in>debug.h</in>
@@ -409,13 +396,14 @@
       </df>
       <df name="startup">
         <df name="xenon">
-          <in>argv.c</in>
           <in>crt1.c</in>
           <in>startup_from_xell.S</in>
         </df>
       </df>
     </df>
     <df name="toolchain" root="../../toolchain">
+      <df name="libpng-1.5.7">
+      </df>
     </df>
     <logicalFolder name="ExternalFiles"
                    displayName="Important Files"
@@ -436,8 +424,6 @@
         <remote-sources-mode>LOCAL_SOURCES</remote-sources-mode>
         <compilerSet>Xenon|GNU</compilerSet>
       </toolsSet>
-      <codeAssistance>
-      </codeAssistance>
       <makefileType>
         <makeTool>
           <buildCommandWorkingDir>../../libxenon/ports/xenon</buildCommandWorkingDir>

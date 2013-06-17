@@ -24,5 +24,6 @@ void Xe_pSyncToDevice(struct XenosDevice *xe, volatile void *data, int len);
 void Xe_pSyncFromDevice(struct XenosDevice *xe, volatile void *data, int len);
 void *Xe_pAlloc(struct XenosDevice *xe, u32 *phys, int size, int align);
 void Xe_pDebugSync(struct XenosDevice *xe);
+void Xe_pSetState(struct XenosDevice *xe);
 
 #endif

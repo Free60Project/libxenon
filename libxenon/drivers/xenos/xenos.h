@@ -83,6 +83,7 @@ extern "C" {
 #define	D1COLOR_MATRIX_COEF_3_3        0x63ac
 #define	D1COLOR_MATRIX_COEF_3_4        0x63b0
 
+int xenos_is_initialized();
 void xenos_init(int videoMode);
 int xenos_is_overscan();
 

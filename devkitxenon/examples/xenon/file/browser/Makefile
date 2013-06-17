@@ -25,7 +25,7 @@ INCLUDES	:=
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CFLAGS	= -ffunction-sections -fdata-sections -g -O2 -Wall $(MACHDEP) $(INCLUDE)
+CFLAGS	= -g -O2 -Wall $(MACHDEP) $(INCLUDE)
 CXXFLAGS	=	$(CFLAGS)
 
 LDFLAGS	=	-g $(MACHDEP) -Wl,--gc-sections -Wl,-Map,$(notdir $@).map
@@ -125,6 +125,6 @@ endif
 #	python genffs.py > source/ffs_content.c
 
 run: $(BUILD) $(OUTPUT).elf32
-	cp $(OUTPUT).elf32 /srv/tftp/tftpboot/xenon
-	$(PREFIX)strip /srv/tftp/tftpboot/xenon
+	cp $(OUTPUT).elf32 /tftpboot/xenon
+	$(PREFIX)strip /tftpboot/xenon
 #	/home/dev360/run

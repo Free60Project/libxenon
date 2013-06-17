@@ -17,9 +17,8 @@ uint32_t pagetable[] __attribute__ ((section (".pagetable"))) = {
 	0, /* zero "page", should pagefault */
 	0,
 	(0x20000000000ULL >> 10) | VM_WIMG_GUARDED, // CPU stuff
-	0, 
 	
-	-1, -1, -1, -1, // 1GB user pages
+    -1, -1, -1, -1, -1, // 1280MB user pages
 
 	(0x00000000 >> 10) | VM_WIMG_CACHED,
 	(0x10000000 >> 10) | VM_WIMG_CACHED,
@@ -33,7 +32,7 @@ uint32_t pagetable[] __attribute__ ((section (".pagetable"))) = {
 	0,
 };
 
-uint32_t userpagetable[1024*1024*1024/VM_USER_PAGE_SIZE] = {0};
+uint32_t userpagetable[1280*1024*1024/VM_USER_PAGE_SIZE] = {0};
 vm_segfault_handler_t vm_segfault_handler=NULL;
 
 static void vm_invalidate_tlb(uint32_t ea)
@@ -47,9 +46,9 @@ static int vm_common_check_get_idx(uint32_t virt_addr, int size)
 {
 	assert(!(virt_addr&VM_USER_PAGE_MASK));
 	assert(!(size&VM_USER_PAGE_MASK));
-	assert(virt_addr>=0x40000000 && virt_addr<0x80000000);
+	assert(virt_addr>=0x30000000 && virt_addr<0x80000000);
 
-	return (virt_addr&~0x40000000)>>VM_USER_PAGE_BITS;
+	return (virt_addr-0x30000000)>>VM_USER_PAGE_BITS;
 }
 
 void vm_create_user_mapping(uint32_t virt_addr, uint64_t phys_addr, int size, int wimg)

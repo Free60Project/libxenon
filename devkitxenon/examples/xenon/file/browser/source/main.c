@@ -161,7 +161,7 @@ int main(){
 			}
 		}
 		
-		if(pad.select){
+		if(pad.back){
 			append_dir_to_path(path,"..");
 			load_dir(path);
 			ppos=-1;
@@ -215,7 +215,7 @@ int main(){
 		do{
 	 		usb_do_poll();		
 			get_controller_data(&pad, 0);
-		}while(pad.a || pad.b || pad.select || pad.s1_y>STICK_THRESHOLD || pad.s1_y<-STICK_THRESHOLD);
+		}while(pad.a || pad.b || pad.back || pad.s1_y>STICK_THRESHOLD || pad.s1_y<-STICK_THRESHOLD);
 	}
 	
 	

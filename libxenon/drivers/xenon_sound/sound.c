@@ -1,17 +1,16 @@
 #include <pci/io.h>
 #include <string.h>
-#include <malloc.h>
 #include <xenon_smc/xenon_smc.h>
 #include <xenon_smc/xenon_gpio.h>
-#include <stdio.h>
 #include <ppc/cache.h>
 
 extern int xenos_is_hdmi;
 
 static int snd_base = 0xea001600, wptr, buffer_len;
 
-static uint8_t buffer[65536] __attribute__ ((aligned (256)));
-static uint32_t descr[0x160] __attribute__ ((aligned (256)));
+// those 2 must be in the first 32MB of physical memory it seems...
+static uint8_t buffer[65536] __attribute__ ((section(".bss.beginning.lower"),aligned (256)));
+static uint32_t descr[0x20*2] __attribute__ ((section(".bss.beginning.lower"),aligned (256)));
 
 void xenon_sound_init(void)
 {
@@ -40,13 +39,13 @@ void xenon_sound_init(void)
 	static unsigned char smc_snd[32] = {0x8d, 1, 1};
 	xenon_smc_send_message(smc_snd);
 
-	int descr_base = ((int)descr) & 0x1FFFFFFF;
+	unsigned int descr_base = ((unsigned int)descr) & 0x1fffffff;
 	
-	buffer_len = 64*1024;
+	buffer_len = sizeof(buffer);
 	memset(buffer, 0, buffer_len);
 	memdcbst(buffer, buffer_len);
 	
-	int buffer_base = ((int)buffer) & 0x1fffffff;
+	unsigned int buffer_base = ((unsigned int)buffer) & 0x1fffffff;
 	
 	int i;
 	for (i = 0; i < 0x20; ++i)
@@ -55,14 +54,13 @@ void xenon_sound_init(void)
 		descr[i * 2 + 1] = __builtin_bswap32(0x80000000 | (buffer_len/0x20));
 	}
 
-	memdcbst(descr, 0x20 * 2 * 4);
+	memdcbf(descr, sizeof(descr));
 
 	write32(snd_base + 8, 0);
 	write32(snd_base + 8, 0x2000000);
 	write32(snd_base + 0, descr_base);
 	write32(snd_base + 8, 0x1d08001c);
 	write32(snd_base + 0xC, 0x1c);
-//	write32(snd_base + 8, read32(snd_base) | 0x1000000);
 	
 	wptr = 0;
 }

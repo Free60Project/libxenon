@@ -10,12 +10,11 @@
 #include <sys/errno.h>
 #include <sys/time.h>
 #include <sys/resource.h>
+#include <sys/unistd.h>
 #include <diskio/disc_io.h>
 #include <xenon_soc/xenon_power.h>
 
 #include <debug.h>
-
-#define MAXPATHLEN 2048
 
 void (*stdout_hook)(const char *text, int len) = 0;
 
@@ -114,12 +113,12 @@ void __malloc_unlock(struct _reent *ptr) {
 void _exit(int status) {
 	if (__syscalls.exit) {
 		__syscalls.exit(status);
-	} else {
-		while (1);
 	}
+
+	for(;;);
 }
 
-caddr_t sbrk(ptrdiff_t incr) {
+void * sbrk(ptrdiff_t incr) {
 	struct _reent *ptr = _REENT;
 	if (__syscalls.sbrk_r) {
 		return __syscalls.sbrk_r(ptr, incr);
@@ -137,10 +136,46 @@ void abort(void) {
 }
 //---------------------------------------------------------------------------------
 
-int execve(char *name, char **argv, char **env) {
+void  *dlopen(const char * c, int i) {
+	return NULL;
+}
+
+void  *dlsym(void * p, const char * s) {
+	return NULL;
+}
+
+int    dlclose(void * p) {
+	return -1;
+}
+
+char  *dlerror(void) {
+	return "";
+}
+
+//---------------------------------------------------------------------------------
+
+FILE    *popen(const char * s1, const char * s2){
+	return NULL;
+}
+
+int      pclose(FILE * f) {
+	return -1;
+}
+
+//---------------------------------------------------------------------------------
+
+int execve(const char *path, char * const argv[], char * const envp[]) {
 	struct _reent *r = _REENT;
 	r->_errno = ENOSYS;
 	return -1;
+}
+
+int execv(const char *path, char * const argv[]) {
+    return execve(path, argv, NULL);
+}
+
+int execvp(const char *file, char * const argv[]) {
+    return execve(file, argv, NULL);
 }
 
 //---------------------------------------------------------------------------------
@@ -157,6 +192,48 @@ int getpid() {
 	ptr->_errno = ENOSYS;
 	return -1;
 }
+
+pid_t waitpid(pid_t pid, int *stat_loc, int options) {
+      return (pid_t)-1;
+}
+
+//---------------------------------------------------------------------------------
+
+int mkfifo(const char *pathname, mode_t mode) {
+	return -1;
+}
+
+//---------------------------------------------------------------------------------
+
+int lstat(const char * path, struct stat * buf) {
+	return -1;
+}
+
+//---------------------------------------------------------------------------------
+
+int access(const char * path, int mode){
+    struct stat information;
+    int ok = stat(path, &information);
+    // printf("stat of '%s' is %d\n", path.c_str(), ok);
+    if (ok == 0){
+        if (mode == R_OK){
+            if (((information.st_mode & S_IRUSR) == S_IRUSR) ||
+                ((information.st_mode & S_IRGRP) == S_IRGRP) ||
+                ((information.st_mode & S_IROTH) == S_IROTH)){
+                return 0;
+            } else {
+            /* handle other modes if they become useful to us */
+                return -1;
+            }
+       } else {
+           return -1;
+       }
+    } else {
+        // perror("stat");
+        return -1;
+    }
+}
+
 //---------------------------------------------------------------------------------
 
 int getrusage(int who, struct rusage *usage) {
@@ -184,6 +261,11 @@ int kill(int pid, int sig) {
 	struct _reent *ptr = _REENT;
 	ptr->_errno = ENOSYS;
 	return -1;
+}
+
+int gethostname(char *name, size_t len) {
+    strncpy(name,"xenon",len);
+    return 0;
 }
 //---------------------------------------------------------------------------------
 
@@ -365,7 +447,7 @@ int FindDevice(const char* name) {
 		if (devoptab_list[i]) {
 			namelen = strlen(devoptab_list[i]->name);
 			if (strncmp(devoptab_list[i]->name, name, namelen) == 0) {
-				if (name[namelen] == ':' || (isdigit(name[namelen]) && name[namelen + 1] == ':')) {
+				if (name[namelen] == ':' || (isdigit((int)name[namelen]) && name[namelen + 1] == ':')) {
 					dev = i;
 					break;
 				}
@@ -471,8 +553,7 @@ int open(const char *file, int flags, int mode) {
 
 //---------------------------------------------------------------------------------
 
-_ssize_t read(int fileDesc, char *ptr, size_t len) {
-	//---------------------------------------------------------------------------------
+int read(int fileDesc, void *ptr, size_t len) {
 	struct _reent *r = _REENT;
 	int ret = -1;
 	unsigned int dev = 0;
@@ -497,7 +578,7 @@ _ssize_t read(int fileDesc, char *ptr, size_t len) {
 	return ret;
 }
 
-_ssize_t write(int fileDesc, const char *ptr, int len) {
+int write(int fileDesc, const void *ptr, size_t len) {
 	struct _reent *r = _REENT;
 	int ret = -1;
 	unsigned int dev = 0;
@@ -919,7 +1000,7 @@ int chdir(const char *path) {
 	return 0;
 }
 
-char *getcwd(char *buf, size_t size) {
+char *getcwd(char * buf, size_t size) {
 
 	struct _reent *r = _REENT;
 

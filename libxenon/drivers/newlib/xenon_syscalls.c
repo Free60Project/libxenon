@@ -10,6 +10,7 @@
 #include <sys/time.h>
 
 #include <assert.h>
+#include <debug.h>
 
 #include <ppc/atomic.h>
 #include <ppc/register.h>
@@ -94,6 +95,7 @@ void shutdown_drivers() {
 	// some drivers require a shutdown
 	enet_quiesce();
 	usb_shutdown();
+    data_breakpoint(NULL,0,0);
 }
 
 void try_return_to_xell(unsigned int nand_addr, unsigned int phy_loading_addr) {
@@ -142,29 +144,59 @@ static void xenon_exit(int status) {
 }
 
 
-static unsigned int spinlock = 0;
+static unsigned int __attribute__((aligned(128))) malloc_spinlock = 0;
+static unsigned int __attribute__((aligned(128))) safety_spinlock = 0;
 static volatile int lockcount = 0;
 static volatile unsigned int lockowner = -1;
 
 static void xenon_malloc_lock(struct _reent *_r) {
-	assert(lockcount >= 0);
+    lock(&safety_spinlock);
 
-	if (lockcount == 0 || lockowner != mfspr(pir)) {
-		lock(&spinlock);
-		lockowner = mfspr(pir);
-	}
+    int llc=lockcount;
+    unsigned int llo=lockowner;
+    unsigned int pir_=mfspr(pir);
 
-	++lockcount;
+    assert(llc >= 0);
+    
+    unlock(&safety_spinlock);
+    
+    if (llc == 0 || llo != pir_)
+    {
+        lock(&malloc_spinlock);
+
+        lock(&safety_spinlock);
+
+        ++lockcount;
+        lockowner = pir_;
+
+        unlock(&safety_spinlock);
+    }
+    else
+    {
+        lock(&safety_spinlock);
+
+        ++lockcount;
+
+        unlock(&safety_spinlock);
+    }
 }
 
 static void xenon_malloc_unlock(struct _reent *_r) {
-	assert(lockcount > 0);
-	assert(lockowner == mfspr(pir));
+    lock(&safety_spinlock);
+
+    int llc=lockcount;
+    unsigned int llo=lockowner;
 
 	--lockcount;
 
-	if (lockcount == 0) {
-		unlock(&spinlock);
-		lockowner = -1;
-	}
+	assert(llc > 0);
+	assert(llo == mfspr(pir));
+
+    if (llc == 1)
+    {
+		unlock(&malloc_spinlock);
+        lockowner = -1;
+    }
+        
+	unlock(&safety_spinlock);
 }

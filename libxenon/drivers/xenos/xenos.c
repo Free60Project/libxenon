@@ -1254,3 +1254,8 @@ int xenos_is_overscan()
 		exit(-1);
 	}
 }
+
+int xenos_is_initialized()
+{
+	return xenos_current_mode!=NULL;
+}

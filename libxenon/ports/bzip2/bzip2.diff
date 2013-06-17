@@ -5,7 +5,7 @@ diff -NurpP --minimal bzip2-1.0.6/Makefile bzip2-1.0.6-xenon/Makefile
  
  SHELL=/bin/sh
  
-+MACHDEP =  -DXENON -m32 -mno-altivec -fno-pic  -fno-pic -mpowerpc64 -mhard-float -L/usr/local/xenon/usr -L/usr/local/xenon/xenon/lib/32 -u read -u _start -u exc_base
++MACHDEP =  -DXENON -m32 -mno-altivec -fno-pic  -fno-pic -mpowerpc64 -mhard-float -L/usr/local/xenon/usr -L/usr/local/xenon/xenon/lib/32
 +
  # To assist in cross-compiling
 -CC=gcc

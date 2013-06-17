@@ -57,4 +57,4 @@ endef
 export	LIBXENON_INC	:=	$(DEVKITXENON)/usr/include
 export	LIBXENON_LIB	:=	$(DEVKITXENON)/usr/lib
 
-MACHDEP =  -DXENON -m32 -maltivec -fno-pic -mpowerpc64 -mhard-float -L$(DEVKITXENON)/xenon/lib/32 -u read -u _start -u exc_base
+MACHDEP =  -DXENON -m32 -maltivec -fno-pic -mpowerpc64 -mhard-float -L$(DEVKITXENON)/xenon/lib/32

@@ -4,12 +4,13 @@
 #define __iomem
 
 #include <xetypes.h>
+#include <sys/unistd.h>
+#include <sys/errno.h>
 
 #define __u32 u32
 #define __le32 u32
 #define dma_addr_t u32
 #define __GNUG__
-#define size_t u32
 typedef unsigned int spinlock_t;
 typedef enum
 {
@@ -20,13 +21,6 @@ struct timer_list
         int time;
 };
 
-enum{
-        ENODEV =1,
-        ETIMEDOUT,
-        EINVAL,
-        ENOMEM,
-        
-};
 #define jiffies 0
 #define likely(x)       __builtin_expect(!!(x), 1)
 #define unlikely(x)     __builtin_expect(!!(x), 0)

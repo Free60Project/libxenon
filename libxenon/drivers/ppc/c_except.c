@@ -7,6 +7,7 @@
 #include <ppc/cache.h>
 #include <ppc/register.h>
 #include <xetypes.h>
+#include <xenos/xenos.h>
 
 #define CPU_STACK_TRACE_DEPTH		10
 
@@ -68,6 +69,9 @@ static void flush_console()
 
 void crashdump(u32 exception,u64 * context)
 {
+	if(!xenos_is_initialized())
+        xenos_init(VIDEO_MODE_AUTO);
+    
 	console_set_colors(0x000080ff, 0xffffffff);
 	console_init();
 	console_clrscr();

@@ -938,7 +938,7 @@ void xenos_init_phase1(void)
 	xenos_write32(0x2814, 0);
 
 	udelay(1000);	
-	xenos_write32(0x6548, 0);
+	xenos_write32(0x6584, 0);
 	
 		// resetgui
 		// initcp

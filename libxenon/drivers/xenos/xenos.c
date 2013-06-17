@@ -704,7 +704,7 @@ void xenos_init_ana_new(uint32_t *mode_ana, int hdmi)
 	if(xenos_corona)
     {
 		u32 rd;
-		uint32 r9, r11, r4, r30;
+		uint32_t r9, r11, r4, r30;
  
 		xenon_smc_ana_write(0, 0);
  
@@ -716,7 +716,7 @@ void xenos_init_ana_new(uint32_t *mode_ana, int hdmi)
  
 		xenon_smc_ana_write(0xD1, mode_ana[0xD1]);
  
-		xenon_smc_ana_read(0xD2,&rd)
+		xenon_smc_ana_read(0xD2,&rd);
 		r9 = rd & 0xFFFF0000;
 		r11 = mode_ana[0xD2]& 0x0000FFFF;
 		r4 = r11 | r9;

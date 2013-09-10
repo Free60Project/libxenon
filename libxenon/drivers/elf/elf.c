@@ -337,7 +337,7 @@ int elf_runFromDisk (char *filename)
 	}
 
 	struct stat s;
-	fstat(f, &s);
+	stat(filename, &s);
 
 	int size = s.st_size;
 	void * buf=malloc(size);

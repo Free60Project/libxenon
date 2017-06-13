@@ -418,6 +418,7 @@ void xenos_set_mode_f2(struct mode_s *mode)
 
 	xenos_write32(DC_LUTA_CONTROL, 0);
 	xenos_write32(DC_LUT_RW_INDEX, 0);
+	xenos_write32(DC_LUT_PWL_DATA, 0);
 	xenos_write32(DC_LUT_RW_MODE, 0);
 	xenos_write32(DC_LUT_WRITE_EN_MASK, 7);
 	xenos_write32(DC_LUT_AUTOFILL, 1);

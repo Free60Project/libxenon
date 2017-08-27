@@ -1,7 +1,7 @@
-diff -aur newlib-1.20.0/config.sub newlib-1.20.0/config.sub
---- newlib-1.20.0/config.sub	2008-12-18 04:26:46.000000000 +0100
-+++ newlib-1.20.0/config.sub	2009-04-12 20:36:55.000000000 +0200
-@@ -919,6 +919,14 @@
+diff -NurpP --minimal newlib-2.1.0/config.sub newlib-2.1.0-xenon/config.sub
+--- newlib-2.1.0/config.sub	2013-04-29 17:13:53.000000000 +0200
++++ newlib-2.1.0-xenon/config.sub	2014-06-16 23:22:23.395287673 +0200
+@@ -1014,6 +1014,14 @@ case $basic_machine in
  	ppc64le-* | powerpc64little-*)
  		basic_machine=powerpc64le-`echo $basic_machine | sed 's/^[^-]*-//'`
  		;;

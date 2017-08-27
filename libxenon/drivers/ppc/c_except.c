@@ -12,7 +12,8 @@
 #define CPU_STACK_TRACE_DEPTH		10
 
 static char text[4096]="\0";
- 
+int crash_dumped = 0;
+
 typedef struct _framerec {
 	struct _framerec *up;
 	void *lr;
@@ -69,6 +70,7 @@ static void flush_console()
 
 void crashdump(u32 exception,u64 * context)
 {
+	crash_dumped = 1;
 	if(!xenos_is_initialized())
         xenos_init(VIDEO_MODE_AUTO);
     

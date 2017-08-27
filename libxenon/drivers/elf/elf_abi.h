@@ -28,8 +28,12 @@
 #ifndef _ELF_ABI_H
 #define _ELF_ABI_H
 
+#ifndef ___int32_t_defined
 typedef unsigned long int uint32_t;
+#endif
+#ifndef ___int16_t_defined
 typedef unsigned short    uint16_t;
+#endif
 
 typedef uint32_t	Elf32_Addr;	/* Unsigned program address */
 typedef uint32_t	Elf32_Off;	/* Unsigned file offset */

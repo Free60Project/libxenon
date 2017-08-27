@@ -11,6 +11,7 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <sys/unistd.h>
+#include <sys/param.h>
 #include <diskio/disc_io.h>
 #include <xenon_soc/xenon_power.h>
 

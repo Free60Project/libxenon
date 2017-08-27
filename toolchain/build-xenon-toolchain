@@ -5,17 +5,21 @@
 
 TARGET=xenon
 PREFIX=/usr/local/xenon # Install location of your final toolchain
-PARALLEL=
+PARALLEL="-j3"
 
-BINUTILS=binutils-2.22
-GCC=gcc-4.7.1
-NEWLIB=newlib-1.20.0
-GDB=gdb-6.8
+BINUTILS=binutils-2.24
+GCC=gcc-4.9.0
+NEWLIB=newlib-2.1.0
+GDB=gdb-7.7.1
+
+GMP=gmp-6.0.0a
+MPFR=mpfr-3.1.2
+MPC=mpc-1.0.2
 
 ZLIB=zlib-1.2.8
-LIBPNG=libpng-1.5.10
+LIBPNG=libpng-1.6.12
 BZIP2=bzip2-1.0.6
-FREETYPE=freetype-2.4.9
+FREETYPE=freetype-2.5.3
 
 BUILD_BINUTILS=true
 BUILD_GCC=true
@@ -77,23 +81,81 @@ function toolchain_install
                 wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz || exit 0
         fi;
 
-        rm -rf build
+		if [ ! -f "$GMP.tar.xz" ]; then
+                echo -e "Downloading $GMP.tar.xz"
+                wget -c https://gmplib.org/download/gmp/$GMP.tar.xz || exit 0
+        fi;
 
-        mkdir build
+		if [ ! -f "$MPFR.tar.xz" ]; then
+                echo -e "Downloading $MPFR.tar.xz"
+                wget -c http://www.mpfr.org/mpfr-current/$MPFR.tar.xz || exit 0
+        fi;
+
+		if [ ! -f "$MPC.tar.gz" ]; then
+                echo -e "Downloading $MPC.tar.gz"
+                wget -c ftp://ftp.gnu.org/gnu/mpc/$MPC.tar.gz || exit 0
+        fi;
+
+	[ -d build ] && (rm -rf build; mkdir build)
+	[ -d host ] && (rm -rf host; mkdir -p host/build)
+
+	echo "Starting HOST build..."
+	cd host
+	HOSTPFX=$(pwd -P)
 
         if $BUILD_BINUTILS; then
-        echo -e "Extracting binutils..."
-        tar xfj $BINUTILS.tar.bz2 >> $LOGFILE 2>&1 && cat binutils.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-        cd build
-        echo -e "Configuring binutils..."
-        ../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib   --disable-nls --disable-werror >> $LOGFILE 2>&1 || exit 0
-        echo -e "Building binutils, this could take a while..."
-        make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-        make install >> $LOGFILE 2>&1 || exit 0
-        cd ..
-        rm -rf build/*;
-        echo -e "Done"
+	        echo -e "Extracting binutils..."
+	        tar xfj ../$BINUTILS.tar.bz2 >> $LOGFILE 2>&1 && cat ../binutils.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
+		mkdir binutils
+	        cd build
+	        echo -e "Configuring binutils..."
+		../$BINUTILS/configure --prefix=$HOSTPFX/binutils --enable-multilib --disable-nls --disable-werror >> $LOGFILE 2>&1 || exit 0
+		#../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib   --disable-nls --disable-werror >> $LOGFILE 2>&1 || exit 0
+	        echo -e "Building binutils, this could take a while..."
+	        make $PARALLEL >> $LOGFILE 2>&1 || exit 0
+	        make install >> $LOGFILE 2>&1 || exit 0
+	        cd ..
+	        rm -rf build/*;
+	        echo -e "Done"
         fi;
+
+	echo "Extracting gmp..."
+	tar xfj ../$GMP.tar.xz
+	mkdir gmp
+	cd build
+	echo "Configuring gmp..."
+	../$GMP/configure --disable-shared --enable-static --prefix=$HOSTPFX/gmp >> $LOGFILE 2>&1 || exit 0
+	echo "Building gmp..."
+	make $PARALLEL >> $LOGFILE 2>&1 || exit 0 
+	echo "Installing gmp..."
+	make install >> $LOGFILE 2>&1 || exit 0
+	cd ..
+	rm -rf build/*
+
+	echo "Extracting mpfr..."
+	tar xfj ../$MPFR.tar.xz
+	mkdir mpfr
+	cd build
+	echo "Configuring mpfr..."
+	../$MPFR/configure --with-gmp=$HOSTPFX/gmp --disable-shared --enable-static --prefix=$HOSTPFX/mpfr >> $LOGFILE 2>&1 || exit 0
+	echo "Building mpfr..."
+	make $PARALLEL >> $LOGFILE 2>&1 || exit 0
+	echo "Installing mpfr..."
+	make install >> $LOGFILE 2>&1 || exit 0
+	cd ..
+	rm -rf build/*
+
+
+	echo "Extracting mpc..."
+	tar xfz ../$MPC.tar.gz
+	mkdir mpc
+	cd build
+	echo "Configuring mpc..."
+	../$MPC/configure --with-gmp=$HOSTPFX/gmp --with-mpfr=$HOSTPFX/mpfr --disable-shared --enable-static --prefix=$HOSTPFX/mpc >> $LOGFILE 2>&1 || exit 0
+	echo "Building mpc..."
+	make $PARALLEL >> $LOGFILE 2>&1 || exit 0
+	echo "Installing mpc..."
+	make install >> $LOGFILE 2>&1 || exit 0
 
         if $BUILD_GCC; then
         echo -e "Extracting gcc..."
@@ -104,7 +166,7 @@ function toolchain_install
                 --enable-languages="c" --without-headers --disable-shared \
                 --with-newlib --disable-libmudflap --disable-libssp --disable-nls --disable-shared --without-headers \
                 --disable-decimal-float --enable-altivec\
-                --with-gmp=/opt/local --with-mpfr=/opt/local --with-cpu=cell >> $LOGFILE 2>&1 || exit 0
+                --with-cpu=cell >> $LOGFILE 2>&1 || exit 0
         echo -e "Building gcc, this could take a while..."
         make $PARALLEL all-gcc >> $LOGFILE 2>&1 || exit 0
         make install-gcc >> $LOGFILE 2>&1 || exit 0
@@ -137,7 +199,7 @@ function toolchain_install
                 --with-gmp=/opt/local --with-mpfr=/opt/local --disable-decimal-float --disable-libquadmath \
                 --enable-languages=c,c++ --disable-libssp --with-newlib --enable-cxx-flags="-G0" \
                 --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-altivec \
-		--disable-threads --disable-libgomp --disable-libitm >> $LOGFILE 2>&1 || exit 0
+		--disable-threads --disable-libgomp --disable-libitm --disable-libsanitizer --disable-libatomic >> $LOGFILE 2>&1 || exit 0
         echo -e "Building gcc - 2nd pass, this could take a while..."
         make $PARALLEL >> $LOGFILE 2>&1 || exit 0
         make install >> $LOGFILE 2>&1 || exit 0
@@ -178,7 +240,7 @@ function zlib_install
 	echo -e "Installing zlib..."
 	make -f Makefile.xenon CROSS_COMPILE=$TARGET- install >> $LOGFILE 2>&1 || exit 0
 	cd ..
-	rm -rf $ZLIB
+	#rm -rf $ZLIB
 
 	export CC=""
 	export CFLAGS=""
@@ -212,7 +274,7 @@ function libpng_install
 	echo -e "Installing libpng..."	
 	make CROSS_COMPILE=xenon- install >> $LOGFILE 2>&1 || exit 0
 	cd ..
-	rm -rf $LIBPNG
+	#rm -rf $LIBPNG
 
         export CC=""
         export CFLAGS=""
@@ -238,7 +300,7 @@ function bzip2_install
 	echo -e "Installing bzip2..."
 	make install >> $LOGFILE 2>&1 || exit 0
 	cd ..
-	rm -rf $BZIP2
+	#rm -rf $BZIP2
 	echo -e "Done"
 }
 
@@ -266,7 +328,7 @@ function freetype_install
 	echo -e "Installing freetype..."
 	make CROSS_COMPILE=xenon- install >> $LOGFILE 2>&1 || exit 0
 	cd ..
-	rm -rf $FREETYPE
+	#rm -rf $FREETYPE
 
 	export CC=""
 	export CFLAGS=""

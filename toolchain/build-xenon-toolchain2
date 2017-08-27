@@ -1,0 +1,559 @@
+#!/bin/bash
+set -o errexit
+set -o pipefail
+
+# originally written by Uwe Hermann <uwe@hermann-uwe.de>, released as public domain.
+# changed for xenon by Felix Domke <tmbinc@elitedvb.net>, still public domain
+
+SCRIPTDIR="$( readlink -f "$( dirname "${BASH_SOURCE[0]}" )")"
+source "$SCRIPTDIR/colors.inc"
+
+TARGET=xenon
+PREFIX=/usr/local/xenon # Install location of your final toolchain
+
+[ -z $PARALLEL ] && PARALLEL="$(grep processor /proc/cpuinfo | wc -l)"
+PARALLEL="-j$PARALLEL"
+
+[ -z $VERBOSE ] && VERBOSE=0
+[ -z $CLEAN ] && CLEAN=1
+
+BINUTILS=binutils-2.24
+GCC=gcc-4.9.0
+NEWLIB=newlib-2.1.0
+GDB=gdb-7.7.1
+
+GMP=gmp-6.0.0a
+MPFR=mpfr-3.1.2
+MPC=mpc-1.0.2
+
+ZLIB=zlib-1.2.8
+LIBPNG=libpng-1.6.12
+BZIP2=bzip2-1.0.6
+FREETYPE=freetype-2.5.3
+
+BUILD_BINUTILS=true
+BUILD_GCC=true
+BUILD_NEWLIB=true
+BUILD_GCC_SECOND=true
+
+#FSBRANCH=Swizzy
+
+# path to the logfile
+LOGFILE="$PWD/build.log"
+
+# variables to check if we are running a debian distribution
+LSBRELEASE="`lsb_release -a`"
+SEARCH_UBUNTU="Ubuntu"
+SEARCH_DEBIAN="Debian"
+DEB=false
+
+# temp variables export
+export PATH="$PATH:$PREFIX/bin"
+export DEVKITXENON="/usr/local/xenon"
+export PATH="$PATH:\$DEVKITXENON/bin:\$DEVKITXENON/usr/bin"
+
+function pr_normal(){
+	$normal; echo -e "$*"
+}
+function pr_info(){
+	$white; echo -e "$*"; $normal
+}
+function pr_error(){
+	$lred; echo -e "$*"; $normal
+}
+function pr_notice(){
+	$lcyan; echo -e "$*"; $normal
+}
+function pr_warning(){
+	$lyellow; echo -e "$*"; $normal
+}
+function pr_success(){
+	$lgreen; echo -e "$*"; $normal
+}
+function prepare(){
+	if [ $CLEAN -eq 1 ] && [ -d build ]; then
+		rm -rf build
+		mkdir build
+	elif [ ! -d build ]; then
+		mkdir build
+	fi
+}
+function log(){
+	if [ $VERBOSE -eq 1 ]; then
+		tee -a "$LOGFILE"
+	else
+		echo >> "$LOGFILE"
+	fi
+}
+function echo_eval(){
+	echo "$*" | log
+	eval "$*"
+}
+
+# function to compile and install libxenon
+function libxenon_install
+{
+        pr_info "Building libxenon..."
+        make -C $SCRIPTDIR/../libxenon/ports/xenon clean | log 2>&1 
+        make -C $SCRIPTDIR/../libxenon/ports/xenon libxenon.a | log 2>&1 
+        make -C $SCRIPTDIR/../libxenon/ports/xenon install | log 2>&1 
+
+        pr_success "\nlibxenon installed successfully\n"
+}
+
+function toolchain_install
+{
+        # Make working directory
+        pr_info "Creating final xenon toolchain directory: $PREFIX"
+        if [ ! -d $PREFIX ]; then
+				mkdir $PREFIX || (echo "Cannot create directory!"; exit 1) 
+                chown -R `whoami`:`whoami` $PREFIX
+        fi;
+
+        # Check if binutils sources are available, download it if needed
+        if [ ! -f "$BINUTILS.tar.bz2" ]; then
+                pr_notice "Downloading $BINUTILS.tar.bz2"
+                wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2 
+        fi;
+
+        # Check if gcc sources are available, download it if needed
+        if [ ! -f "$GCC.tar.bz2" ]; then
+                pr_notice "Downloading $GCC.tar.bz2"
+                wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2 
+        fi;
+
+        # Check if newlib sources are available, download it if needed
+        if [ ! -f "$NEWLIB.tar.gz" ]; then
+                pr_notice "Downloading $NEWLIB.tar.gz"
+                wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz 
+        fi;
+
+		if [ ! -f "$GMP.tar.xz" ]; then
+                pr_notice "Downloading $GMP.tar.xz"
+                wget -c https://gmplib.org/download/gmp/$GMP.tar.xz 
+        fi;
+
+		if [ ! -f "$MPFR.tar.xz" ]; then
+                pr_info "Downloading $MPFR.tar.xz"
+                wget -c http://www.mpfr.org/mpfr-current/$MPFR.tar.xz 
+        fi;
+
+		if [ ! -f "$MPC.tar.gz" ]; then
+                pr_notice "Downloading $MPC.tar.gz"
+                wget -c ftp://ftp.gnu.org/gnu/mpc/$MPC.tar.gz 
+        fi;
+
+		if $BUILD_BINUTILS; then
+			pr_info "Extracting binutils..."
+			tar xfj $BINUTILS.tar.bz2 | log 2>&1 && cat binutils.diff | patch -p0 | log 2>&1
+
+			cd "$BINUTILS"
+			[ -d build ] && rm -rf build
+			mkdir build; cd build
+
+			pr_info "Configuring binutils..."
+			echo_eval ../configure \
+				--target=$TARGET \
+				--prefix=$PREFIX \
+				--enable-multilib \
+				--disable-nls \
+				--disable-werror | log 2>&1 
+
+			pr_info "Building binutils, this could take a while..."
+			make $PARALLEL | log 2>&1 
+
+			pr_info "Installing binutils..."
+			make install | log 2>&1 
+
+			pr_info "Done"
+			cd "$SCRIPTDIR"
+        fi;
+
+        if $BUILD_GCC; then
+			pr_info "Extracting gcc..."
+			tar xfj $GCC.tar.bz2 && cat gcc.diff | patch -p0 | log 2>&1 
+			
+			pushd $GCC
+			pr_info "Extracting gmp..."
+			tar xf ../$GMP.tar.xz | log 2>&1 
+			mv gmp-* gmp
+			pr_info "Extracting mpfr..."
+			tar xf ../$MPFR.tar.xz | log 2>&1 
+			mv $MPFR mpfr
+			pr_info "Extracting mpc..."
+			tar xf ../$MPC.tar.gz | log 2>&1 
+			mv $MPC mpc
+
+			[ -d build ] && (rm -rf build; mkdir build)
+			pushd build
+
+			pr_info "Configuring gcc..."
+			../configure --target=$TARGET --prefix=$PREFIX -enable-interwork \
+					--enable-languages="c" --without-headers --disable-shared \
+					--with-newlib --disable-libmudflap --disable-libssp --disable-nls --disable-shared --without-headers \
+					--disable-decimal-float --enable-altivec\
+					--with-cpu=cell | log 2>&1 
+			pr_info "Building gcc, this could take a while..."
+			make $PARALLEL all-gcc | log 2>&1 
+			make install-gcc | log 2>&1 
+
+			pr_success "Done"
+			dirs -c
+        fi;
+
+        if $BUILD_NEWLIB; then
+			pr_info "Extracting newlib..."
+			tar xfz $NEWLIB.tar.gz | log 2>&1 && cat newlib.diff | patch -p0 | log 2>&1 
+			
+			pushd $NEWLIB
+			[ -d build ] && (rm -rf build; mkdir build)
+			
+			pushd build
+			pr_info "Configuring newlib..."
+			../configure \
+				--target=$TARGET \
+				--prefix=$PREFIX \
+				--enable-multilib \
+				--disable-nls \
+				CFLAGS="-DHAVE_BLKSIZE -O2" \
+				--enable-newlib-io-long-long \
+				--enable-newlib-io-long-double | log 2>&1 
+
+			pr_info "Building newlib, this could take a while..."
+			make $PARALLEL | log 2>&1 
+			make install | log 2>&1 	
+						
+			pr_success "Done"
+			dirs -c
+        fi
+
+        if $BUILD_GCC_SECOND; then
+			# Yes, you need to build gcc again!
+			pushd $GCC/build
+
+			pr_info "Configuring gcc - 2nd pass..."
+			../configure \
+				--target=$TARGET \
+				--prefix=$PREFIX \
+				--with-cpu=cell \
+				--disable-decimal-float \
+				--disable-libquadmath \
+				--enable-languages=c,c++ \
+				--disable-libssp \
+				--with-newlib \
+				--enable-cxx-flags="-G0" \
+				--disable-libmudflap \
+				--disable-nls \
+				--disable-shared \
+				--disable-linux-futex \
+				--enable-altivec \
+				--disable-threads \
+				--disable-libgomp \
+				--disable-libitm \
+				--disable-libsanitizer \
+				--disable-libatomic | log 2>&1 
+			
+			pr_info "Building gcc - 2nd pass, this could take a while..."
+			make $PARALLEL | log 2>&1 
+			make install | log 2>&1 
+			
+			pr_success "Done"
+			dirs -c
+        fi
+}
+
+function zlib_install
+{
+	if [ ! -f "$ZLIB.tar.gz" ]; then
+		pr_info "Downloading $ZLIB.tar.gz"
+		wget -c http://zlib.net/$ZLIB.tar.gz 
+	fi;
+
+	pr_info "Extracting zlib..."
+	rm -rf $ZLIB
+	tar xzf $ZLIB.tar.gz | log 2>&1 
+	
+	pushd $ZLIB
+	export TARGET_SAVE=$TARGET
+	export CC=$TARGET-gcc
+	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
+	export LDFLAGS="$CFLAGS"
+	export TARGET=`gcc -v 2>&1 | sed -n '2p' | awk '{print $2}'`
+
+	pr_info "Configuring zlib..."
+	./configure --prefix=$DEVKITXENON/usr | log 2>&1 
+
+	sed '/cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)/d' Makefile > Makefile.xenon
+
+	pr_info "Building zlib..."
+	make $PARALLEL -f Makefile.xenon CROSS_COMPILE=$TARGET- libz.a | log 2>&1 
+	pr_info "Installing zlib..."
+	make -f Makefile.xenon CROSS_COMPILE=$TARGET- install | log 2>&1 
+	
+	popd
+
+	export CC=""
+	export CFLAGS=""
+	export LDFLAGS=""
+	export TARGET=$TARGET_SAVE
+
+	pr_success "Done"
+}
+
+function libpng_install
+{
+	if [ ! -f "$LIBPNG.tar.xz" ]; then
+		pr_info "Downloading $LIBPNG.tar.xz"
+		wget -c http://download.sourceforge.net/libpng/$LIBPNG.tar.xz
+	fi;
+
+	pr_info "Extracting libpng..."
+	rm -rf $LIBPNG
+	tar xJf $LIBPNG.tar.xz | log 2>&1
+	
+	pushd $LIBPNG
+	export CC=$TARGET-gcc
+	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 $DEVKITXENON/usr/lib/libxenon.a -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
+	export LDFLAGS="$CFLAGS"
+
+	pr_info "Configuring libpng..."
+	./configure --disable-shared --enable-static --prefix=$DEVKITXENON/usr --host=ppc-elf | log 2>&1 
+
+	pr_info "Building libpng..."
+	make $PARALLEL CROSS_COMPILE=xenon- | log 2>&1
+	pr_info "Installing libpng..."
+	make CROSS_COMPILE=xenon- install | log 2>&1
+	popd
+	#rm -rf $LIBPNG
+
+	export CC=""
+	export CFLAGS=""
+	export LDFLAGS=""
+
+	pr_success "Done"
+}
+
+function bzip2_install
+{
+	if [ ! -f "$BZIP2.tar.gz" ]; then
+		pr_info "Downloading $BZIP2.tar.gz"
+		wget -c http://bzip.org/1.0.6/$BZIP2.tar.gz 
+	fi;
+
+	pr_info "Extracting bzip2..."
+	rm -rf $BZIP2
+	tar xzf $BZIP2.tar.gz | log 2>&1 && cat ../libxenon/ports/bzip2/bzip2.diff | patch -p0 | log 2>&1 
+	cd $BZIP2
+
+	pr_info "Building bzip2..."
+	make $PARALLEL | log 2>&1 
+	pr_info "Installing bzip2..."
+	make install | log 2>&1 
+	cd ..
+	#rm -rf $BZIP2
+	pr_info "Done"
+}
+
+function freetype_install
+{
+	if [ ! -f "$FREETYPE.tar.gz" ]; then
+		pr_info "Downloading $FREETYPE.tar.gz"
+		wget -c http://download.savannah.gnu.org/releases/freetype/$FREETYPE.tar.gz 
+	fi;
+	
+	pr_info "Extracting freetype..."
+	rm -rf $FREETYPE
+	tar xzf $FREETYPE.tar.gz | log 2>&1 
+	cd $FREETYPE
+
+	export CC=$TARGET-gcc
+	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 $DEVKITXENON/usr/lib/libxenon.a -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
+	export LDFLAGS="$CFLAGS"
+
+	pr_info "Configuring freetype..."
+	./configure --prefix=$DEVKITXENON/usr --host=ppc-elf --disable-shared | log 2>&1 
+
+	pr_info "Building freetype..."
+	make $PARALLEL CROSS_COMPILE=xenon- | log 2>&1 
+	pr_info "Installing freetype..."
+	make CROSS_COMPILE=xenon- install | log 2>&1 
+	cd ..
+	#rm -rf $FREETYPE
+
+	export CC=""
+	export CFLAGS=""
+	export LDFLAGS=""
+
+	pr_info "Done"
+}
+
+function filesystems_install
+{
+	pr_info "=> Building Filesystems..."
+
+	filesystems="fat-xenon ntfs-xenon ext2fs-xenon xtaflib"
+
+	for fs in $filesystems
+	do
+		pr_info "$fs: "
+		if [ ! -d $fs ]; then
+			pr_info "=> Cloning... "
+			git clone https://github.com/LibXenonProject/$i.git  | log 2>&1 
+			if [ "" != "$FSBRANCH" ]; then
+				cd "$fs"
+				git checkout $FSBRANCH | log 2>&1
+				cd ..
+			fi			
+		else
+			cd $i
+			if [ "" != "$FSBRANCH" ]; then
+				git checkout $FSBRANCH | log 2>&1
+			fi	
+			git remote update | log 2>&1
+			git status -uno | grep -q behind
+			if [ 0 -eq $? ]; then
+				pr_info "=> Updating... "
+				git pull | log 2>&1
+				make clean | log 2>&1
+			fi
+			cd ..
+		fi
+		pr_info "=> Building... "
+		make -C $i | log 2>&1 
+		pr_info "=> Installing... "
+		make -C $i install | log 2>&1 
+		pr_success "Done"
+	done
+}
+
+function bin2s_install
+{
+	pushd ../libxenon/ports/xenon/
+	pr_info "=> Building bin2s..."
+	gcc bin2s.c -o bin2s 
+	pr_info "=> Installing bin2s..."
+	mv bin2s $DEVKITXENON/bin
+	chmod a+x $DEVKITXENON/bin/bin2s
+	pr_success "Done"
+	popd
+}
+
+function cube
+{
+	rm -rf free60 &>/dev/null
+	rm cube.elf32 &>/dev/null
+
+	#check if git is present to download and install libxenon
+	git &>/dev/null
+	RETVAL=$?
+
+	if [ $RETVAL -eq 1 ]; then
+
+		pr_info "Downloading Cube Sample"
+		git clone git://free60.git.sourceforge.net/gitroot/free60/free60 | log 2>&1
+		pr_info "Building Cube Sample..."
+		make -C free60/devkitxenon/examples/xenon/graphics/cube | log 2>&1
+		cp free60/devkitxenon/examples/xenon/graphics/cube/cube.elf32 .
+
+		pr_success "\ncube.elf32 compiled, run it via xell\n"
+		
+	else
+		pr_error "git is needed to download libxenon, install it and run this script again with \"libxenon\" as argument"
+		echo "If you are running debian/ubuntu : sudo apt-get install git"
+	fi
+	exit 0	
+}
+
+function all_done
+{
+	pr_success "\nAll done, your xenon toolchain is located here : $PREFIX\n"
+	
+	pr_warning "${RED}Please add the following path to your login script (~/.bashrc)"
+	echo "export DEVKITXENON=\"/usr/local/xenon\""
+	echo "export PATH=\"\$PATH:\$DEVKITXENON/bin:\$DEVKITXENON/usr/bin\""
+}
+
+function check_debian
+{
+	echo "$LSBRELEASE" | log
+	echo $LSBRELEASE | grep "$SEARCH_UBUNTU" &&	DEB=true
+	echo $LSBRELEASE | grep "$SEARCH_DEBIAN" && DEB=true
+}
+
+function check_build-essential
+{
+	pr_notice "Ubuntu or Debian is detected."
+	dpkg -s build-essential | log 2>&1
+
+	if [ $? -eq 1 ]; then
+		pr_warning "The build-essential package was not detected on your system"
+		pr_warning "To build the toolchain you need to download and install the build-essential package."
+		pr_warning "Do you want this script to do it for you ? (y/n)"
+		read answer | log 2>&1
+		if [ "$answer" == "y" ]; then
+			pr_info "Please wait while installing build-essential..."
+			sudo apt-get install build-essential | log 2>&1
+		fi
+	else
+		pr_success "The build-essential package was detected on your system"
+	fi
+}
+
+# start
+rm $LOGFILE &>/dev/null
+
+case "$1" in
+	"toolchain")
+		check_debian
+		if $DEB; then
+			check_build-essential
+		fi
+		toolchain_install
+		libxenon_install
+		all_done
+		;;
+	"libs")
+		zlib_install
+		bzip2_install
+		libpng_install
+		freetype_install
+		bin2s_install
+		filesystems_install
+		;;
+	"libxenon")
+    	libxenon_install
+		;;
+	"zlib")
+    	zlib_install
+		;;
+	"libpng")
+    	libpng_install
+		;;
+	"bzip2")
+	    bzip2_install
+		;;
+	"freetype")
+    	freetype_install
+		;;
+	"filesystems")
+    	filesystems_install
+		;;
+	"bin2s")
+        bin2s_install
+		;;
+	"cube")
+    	cube
+		;;
+	*)
+		pr_info "\nUsage:"
+		pr_info "\"$0 toolchain\" (install toolchain + libxenon)"
+		pr_info "\"$0 libs\" (install libxenon + bin2s + libraries seen below)"
+		pr_info "\"$0 libxenon\" (install or update libxenon)"
+		pr_info "\"$0 zlib\" (install or update zlib)"
+		pr_info "\"$0 libpng\" (install or update libpng)"
+		pr_info "\"$0 bzip2\" (install or update bzip2)"
+		pr_info "\"$0 freetype\" (install or update freetype)"
+		pr_info "\"$0 filesystems\" (install libxenon filesystems)"
+		pr_info "\"$0 cube\" (compile the cube sample)\n"
+		;;
+esac

@@ -40,12 +40,17 @@ typedef uint16_t	Elf32_Half;	/* Unsigned medium integer */
 #define EI_MAG1		1		/* file ID */
 #define EI_MAG2		2		/* file ID */
 #define EI_MAG3		3		/* file ID */
+#define EI_CLASS	4		/* ELF type */
 #define EI_NIDENT	16		/* Size of e_ident[] */
 
 #define	ELFMAG0		0x7f		/* e_ident[EI_MAG0] */
 #define	ELFMAG1		'E'		/* e_ident[EI_MAG1] */
 #define	ELFMAG2		'L'		/* e_ident[EI_MAG2] */
 #define	ELFMAG3		'F'		/* e_ident[EI_MAG3] */
+
+#define ELFCLASSNONE 0
+#define ELFCLASS32	1
+#define ELFCLASS64	2
 
 #define IS_ELF(ehdr) ((ehdr).e_ident[EI_MAG0] == ELFMAG0 && \
                       (ehdr).e_ident[EI_MAG1] == ELFMAG1 && \
@@ -86,8 +91,33 @@ typedef struct {
 	Elf32_Word	sh_entsize;	/* section entry size */
 } Elf32_Shdr;
 
+typedef struct {
+	Elf32_Word p_type;
+	Elf32_Word p_offset;
+	Elf32_Word p_vaddr;
+	Elf32_Word p_paddr;
+	Elf32_Word p_filesz;
+	Elf32_Word p_memsz;
+	Elf32_Word p_flags;
+	Elf32_Word p_align;
+} Elf32_Phdr;
+
+#define SHT_NULL	0
+#define SHT_PROGBITS 1
+#define SHT_SYMTAB	2
 #define SHT_STRTAB	3		/* string table section */
+#define SHT_RELA	4
+#define SHT_HASH	5
+#define SHT_DYNAMIC	6
+#define SHT_NOTE	7
 #define SHT_NOBITS	8		/* no space section */
+#define SHT_REL		9
+#define SHT_SHLIB	10
+#define SHT_DYNSYM	11
+
+#define PT_LOAD		1
+#define PT_DYNAMIC	2
+#define PT_NOTE		4
 
 #define SHF_ALLOC	0x2		/* occupies memory */
 

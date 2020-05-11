@@ -11,14 +11,15 @@ elf_call_real:
 	/* r3 = real address */
 	mtsrr0 	%r3
 
-	/* Clear IR/DR and set 64bit mode */
+	/* Clear IR/DR and set 32bit mode */
 	mfmsr	%r11
 	li		%r12, 0x30
 	andc	%r11, %r11, %r12
-	lis		%r12, 0x8000
-	rldicr	%r12, %r12, 32, 31
-	or		%r11, %r11, %r12
+	rldicl 	%r11, %r11, 0, 1
 	mtsrr1	%r11
+
+	/* real-mode-ize the stack pointer */
+	clrldi	%r1, %r1, 35
 
 	/* Now branch to our real-mode function. */
 	rfid

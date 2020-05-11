@@ -190,6 +190,7 @@ err_t etharp_request(struct netif *netif, ip_addr_t *ipaddr);
  *  nodes to update an entry in their ARP cache.
  *  From RFC 3220 "IP Mobility Support for IPv4" section 4.6. */
 #define etharp_gratuitous(netif) etharp_request((netif), &(netif)->ip_addr)
+void etharp_cleanup_netif(struct netif *netif);
 
 #if ETHARP_SUPPORT_STATIC_ENTRIES
 err_t etharp_add_static_entry(ip_addr_t *ipaddr, struct eth_addr *ethaddr);
@@ -208,8 +209,6 @@ err_t etharp_raw(struct netif *netif, const struct eth_addr *ethsrc_addr,
 
 err_t ethernet_input(struct pbuf *p, struct netif *netif);
 
-void etharp_arp_input(struct netif *netif, struct eth_addr *ethaddr, struct pbuf *p);
-void etharp_ip_input(struct netif *netif, struct pbuf *p);
 #define eth_addr_cmp(addr1, addr2) (memcmp((addr1)->addr, (addr2)->addr, ETHARP_HWADDR_LEN) == 0)
 
 extern const struct eth_addr ethbroadcast, ethzero;

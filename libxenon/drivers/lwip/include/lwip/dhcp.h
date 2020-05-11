@@ -25,7 +25,6 @@ extern "C" {
 #define DHCP_CHADDR_LEN 16U
 #define DHCP_SNAME_LEN  64U
 #define DHCP_FILE_LEN   128U
-#define LWIP_DHCP_BOOTP_FILE 1
 
 struct dhcp
 {
@@ -62,7 +61,6 @@ struct dhcp
      integrate with possible TFTP-client for booting? */
 #if LWIP_DHCP_BOOTP_FILE
   ip_addr_t offered_si_addr;
-  char boot_server_name[DHCP_SNAME_LEN];
   char boot_file_name[DHCP_FILE_LEN];
 #endif /* LWIP_DHCP_BOOTPFILE */
 };

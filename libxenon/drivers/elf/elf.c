@@ -46,6 +46,7 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #define ELF_ARGV_BEGIN ((void *)0x8E000000)
 #define ELF_GET_RELOCATED(x)                                                   \
   (ELF_CODE_RELOC_START + ((unsigned long)(x) - (unsigned long)elfldr_start))
+#define ELF_GET_RELOCATED_REAL(x) (void*)((uint64_t)ELF_GET_RELOCATED(x) & 0x1FFFFFFF)
 
 #define ELF_DEBUG 1
 
@@ -53,6 +54,7 @@ extern void shutdown_drivers();
 
 // section start/end, defined by the compiler
 extern unsigned char elfldr_start[], elfldr_end[], pagetable_end[];
+extern void elf_call_real(uint64_t function, ...);
 extern void elf_run(unsigned long entry, unsigned long devtree);
 extern void elf_hold_thread();
 
@@ -152,11 +154,43 @@ static inline __attribute__((always_inline)) void elf_smc_set_led(int override,
   elf_smc_send_message(buf);
 }
 
+// Stage 2 of prepare run: This function is called in real-mode.
+static void
+    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2")))
+    elf_prepare_run_s2(void *self, uint32_t entry, int mem_size) {
+  // GCC is allowed to optimize away writes to 0, so do a stupid trick.
+  volatile void* volatile zero = 0x0;
+
+  // Final copy, and synchronize icache. This is the point of no return.
+  elf_memcpy(zero, (void*)((uint64_t)ELF_TEMP_BEGIN & 0x1FFFFFFF), mem_size);
+  elf_sync_before_exec(zero, mem_size);
+
+  // Send secondary threads into the elf.
+  *(volatile unsigned long *)(ELF_GET_RELOCATED_REAL(
+      &elf_secondary_hold_addr)) = entry + 0x60;
+
+  // load the argv struct (if this isn't the kernel)
+  if (entry != 0) {
+    // disable argument for linux
+    void *new_argv = (void*)(0x00000008 + entry);
+    elf_memcpy(new_argv, (void*)((uint64_t)ELF_ARGV_BEGIN & 0x1FFFFFFF), sizeof(struct __argv));
+    elf_sync_before_exec(new_argv, sizeof(struct __argv));
+  }
+
+  // call elf_run() in elf_run.S
+  void (*call)(unsigned long, unsigned long) = ELF_GET_RELOCATED_REAL(elf_run);
+  call(entry, ((uint64_t)ELF_DEVTREE_START) & 0x1fffffff);
+
+  // This should never be reached.
+  for (;;)
+    ;
+}
+
 // optimize("O2") is required to prevent call to _savegpr, which would fail due
 // to the relocation
 // This function is RELOCATED! You CANNOT call regular functions from here!
 static void
-    __attribute__((section(".elfldr"), noreturn, flatten, optimize("O2")))
+    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2")))
     elf_prepare_run(void *addr, uint32_t size) {
   Elf32_Ehdr *ehdr;
   Elf32_Shdr *shdr;
@@ -203,56 +237,13 @@ static void
   elf_smc_set_led(1, 0x87); // 1 green 3 red
 #endif
 
-  // Final copy, and synchronize icache. This is the point of no return.
-  // First, overwrite past the page table. Then overwrite the page table.
-  if (mem_size > pagetable_size) {
-    elf_memcpy(pagetable_end, ELF_TEMP_BEGIN + pagetable_size,
-               mem_size - pagetable_size);
+  void (*call_real)(void *, uint32_t, int) = ELF_GET_RELOCATED(elf_call_real);
+  call_real(ELF_GET_RELOCATED_REAL(elf_prepare_run_s2), ehdr->e_entry,
+            mem_size);
 
-    // HACK: This is a giant hack. The page table entry is in the processor's
-    // cache, so we won't hit the exception vector (which we just overwrote).
-    // TODO: Uh, go back to real mode and do this copy.
-    elf_memcpy((void *)0x80000000, ELF_TEMP_BEGIN, pagetable_size);
-  } else {
-    elf_memcpy((void *)0x80000000, ELF_TEMP_BEGIN, mem_size);
-  }
-  elf_sync_before_exec((void *)0x80000000, mem_size);
-
-#if ELF_DEBUG
-  elf_smc_set_led(1, 0x80); // 1 green
-#endif
-
-#if 0
-  elf_putch('\r');
-  elf_putch('\n');
-  elf_putch('E');
-  elf_putch('P');
-  elf_putch(' ');
-  elf_int2hex(ehdr->e_entry, 8, s);
-  elf_puts(s);
-  elf_putch('\r');
-  elf_putch('\n');
-#endif
-
-  // Send secondary threads into the elf.
-  *(volatile unsigned long *)ELF_GET_RELOCATED(&elf_secondary_hold_addr) =
-      ehdr->e_entry + 0x60;
-
-  // load the argv struct (if this isn't the kernel)
-  if (ehdr->e_entry != 0) {
-    // disable argument for linux
-    void *new_argv = 0x80000008 + ehdr->e_entry;
-    elf_memcpy(new_argv, ELF_ARGV_BEGIN, sizeof(struct __argv));
-    elf_sync_before_exec(new_argv, sizeof(struct __argv));
-  }
-
-#if ELF_DEBUG
-  elf_smc_set_led(1, 0xC0); // 2 green
-#endif
-
-  // call elf_run() in elf_run.S
-  void (*call)(unsigned long, unsigned long) = ELF_GET_RELOCATED(elf_run);
-  call(ehdr->e_entry, ((unsigned long)ELF_DEVTREE_START) & 0x1fffffff);
+  // Call these just so they aren't optimized out (this isn't reached).
+  elf_call_real(NULL);
+  elf_prepare_run_s2(NULL, 0, 0);
 
   // This should never be reached.
   for (;;)

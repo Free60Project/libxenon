@@ -74,7 +74,7 @@ function toolchain_install
         # Check if newlib sources are available, download it if needed
         if [ ! -f "$NEWLIB.tar.gz" ]; then
                 echo -e "Downloading $NEWLIB.tar.gz"
-                wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz || exit 0
+                wget -c ftp://sourceware.org/pub/newlib/$NEWLIB.tar.gz || exit 0
         fi;
 
         rm -rf build

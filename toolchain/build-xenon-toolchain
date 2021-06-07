@@ -7,20 +7,27 @@ TARGET=xenon
 PREFIX=/usr/local/xenon # Install location of your final toolchain
 PARALLEL=
 
-BINUTILS=binutils-2.22
-GCC=gcc-4.7.1
-NEWLIB=newlib-1.20.0
+BINUTILS=binutils-2.28
+GCC=gcc-6.3.0
+NEWLIB=newlib-2.5.0
 GDB=gdb-6.8
 
-ZLIB=zlib-1.2.8
+ZLIB=zlib-1.2.11
 LIBPNG=libpng-1.5.10
 BZIP2=bzip2-1.0.6
 FREETYPE=freetype-2.4.9
 
+# build stages
 BUILD_BINUTILS=true
 BUILD_GCC=true
 BUILD_NEWLIB=true
 BUILD_GCC_SECOND=true
+
+# fancy progress bar
+EXTR=cat
+if type "pv" &> /dev/null; then
+  EXTR=pv
+fi;
 
 #FSBRANCH=Swizzy
 
@@ -34,17 +41,22 @@ SEARCH_DEBIAN="Debian"
 DEB=false
 
 # temp variables export
-export PATH="$PATH:$PREFIX/bin"
-export DEVKITXENON="/usr/local/xenon"
-export PATH="$PATH:\$DEVKITXENON/bin:\$DEVKITXENON/usr/bin"
+export DEVKITXENON="$PREFIX"
+export PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"
+
+function fail_with_info()
+{
+	echo "[-] Script failed, check build.log!" >> /dev/stderr
+	exit 1
+}
 
 # function to compile and install libxenon
 function libxenon_install
 {
         echo -e "Building libxenon..."
-        make -C ../libxenon/ports/xenon clean >> $LOGFILE 2>&1 || exit 0
-        make -C ../libxenon/ports/xenon libxenon.a >> $LOGFILE 2>&1 || exit 0
-        make -C ../libxenon/ports/xenon install >> $LOGFILE 2>&1 || exit 0
+        make -C ../libxenon/ports/xenon clean 2>&1 >> $LOGFILE || fail_with_info
+        make $PARALLEL -C ../libxenon/ports/xenon libxenon.a 2>&1 >> $LOGFILE || fail_with_info
+        make -C ../libxenon/ports/xenon install 2>&1 >> $LOGFILE || fail_with_info
         echo
         echo -e "libxenon installed successfully"
         echo
@@ -62,121 +74,135 @@ function toolchain_install
         # Check if binutils sources are available, download it if needed
         if [ ! -f "$BINUTILS.tar.bz2" ]; then
                 echo -e "Downloading $BINUTILS.tar.bz2"
-                wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2 || exit 0
+                wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2 || fail_with_info
         fi;
 
         # Check if gcc sources are available, download it if needed
         if [ ! -f "$GCC.tar.bz2" ]; then
                 echo -e "Downloading $GCC.tar.bz2"
-                wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2 || exit 0
+                wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2 || fail_with_info
         fi;
 
         # Check if newlib sources are available, download it if needed
         if [ ! -f "$NEWLIB.tar.gz" ]; then
                 echo -e "Downloading $NEWLIB.tar.gz"
-                wget -c ftp://sourceware.org/pub/newlib/$NEWLIB.tar.gz || exit 0
+                wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz || fail_with_info
         fi;
 
         rm -rf build
-
         mkdir build
 
         if $BUILD_BINUTILS; then
-        echo -e "Extracting binutils..."
-        tar xfj $BINUTILS.tar.bz2 >> $LOGFILE 2>&1 && cat binutils-2.22.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-        cd build
-        echo -e "Configuring binutils..."
-        ../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib   --disable-nls --disable-werror >> $LOGFILE 2>&1 || exit 0
-        echo -e "Building binutils, this could take a while..."
-        make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-        make install >> $LOGFILE 2>&1 || exit 0
-        cd ..
-        rm -rf build/*;
-        echo -e "Done"
+          if [ ! -d $BINUTILS ]; then
+            mkdir $BINUTILS
+            echo -e "Extracting binutils..."
+            $EXTR $BINUTILS.tar.bz2 | tar xfj - >> $LOGFILE 2>&1 || fail_with_info
+            cat $BINUTILS.diff | patch -p0 >> $LOGFILE 2>&1
+
+            if [ -f $BINUTILS-vmx128.diff ]; then
+              echo -e "Applying vmx128 support..."
+              cat $BINUTILS-vmx128.diff | patch -p0 >> $LOGFILE 2>&1
+            fi;
+          fi;
+          cd build
+          echo -e "Configuring binutils..."
+          ../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib --disable-nls --disable-werror >> $LOGFILE 2>&1 || fail_with_info
+          echo -e "Building binutils, this could take a while..."
+          make $PARALLEL 2>&1 >> $LOGFILE || fail_with_info
+          make install 2>&1 >> $LOGFILE || fail_with_info
+          cd ..
+          rm -rf build/*;
+          echo -e "Done"
         fi;
 
         if $BUILD_GCC; then
-        echo -e "Extracting gcc..."
-        tar xfj $GCC.tar.bz2 >> $LOGFILE 2>&1 && cat gcc-4.7.1.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-        cd build
-        echo -e "Configuring gcc..."
-        ../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local -enable-interwork \
-                --enable-languages="c" --without-headers --disable-shared \
-                --with-newlib --disable-libmudflap --disable-libssp --disable-nls --disable-shared --without-headers \
-                --disable-decimal-float --enable-altivec\
-                --with-gmp=/opt/local --with-mpfr=/opt/local --with-cpu=cell >> $LOGFILE 2>&1 || exit 0
-        echo -e "Building gcc, this could take a while..."
-        make $PARALLEL all-gcc >> $LOGFILE 2>&1 || exit 0
-        make install-gcc >> $LOGFILE 2>&1 || exit 0
-        cd ..
-        rm -rf build/*
-        echo -e "Done"
+          if [ ! -d $GCC ]; then
+            mkdir $GCC
+            echo -e "Extracting gcc..."
+            $EXTR $GCC.tar.bz2 | tar xfj - >> $LOGFILE 2>&1 || fail_with_info
+            cat $GCC.diff | patch -p0 >> $LOGFILE 2>&1
+          fi;
+          cd build
+          echo -e "Configuring gcc..."
+          ../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local -enable-interwork \
+                  --enable-languages="c" --without-headers --disable-shared \
+                  --with-newlib --disable-libmudflap --disable-libssp --disable-nls --disable-shared --without-headers \
+                  --disable-decimal-float --enable-altivec \
+                  --with-gmp=/opt/local --with-mpfr=/opt/local --with-cpu=cell >> $LOGFILE 2>&1 || fail_with_info
+          echo -e "Building gcc, this could take a while..."
+          make $PARALLEL all-gcc 2>&1 >> $LOGFILE || fail_with_info
+          make install-gcc 2>&1 >> $LOGFILE || fail_with_info
+          cd ..
+          rm -rf build/*
+          echo -e "Done"
         fi;
 
         if $BUILD_NEWLIB; then
-        echo -e "Extracting newlib..."
-        tar xfz $NEWLIB.tar.gz >> $LOGFILE 2>&1 && cat newlib-1.20.0.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
-        cd build
-        echo -e "Configuring newlib..."
-        ../$NEWLIB/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib --disable-nls \
-		CFLAGS="-DHAVE_BLKSIZE -O2"\
-		--enable-newlib-io-long-long --enable-newlib-io-long-double >> $LOGFILE 2>&1 || exit 0
-        echo -e "Building newlib, this could take a while..."
-        make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-        make install >> $LOGFILE 2>&1 || exit 0
-        cd ..
-        #rm -rf build/*
-        echo -e "Done"
+          mkdir -p $NEWLIB
+          echo -e "Extracting newlib..."
+          $EXTR $NEWLIB.tar.gz | tar xfz - >> $LOGFILE 2>&1 || fail_with_info
+          cat $NEWLIB.diff | patch -p0 >> $LOGFILE 2>&1
+          cd build
+          echo -e "Configuring newlib..."
+          ../$NEWLIB/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib --disable-nls \
+            CFLAGS="-DHAVE_BLKSIZE -O2"\
+            --enable-newlib-io-long-long --enable-newlib-io-long-double >> $LOGFILE 2>&1 || fail_with_info
+          echo -e "Building newlib, this could take a while..."
+          make $PARALLEL 2>&1 >> $LOGFILE || fail_with_info
+          make install 2>&1 >> $LOGFILE || fail_with_info
+          cd ..
+          #rm -rf build/*
+          echo -e "Done"
         fi
 
         if $BUILD_GCC_SECOND; then
-        # Yes, you need to build gcc again!
-        cd build
-        echo -e "Configuring gcc - 2nd pass..."
-        ../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local --with-cpu=cell \
-                --with-gmp=/opt/local --with-mpfr=/opt/local --disable-decimal-float --disable-libquadmath \
-                --enable-languages=c,c++ --disable-libssp --with-newlib --enable-cxx-flags="-G0" \
-                --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-altivec \
-		--disable-threads --disable-libgomp --disable-libitm >> $LOGFILE 2>&1 || exit 0
-        echo -e "Building gcc - 2nd pass, this could take a while..."
-        make $PARALLEL >> $LOGFILE 2>&1 || exit 0
-        make install >> $LOGFILE 2>&1 || exit 0
-        cd ..
-        rm -rf build/*
-        echo -e "Done"
+          # Yes, you need to build gcc again!
+          cd build
+          echo -e "Configuring gcc - 2nd pass..."
+          unset LIBRARY_PATH
+          ../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local --with-cpu=cell \
+                  --with-gmp=/opt/local --with-mpfr=/opt/local --disable-decimal-float --disable-libquadmath \
+                  --enable-languages=c,c++ --disable-libssp --disable-libsanitizer --with-newlib --enable-cxx-flags="-G0" \
+                  --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-altivec \
+                  --disable-libatomic --disable-threads --disable-libgomp --disable-libitm -v >> $LOGFILE 2>&1 || fail_with_info
+          echo -e "Building gcc - 2nd pass, this could take a while..."
+          make $PARALLEL 2>&1 >> $LOGFILE || fail_with_info
+          make install 2>&1 >> $LOGFILE || fail_with_info
+          cd ..
+          rm -rf build/*
+          echo -e "Done"
         fi
 
         rm -rf build
-
 }
 
 function zlib_install
 {
 	if [ ! -f "$ZLIB.tar.gz" ]; then
 		echo -e "Downloading $ZLIB.tar.gz"
-		wget -c http://download.sourceforge.net/libpng/$ZLIB.tar.gz || exit 0
+		wget -c http://zlib.net/$ZLIB.tar.gz || fail_with_info
 	fi;
 
 	echo -e "Extracting zlib..."
 	rm -rf $ZLIB
-	tar xzf $ZLIB.tar.gz >> $LOGFILE 2>&1 || exit 0
+	tar xzf $ZLIB.tar.gz >> $LOGFILE 2>&1 || fail_with_info
 	cd $ZLIB
 
 	export TARGET_SAVE=$TARGET
 	export CC=$TARGET-gcc
-	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
+	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 -Wno-error -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
 	export LDFLAGS="$CFLAGS"
 	export TARGET=`gcc -v 2>&1 | sed -n '2p' | awk '{print $2}'`
 
 	echo -e "Configuring zlib..."
-	./configure --prefix=$DEVKITXENON/usr >> $LOGFILE 2>&1 || exit 0
+	./configure --prefix=$DEVKITXENON/usr >> $LOGFILE 2>&1 || fail_with_info
 
 	sed '/cp $(SHAREDLIBV) $(DESTDIR)$(sharedlibdir)/d' Makefile > Makefile.xenon
 
 	echo -e "Building zlib..."
-	make $PARALLEL -f Makefile.xenon CROSS_COMPILE=$TARGET- libz.a >> $LOGFILE 2>&1 || exit 0
+	make $PARALLEL -f Makefile.xenon CROSS_COMPILE=$TARGET- libz.a >> $LOGFILE 2>&1 || fail_with_info
 	echo -e "Installing zlib..."
-	make -f Makefile.xenon CROSS_COMPILE=$TARGET- install >> $LOGFILE 2>&1 || exit 0
+	make -f Makefile.xenon CROSS_COMPILE=$TARGET- install >> $LOGFILE 2>&1 || fail_with_info
 	cd ..
 	rm -rf $ZLIB
 
@@ -192,12 +218,12 @@ function libpng_install
 {
 	if [ ! -f "$LIBPNG.tar.xz" ]; then
 		echo -e "Downloading $LIBPNG.tar.xz"
-		wget -c http://download.sourceforge.net/libpng/$LIBPNG.tar.xz || exit 0
+		wget -c http://download.sourceforge.net/libpng/$LIBPNG.tar.xz || fail_with_info
 	fi;
 
 	echo -e "Extracting libpng..."
 	rm -rf $LIBPNG
-	tar xJf $LIBPNG.tar.xz >> $LOGFILE 2>&1 || exit 0
+	tar xJf $LIBPNG.tar.xz >> $LOGFILE 2>&1 || fail_with_info
 	cd $LIBPNG
 
 	export CC=$TARGET-gcc
@@ -205,12 +231,12 @@ function libpng_install
 	export LDFLAGS="$CFLAGS"
 
 	echo -e "Configuring libpng..."
-	./configure --disable-shared --enable-static --prefix=$DEVKITXENON/usr --host=ppc-elf >> $LOGFILE 2>&1 || exit 0
+	./configure --disable-shared --enable-static --prefix=$DEVKITXENON/usr --host=ppc-elf >> $LOGFILE 2>&1 || fail_with_info
 
 	echo -e "Building libpng..."
-	make $PARALLEL CROSS_COMPILE=xenon- >> $LOGFILE 2>&1 || exit 0
+	make $PARALLEL CROSS_COMPILE=$TARGET- >> $LOGFILE 2>&1 || fail_with_info
 	echo -e "Installing libpng..."	
-	make CROSS_COMPILE=xenon- install >> $LOGFILE 2>&1 || exit 0
+	make CROSS_COMPILE=$TARGET- install >> $LOGFILE 2>&1 || fail_with_info
 	cd ..
 	rm -rf $LIBPNG
 
@@ -225,18 +251,18 @@ function bzip2_install
 {
 	if [ ! -f "$BZIP2.tar.gz" ]; then
 		echo -e "Downloading $BZIP2.tar.gz"
-		wget -c http://download.sourceforge.net/bzip2/$BZIP2.tar.gz || exit 0
+		wget -c http://bzip.org/1.0.6/$BZIP2.tar.gz || fail_with_info
 	fi;
 
 	echo -e "Extracting bzip2..."
 	rm -rf $BZIP2
-	tar xzf $BZIP2.tar.gz >> $LOGFILE 2>&1 && cat ../libxenon/ports/bzip2/bzip2-1.0.6.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
+	tar xzf $BZIP2.tar.gz >> $LOGFILE 2>&1 && cat ../libxenon/ports/bzip2/$BZIP2.diff | patch -p0 >> $LOGFILE 2>&1 || fail_with_info
 	cd $BZIP2
 
 	echo -e "Building bzip2..."
-	make $PARALLEL >> $LOGFILE 2>&1 || exit 0
+	make $PARALLEL >> $LOGFILE 2>&1 || fail_with_info
 	echo -e "Installing bzip2..."
-	make install >> $LOGFILE 2>&1 || exit 0
+	make install >> $LOGFILE 2>&1 || fail_with_info
 	cd ..
 	rm -rf $BZIP2
 	echo -e "Done"
@@ -246,12 +272,12 @@ function freetype_install
 {
 	if [ ! -f "$FREETYPE.tar.gz" ]; then
 		echo -e "Downloading $FREETYPE.tar.gz"
-		wget -c http://download.savannah.gnu.org/releases/freetype/$FREETYPE.tar.gz || exit 0
+		wget -c http://download.savannah.gnu.org/releases/freetype/$FREETYPE.tar.gz || fail_with_info
 	fi;
 	
 	echo -e "Extracting freetype..."
 	rm -rf $FREETYPE
-	tar xzf $FREETYPE.tar.gz >> $LOGFILE 2>&1 || exit 0
+	tar xzf $FREETYPE.tar.gz >> $LOGFILE 2>&1 || fail_with_info
 	cd $FREETYPE
 
 	export CC=$TARGET-gcc
@@ -259,12 +285,12 @@ function freetype_install
 	export LDFLAGS="$CFLAGS"
 
 	echo -e "Configuring freetype..."
-	./configure --prefix=$DEVKITXENON/usr --host=ppc-elf --disable-shared >> $LOGFILE 2>&1 || exit 0
+	./configure --prefix=$DEVKITXENON/usr --host=ppc-elf --disable-shared >> $LOGFILE 2>&1 || fail_with_info
 
 	echo -e "Building freetype..."
-	make $PARALLEL CROSS_COMPILE=xenon- >> $LOGFILE 2>&1 || exit 0
+	make $PARALLEL CROSS_COMPILE=$TARGET- >> $LOGFILE 2>&1 || fail_with_info
 	echo -e "Installing freetype..."
-	make CROSS_COMPILE=xenon- install >> $LOGFILE 2>&1 || exit 0
+	make CROSS_COMPILE=$TARGET- install >> $LOGFILE 2>&1 || fail_with_info
 	cd ..
 	rm -rf $FREETYPE
 
@@ -279,14 +305,14 @@ function filesystems_install
 {
 	echo -e "Building Filesystems..."
 
-	filesystems="fat-xenon ntfs-xenon ext2fs-xenon xtaflib"
+	filesystems="fat-xenon ext2fs-xenon xtaflib" # ntfs-xenon ext2fs-xenon xtaflib
 
 	for i in $filesystems
 	do
 		echo -e -n "$i: "
 		if [ ! -d $i ]; then
 			echo -e -n "Cloning... "
-			git clone https://github.com/LibXenonProject/$i.git  >> $LOGFILE 2>&1 || exit 0
+			git clone https://github.com/LibXenonProject/$i.git  >> $LOGFILE 2>&1 || fail_with_info
 			if [ "" != "$FSBRANCH" ]; then
 				cd $i
 				git checkout $FSBRANCH >> $LOGFILE 2>&1
@@ -307,9 +333,9 @@ function filesystems_install
 			cd ..
 		fi
 		echo -e -n "Building... "
-		make -C $i >> $LOGFILE 2>&1 || exit 0
+		make -C $i >> $LOGFILE 2>&1 || fail_with_info
 		echo -e -n "Installing... "
-		make -C $i install >> $LOGFILE 2>&1 || exit 0
+		make -C $i install >> $LOGFILE 2>&1 || fail_with_info
 		echo -e "Done"
 	done
 }
@@ -318,7 +344,7 @@ function bin2s_install
 {
 	pushd ../libxenon/ports/xenon/
 	echo -e "Building bin2s..."
-	gcc bin2s.c -o bin2s || exit 0
+	gcc bin2s.c -o bin2s || fail_with_info
 	echo -e "Installing bin2s..."
 	mv bin2s $DEVKITXENON/bin
 	chmod a+x $DEVKITXENON/bin/bin2s
@@ -336,12 +362,9 @@ function cube
 	RETVAL=$?
 
 	if [ $RETVAL -eq 1 ]; then
-
-		echo -e "Downloading Cube Sample"
-		git clone git://free60.git.sourceforge.net/gitroot/free60/free60 >> $LOGFILE 2>&1
 		echo -e "Building Cube Sample..."
-		make -C free60/devkitxenon/examples/xenon/graphics/cube >> $LOGFILE 2>&1
-		cp free60/devkitxenon/examples/xenon/graphics/cube/cube.elf32 .
+		make -C ../devkitxenon/examples/xenon/graphics/cube >> $LOGFILE 2>&1
+		cp ../devkitxenon/examples/xenon/graphics/cube/cube.elf32 .
 		echo
 		echo -e "cube.elf32 compiled, run it via xell"
 		echo		
@@ -349,7 +372,7 @@ function cube
 	else
 		echo
 		echo -e "git is needed to download libxenon, install it and run this script again with \"libxenon\" as argument"
-		echo -e "If you are running debian/ubuntu : sudo apt-get install git"
+		echo -e "If you are running debian/ubuntu : apt install git"
 		echo
 	fi
 	exit 0	
@@ -365,7 +388,7 @@ function all_done
 	echo
 	echo -e "${RED}Please add the following path to your login script (~/.bashrc)"
 	echo
-	echo -e "export DEVKITXENON=\"/usr/local/xenon\""
+	echo -e "export DEVKITXENON=\"$PREFIX\""
 	echo -e "export PATH=\"\$PATH:\$DEVKITXENON/bin:\$DEVKITXENON/usr/bin\""
 	echo -e "${NC}"
 }
@@ -395,11 +418,33 @@ function check_build-essential
 		read answer >> $LOGFILE 2>&1
 		if [ "$answer" == "y" ]; then
 			echo -e "Please wait while installing build-essential..."
-			sudo apt-get install build-essential >> $LOGFILE 2>&1
+			apt install -y build-essential >> $LOGFILE 2>&1
 		fi
 	else
 		echo -e "The build-essential package was detected on your system"
 	fi
+
+	dpkg -s flex bison >> $LOGFILE 2>&1
+	if [ $? -eq 1 ]; then
+		echo -e "Flex / Bison were not detected on your system (binutils)"
+		echo -e "Do you want this script to attempt to install them for you? (y/n)"
+		read answer >> $LOGFILE 2>&1
+		if [ "$answer" == "y" ]; then
+			echo -e "Please wait while installing flex and bison..."
+			apt install -y flex bison >> $LOGFILE 2>&1
+		fi
+	fi;
+
+	dpkg -s gcc-multilib >> $LOGFILE 2>&1
+	if [ $? -eq 1 ]; then
+		echo -e "gcc-multilib was not detected on your system (binutils)"
+		echo -e "Do you want this script to attempt to install it for you? (y/n)"
+		read answer >> $LOGFILE 2>&1
+		if [ "$answer" == "y" ]; then
+			echo -e "Please wait while installing gcc-multilib..."
+			apt install -y gcc-multilib >> $LOGFILE 2>&1
+		fi
+	fi;
 }
 
 # start

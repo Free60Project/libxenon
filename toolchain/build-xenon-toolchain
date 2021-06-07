@@ -83,7 +83,7 @@ function toolchain_install
 
         if $BUILD_BINUTILS; then
         echo -e "Extracting binutils..."
-        tar xfj $BINUTILS.tar.bz2 >> $LOGFILE 2>&1 && cat binutils.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
+        tar xfj $BINUTILS.tar.bz2 >> $LOGFILE 2>&1 && cat binutils-2.22.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
         cd build
         echo -e "Configuring binutils..."
         ../$BINUTILS/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib   --disable-nls --disable-werror >> $LOGFILE 2>&1 || exit 0
@@ -97,7 +97,7 @@ function toolchain_install
 
         if $BUILD_GCC; then
         echo -e "Extracting gcc..."
-        tar xfj $GCC.tar.bz2 >> $LOGFILE 2>&1 && cat gcc.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
+        tar xfj $GCC.tar.bz2 >> $LOGFILE 2>&1 && cat gcc-4.7.1.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
         cd build
         echo -e "Configuring gcc..."
         ../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local -enable-interwork \
@@ -115,7 +115,7 @@ function toolchain_install
 
         if $BUILD_NEWLIB; then
         echo -e "Extracting newlib..."
-        tar xfz $NEWLIB.tar.gz >> $LOGFILE 2>&1 && cat newlib.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
+        tar xfz $NEWLIB.tar.gz >> $LOGFILE 2>&1 && cat newlib-1.20.0.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
         cd build
         echo -e "Configuring newlib..."
         ../$NEWLIB/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib --disable-nls \
@@ -230,7 +230,7 @@ function bzip2_install
 
 	echo -e "Extracting bzip2..."
 	rm -rf $BZIP2
-	tar xzf $BZIP2.tar.gz >> $LOGFILE 2>&1 && cat ../libxenon/ports/bzip2/bzip2.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
+	tar xzf $BZIP2.tar.gz >> $LOGFILE 2>&1 && cat ../libxenon/ports/bzip2/bzip2-1.0.6.diff | patch -p0 >> $LOGFILE 2>&1 || exit 0
 	cd $BZIP2
 
 	echo -e "Building bzip2..."

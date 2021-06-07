@@ -64,6 +64,10 @@ function libxenon_install
 
 function toolchain_install
 {
+        BINUTILS_FILE="${BINUTILS}.tar.gz"
+        GCC_FILE="${GCC}.tar.gz"
+        NEWLIB_FILE="${NEWLIB}.tar.gz"
+
         # Make working directory
         echo -e "Creating final xenon toolchain directory: $PREFIX"
         if [ ! -d $PREFIX ]; then
@@ -72,21 +76,21 @@ function toolchain_install
         fi;
 
         # Check if binutils sources are available, download it if needed
-        if [ ! -f "$BINUTILS.tar.bz2" ]; then
-                echo -e "Downloading $BINUTILS.tar.bz2"
-                wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS.tar.bz2 || fail_with_info
+        if [ ! -f $BINUTILS_FILE ]; then
+                echo -e "Downloading $BINUTILS_FILE"
+                wget -c http://ftp.gnu.org/gnu/binutils/$BINUTILS_FILE || fail_with_info
         fi;
 
         # Check if gcc sources are available, download it if needed
-        if [ ! -f "$GCC.tar.bz2" ]; then
-                echo -e "Downloading $GCC.tar.bz2"
-                wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC.tar.bz2 || fail_with_info
+        if [ ! -f $GCC_FILE ]; then
+                echo -e "Downloading $GCC_FILE"
+                wget -c ftp://ftp.gnu.org/gnu/gcc/$GCC/$GCC_FILE || fail_with_info
         fi;
 
         # Check if newlib sources are available, download it if needed
-        if [ ! -f "$NEWLIB.tar.gz" ]; then
-                echo -e "Downloading $NEWLIB.tar.gz"
-                wget -c ftp://sources.redhat.com/pub/newlib/$NEWLIB.tar.gz || fail_with_info
+        if [ ! -f $NEWLIB_FILE ]; then
+                echo -e "Downloading $NEWLIB_FILE"
+                wget -c ftp://sourceware.org/pub/newlib/$NEWLIB_FILE || fail_with_info
         fi;
 
         rm -rf build
@@ -96,12 +100,12 @@ function toolchain_install
           if [ ! -d $BINUTILS ]; then
             mkdir $BINUTILS
             echo -e "Extracting binutils..."
-            $EXTR $BINUTILS.tar.bz2 | tar xfj - >> $LOGFILE 2>&1 || fail_with_info
-            cat $BINUTILS.diff | patch -p0 >> $LOGFILE 2>&1
+            $EXTR $BINUTILS_FILE | tar xfz - >> $LOGFILE 2>&1 || fail_with_info
+            cat $BINUTILS.diff | patch -p0 >> $LOGFILE 2>&1 || fail_with_info
 
             if [ -f $BINUTILS-vmx128.diff ]; then
               echo -e "Applying vmx128 support..."
-              cat $BINUTILS-vmx128.diff | patch -p0 >> $LOGFILE 2>&1
+              cat $BINUTILS-vmx128.diff | patch -p0 >> $LOGFILE 2>&1 || fail_with_info
             fi;
           fi;
           cd build
@@ -119,8 +123,8 @@ function toolchain_install
           if [ ! -d $GCC ]; then
             mkdir $GCC
             echo -e "Extracting gcc..."
-            $EXTR $GCC.tar.bz2 | tar xfj - >> $LOGFILE 2>&1 || fail_with_info
-            cat $GCC.diff | patch -p0 >> $LOGFILE 2>&1
+            $EXTR $GCC_FILE | tar xfz - >> $LOGFILE 2>&1 || fail_with_info
+            cat $GCC.diff | patch -p0 >> $LOGFILE 2>&1 || fail_with_info
           fi;
           cd build
           echo -e "Configuring gcc..."
@@ -140,8 +144,8 @@ function toolchain_install
         if $BUILD_NEWLIB; then
           mkdir -p $NEWLIB
           echo -e "Extracting newlib..."
-          $EXTR $NEWLIB.tar.gz | tar xfz - >> $LOGFILE 2>&1 || fail_with_info
-          cat $NEWLIB.diff | patch -p0 >> $LOGFILE 2>&1
+          $EXTR $NEWLIB_FILE | tar xfz - >> $LOGFILE 2>&1 || fail_with_info
+          cat $NEWLIB.diff | patch -p0 >> $LOGFILE 2>&1 || fail_with_info
           cd build
           echo -e "Configuring newlib..."
           ../$NEWLIB/configure --target=$TARGET --prefix=$PREFIX  --enable-multilib --disable-nls \

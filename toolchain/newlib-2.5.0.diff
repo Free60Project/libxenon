@@ -1,0 +1,17 @@
+--- newlib-2.5.0/config.sub	2017-04-22 22:38:13.882672000 -0500
++++ newlib-2.5.0/config.sub	2017-04-24 23:05:53.991570900 -0500
+@@ -1038,6 +1038,14 @@ case $basic_machine in
+ 	ppc64le-* | powerpc64little-*)
+ 		basic_machine=powerpc64le-`echo $basic_machine | sed 's/^[^-]*-//'`
+ 		;;
++	ppu)
++		basic_machine=powerpc64-unknown
++		os=-none
++		;;
++	xenon)
++		basic_machine=powerpc64-unknown
++		os=-none
++		;;
+ 	ps2)
+ 		basic_machine=i386-ibm
+ 		;;

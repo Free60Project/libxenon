@@ -17,17 +17,11 @@ RUN apt update && apt install -y \
   file
 
 WORKDIR /build
-COPY . .
+COPY toolchain ./toolchain
 
 WORKDIR /build/toolchain
 RUN echo "[+] Installing toolchain"
-RUN ./build-xenon-toolchain toolchain || cat build.log
-
-RUN echo "[+] Installing libxenon"
-RUN ./build-xenon-toolchain libxenon || cat build.log
-
-RUN echo "[+] Installing dependencies"
-RUN ./build-xenon-toolchain libs || cat build.log
+RUN ./build-xenon-toolchain toolchain || (cat build.log; exit 1)
 
 RUN echo "[+] Setting environment variables"
 RUN echo 'export DEVKITXENON="/usr/local/xenon"' >> /root/.bashrc

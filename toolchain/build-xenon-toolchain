@@ -460,7 +460,6 @@ if [ "$1" == "toolchain" ]; then
 	check_build-essential
     fi
     toolchain_install
-    libxenon_install
     all_done
 elif [ "$1" == "libs" ]; then
     zlib_install

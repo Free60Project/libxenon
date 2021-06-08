@@ -310,7 +310,7 @@ function filesystems_install
 		echo -e -n "$i: "
 		if [ ! -d $i ]; then
 			echo -e -n "Cloning... "
-			git clone https://github.com/LibXenonProject/$i.git  >> $LOGFILE 2>&1 || fail_with_info
+			git clone https://github.com/Free60Project/$i.git  >> $LOGFILE 2>&1 || fail_with_info
 			if [ "" != "$FSBRANCH" ]; then
 				cd $i
 				git checkout $FSBRANCH >> $LOGFILE 2>&1

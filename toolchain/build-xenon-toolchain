@@ -4,7 +4,7 @@
 # changed for xenon by Felix Domke <tmbinc@elitedvb.net>, still public domain
 
 TARGET=xenon
-PREFIX=/usr/local/xenon # Install location of your final toolchain
+PREFIX=${PREFIX:-/usr/local/xenon} # Install location of your final toolchain
 PARALLEL=
 
 BINUTILS=binutils-2.32
@@ -15,7 +15,7 @@ GDB=gdb-6.8
 ZLIB=zlib-1.2.11
 LIBPNG=libpng-1.5.10
 BZIP2=bzip2-1.0.6
-FREETYPE=freetype-2.4.9
+FREETYPE=freetype-2.10.4
 
 # build stages
 BUILD_BINUTILS=true
@@ -225,7 +225,7 @@ function libpng_install
 	cd $LIBPNG
 
 	export CC=$TARGET-gcc
-	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 $DEVKITXENON/usr/lib/libxenon.a -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
+	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 $DEVKITXENON/usr/lib/libxenon.a -L$DEVKITXENON/xenon/lib/32 -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
 	export LDFLAGS="$CFLAGS"
 
 	echo -e "Configuring libpng..."
@@ -249,7 +249,7 @@ function bzip2_install
 {
 	if [ ! -f "$BZIP2.tar.gz" ]; then
 		echo -e "Downloading $BZIP2.tar.gz"
-		wget -c http://bzip.org/1.0.6/$BZIP2.tar.gz || fail_with_info
+		wget -c ftp://sourceware.org/pub/bzip2/$BZIP2.tar.gz || fail_with_info
 	fi;
 
 	echo -e "Extracting bzip2..."
@@ -310,7 +310,7 @@ function filesystems_install
 		echo -e -n "$i: "
 		if [ ! -d $i ]; then
 			echo -e -n "Cloning... "
-			git clone https://github.com/LibXenonProject/$i.git  >> $LOGFILE 2>&1 || fail_with_info
+			git clone https://github.com/Free60Project/$i.git  >> $LOGFILE 2>&1 || fail_with_info
 			if [ "" != "$FSBRANCH" ]; then
 				cd $i
 				git checkout $FSBRANCH >> $LOGFILE 2>&1
@@ -436,7 +436,6 @@ function check_build-essential
 rm $LOGFILE &>/dev/null
 
 if [ "$1" == "toolchain" ]; then
-    check_debian
     if command -v apt-get &> /dev/null; then
 		check_build-essential
     fi

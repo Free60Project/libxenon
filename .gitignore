@@ -1,4 +1,9 @@
 *.o
 nbproject/*
+*.d
+*.a
+toolchain/build
 toolchain/build.log
-libxenon/ports/xenon/libxenon.a
+toolchain/*.tar.gz
+toolchain/*.tar.bz2
+toolchain/*.tar.xz

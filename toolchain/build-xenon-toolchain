@@ -4,7 +4,7 @@
 # changed for xenon by Felix Domke <tmbinc@elitedvb.net>, still public domain
 
 TARGET=xenon
-PREFIX=/usr/local/xenon # Install location of your final toolchain
+PREFIX=${PREFIX:-/usr/local/xenon} # Install location of your final toolchain
 PARALLEL=
 
 BINUTILS=binutils-2.32

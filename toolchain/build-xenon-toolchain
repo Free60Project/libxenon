@@ -34,12 +34,6 @@ fi;
 # path to the logfile
 LOGFILE="`pwd`/build.log"
 
-# variables to check if we are running a debian distribution
-LSBRELEASE="`lsb_release -a`"
-SEARCH_UBUNTU="Ubuntu"
-SEARCH_DEBIAN="Debian"
-DEB=false
-
 # temp variables export
 export DEVKITXENON="$PREFIX"
 export PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"
@@ -397,19 +391,6 @@ function all_done
 	echo -e "${NC}"
 }
 
-function check_debian
-{
-	if `echo $LSBRELEASE | grep "$SEARCH_UBUNTU" >> $LOGFILE 2>&1`
-	then
-  		DEB=true
-	fi
-
-	if `echo $LSBRELEASE | grep "$SEARCH_DEBIAN" >> $LOGFILE 2>&1`
-	then
-  		DEB=true
-	fi
-}
-
 function check_build-essential
 {
 	echo -e "Ubuntu or Debian is detected."
@@ -456,8 +437,8 @@ rm $LOGFILE &>/dev/null
 
 if [ "$1" == "toolchain" ]; then
     check_debian
-    if $DEB; then
-	check_build-essential
+    if command -v apt-get &> /dev/null; then
+		check_build-essential
     fi
     toolchain_install
     all_done

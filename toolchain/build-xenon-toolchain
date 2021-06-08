@@ -436,7 +436,6 @@ function check_build-essential
 rm $LOGFILE &>/dev/null
 
 if [ "$1" == "toolchain" ]; then
-    check_debian
     if command -v apt-get &> /dev/null; then
 		check_build-essential
     fi

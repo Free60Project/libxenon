@@ -7,9 +7,9 @@ TARGET=xenon
 PREFIX=/usr/local/xenon # Install location of your final toolchain
 PARALLEL=
 
-BINUTILS=binutils-2.28
-GCC=gcc-6.3.0
-NEWLIB=newlib-2.5.0
+BINUTILS=binutils-2.32
+GCC=gcc-9.2.0
+NEWLIB=newlib-3.1.0
 GDB=gdb-6.8
 
 ZLIB=zlib-1.2.11

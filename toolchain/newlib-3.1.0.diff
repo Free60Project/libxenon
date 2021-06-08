@@ -1,0 +1,16 @@
+diff -ENwbur ../newlib-3.1.0/config.sub newlib-3.1.0/config.sub
+--- ../newlib-3.1.0/config.sub	2018-12-31 21:40:11.000000000 -0700
++++ newlib-3.1.0/config.sub	2019-08-21 11:02:42.668047938 -0600
+@@ -1122,6 +1122,12 @@
+ 	ppc64le-* | powerpc64little-*)
+ 		basic_machine=powerpc64le-`echo "$basic_machine" | sed 's/^[^-]*-//'`
+ 		;;
++	ppu)
++		basic_machine=powerpc64-unknown
++		;;
++	xenon)
++		basic_machine=powerpc64-unknown
++		;;
+ 	ps2)
+ 		basic_machine=i386-ibm
+ 		;;

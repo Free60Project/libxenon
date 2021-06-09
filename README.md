@@ -12,6 +12,15 @@ LibXenon provides a bare-metal homebrew library for the Xbox 360 gaming console.
 
 Check out (https://hub.docker.com/u/free60)
 
+Example usage
+
+```
+host $ cd libxenon-homebrew-app/
+host $ docker run -it -v $PWD:/app free60/libxenon:latest
+docker $ cd /app
+docker $ make
+```
+
 ## Manual build
 
 ### Requirements

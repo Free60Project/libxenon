@@ -1,7 +1,10 @@
 FROM free60/toolchain:latest
 
-WORKDIR /build
+RUN apt update && apt install nano && \
+  apt -y clean autoclean autoremove && \
+  rm -rf /var/lib/{apt,dpkg,cache,log}/
 
+WORKDIR /build
 COPY . .
 
 WORKDIR /build/toolchain

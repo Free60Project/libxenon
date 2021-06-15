@@ -6,3 +6,4 @@ toolchain/build.log
 toolchain/*.tar.gz
 toolchain/*.tar.bz2
 toolchain/*.tar.xz
+docs/

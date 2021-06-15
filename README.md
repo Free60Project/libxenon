@@ -1,6 +1,5 @@
 # LibXenon
-
-[![GitHub stars](https://img.shields.io/github/stars/Free60Project/libxenon?style=social)](https://github.com/StoreDev/StoreBot)
+[![GitHub pages - documentation](https://img.shields.io/github/workflow/status/Free60Project/libxenon/Documentation?label=documentation)](https://free60project.github.io/libxenon/)
 [![GitHub Workflow - Docker](https://img.shields.io/github/workflow/status/Free60Project/libxenon/docker?label=docker)](https://github.com/Free60Project/libxenon/actions?query=workflow%3Adocker)
 [![Docker pulls (Toolchain)](https://img.shields.io/docker/pulls/free60/toolchain)](https://hub.docker.com/r/free60/toolchain)
 [![Docker pulls (LibXenon)](https://img.shields.io/docker/pulls/free60/libxenon)](https://hub.docker.com/r/free60/libxenon)

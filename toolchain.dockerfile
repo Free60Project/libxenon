@@ -17,5 +17,5 @@ RUN echo "[+] Installing toolchain"
 RUN (cd /build/toolchain && ./build-xenon-toolchain toolchain && cd / && rm -rf /build) || (cat build.log; exit 1)
 
 RUN echo "[+] Setting environment variables"
-RUN echo 'export DEVKITXENON="/usr/local/xenon"' >> /etc/profile.d/99-devkitxenon.sh
-RUN echo 'export PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"' >> /etc/profile.d/99-devkitxenon.sh
+ENV DEVKITXENON=/usr/local/xenon
+ENV PATH=$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin

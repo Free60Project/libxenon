@@ -63,5 +63,5 @@ e.g. `PREFIX=/home/username/xenon ./build-xenon-toolchain toolchain`
 cd toolchain
 ./build-xenon-toolchain toolchain # install toolchain
 ./build-xenon-toolchain libxenon # install libxenon
-./build-xenon-toolchain libs # install libs (zlib, bzip, libpng, freetype2)
+./build-xenon-toolchain libs # install libs (zlib, bzip, libpng, freetype, sdl, sdl_image, sdl_mixer, sdl_ttf)
 ```

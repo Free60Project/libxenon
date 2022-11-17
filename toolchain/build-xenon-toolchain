@@ -302,6 +302,22 @@ function freetype_install
 	echo -e "Done"
 }
 
+# pass the repo name to this function
+function sdl_install
+{
+	echo -e "Cloning $1... "
+	git clone https://github.com/ITotalJustice/$1.git  >> $LOGFILE 2>&1 || fail_with_info
+	echo -e "Building $1... "
+	cd $1
+	make -f Makefile.xenon >> $LOGFILE 2>&1 || fail_with_info
+	echo -e "Installing $1... "
+	make -f Makefile.xenon install >> $LOGFILE 2>&1 || fail_with_info
+
+	cd ..
+	rm -rf $1
+	echo -e "Done"
+}
+
 function filesystems_install
 {
 	echo -e "Building Filesystems..."
@@ -449,6 +465,10 @@ elif [ "$1" == "libs" ]; then
     bzip2_install
     libpng_install
     freetype_install
+	sdl_install libSDLXenon
+	sdl_install libSDL_ImageXenon
+	sdl_install libSDL_MixerXenon
+	sdl_install libSDL_TTFXenon
     bin2s_install
     filesystems_install
 elif [ "$1" == "libxenon" ]; then
@@ -461,10 +481,18 @@ elif [ "$1" == "bzip2" ]; then
     bzip2_install
 elif [ "$1" == "freetype" ]; then
     freetype_install
+elif [ "$1" == "sdl" ]; then
+    sdl_install libSDLXenon
+elif [ "$1" == "sdl_image" ]; then
+    sdl_install libSDL_ImageXenon
+elif [ "$1" == "sdl_mixer" ]; then
+    sdl_install libSDL_MixerXenon
+elif [ "$1" == "sdl_ttf" ]; then
+    sdl_install libSDL_TTFXenon
 elif [ "$1" == "filesystems" ]; then
     filesystems_install
 elif [ "$1" == "bin2s" ]; then
-        bin2s_install
+	bin2s_install
 elif [ "$1" == "cube" ]; then
     cube
 else
@@ -476,6 +504,10 @@ else
     echo -e "\"$0 libpng\" (install or update libpng)"
     echo -e "\"$0 bzip2\" (install or update bzip2)"
     echo -e "\"$0 freetype\" (install or update freetype)"
+    echo -e "\"$0 sdl\" (install or update sdl)"
+    echo -e "\"$0 sdl_image\" (install or update sdl_image)"
+    echo -e "\"$0 sdl_mixer\" (install or update sdl_mixer)"
+    echo -e "\"$0 sdl_ttf\" (install or update sdl_ttf)"
     echo -e "\"$0 filesystems\" (install libxenon filesystems)"
     echo -e "\"$0 cube\" (compile the cube sample)"
     echo

@@ -7,3 +7,9 @@ toolchain/*.tar.gz
 toolchain/*.tar.bz2
 toolchain/*.tar.xz
 docs/
+toolchain/ext2fs-xenon
+toolchain/fat-xenon
+toolchain/libxtaf
+toolchain/libntfs
+toolchain/extds-xenon
+toolchain/extds-xenon

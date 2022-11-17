@@ -44,12 +44,14 @@ After installation of the toolchain, the following environment variables need to
 
 `DEVKITXENON` is dependencing on your chosen installation prefix location.
 
-```
-DEVKITXENON="/usr/local/xenon"
-PATH="$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin"
+(it's recommended to add the below to your bashrc)
+
+```sh
+export DEVKITXENON=/usr/local/xenon
+PATH=$PATH:$DEVKITXENON/bin:$DEVKITXENON/usr/bin
 ```
 
-### Prefix
+### Prefix (only needed when DEVKITXENON not set)
 
 If you want to choose your own prefix, prepend it to the `./build-xenon-toolchain` invocation.
 
@@ -57,18 +59,9 @@ e.g. `PREFIX=/home/username/xenon ./build-xenon-toolchain toolchain`
 
 ### Installing toolchain
 
-```
-./build-xenon-toolchain toolchain
-```
-
-### Install libxenon library
-
-```
-./build-xenon-toolchain libxenon
-```
-
-### Install auxiliary libs
-
-```
-./build-xenon-toolchain libs
+```sh
+cd toolchain
+./build-xenon-toolchain toolchain # install toolchain
+./build-xenon-toolchain libxenon # install libxenon
+./build-xenon-toolchain libs # install libs (zlib, bzip, libpng, freetype2)
 ```

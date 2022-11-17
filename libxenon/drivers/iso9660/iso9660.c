@@ -63,7 +63,7 @@ static int percd_done;
 /* Joliet UCS is big endian */
 static void utf2ucs(char * ucs, const char * utf) {
 	int c;
-	
+
 	do {
 		c = *utf++;
 		if (c <= 0x7f) {
@@ -82,7 +82,7 @@ static void utf2ucs(char * ucs, const char * utf) {
 
 static void ucs2utfn(char * utf, const char * ucs, size_t len) {
 	int c;
-	
+
 	len = len / 2;
 	while (len) {
 		len--;
@@ -167,7 +167,7 @@ typedef struct filestruct_s
 static u32 ntohl_32(const void *data) {
 	const u8 *d = (const u8*)data;
 	return (d[0] << 24) | (d[1] << 16) | (d[2] << 8) | (d[3] << 0);
-} 
+}
 
 /* This seems kinda silly, but it's important since it allows us
    to do unaligned accesses on a buffer */
@@ -184,7 +184,7 @@ static u32 iso_733(const u8 *from) { return htohl_32(from); }
 
 
 /********************************************************************************/
-/* Low-level block cacheing routines. This implements a simple queue-based 
+/* Low-level block cacheing routines. This implements a simple queue-based
    LRU/MRU cacheing system. Whenever a block is requested, it will be placed
    on the MRU end of the queue. As more blocks are loaded than can fit in
    the cache, blocks are deleted from the LRU end. */
@@ -209,7 +209,7 @@ static unsigned int * cache_mutex;
 /* Clears all cache blocks */
 static void bclear_cache(cache_block_t **cache) {
 	int i;
-	
+
 	lock(cache_mutex);
 	for (i=0; i<NUM_CACHE_BLOCKS; i++)
 		cache[i]->sector = -1;
@@ -220,10 +220,10 @@ static void bclear_cache(cache_block_t **cache) {
 static void bgrad_cache(cache_block_t **cache, int block) {
 	int		i;
 	cache_block_t	*tmp;
-	
+
 	/* Don't try it with the end block */
 	if (block < 0 || block >= (NUM_CACHE_BLOCKS-1)) return;
-	
+
 	/* Make a copy and scoot everything down */
 	tmp = cache[block];
 	for (i=block; i<(NUM_CACHE_BLOCKS - 1); i++)
@@ -238,7 +238,7 @@ static void iso_break_all();
 static int bread_cache(cache_block_t **cache, u32 sector) {
 	int i, j, rv;
 
-	rv = -1;	
+	rv = -1;
 	lock(cache_mutex);
 
 	/* Look for a pre-existing cache block */
@@ -249,30 +249,30 @@ static int bread_cache(cache_block_t **cache, u32 sector) {
 			goto bread_exit;
 		}
 	}
-	
+
 	/* If not, look for an open cache slot; if we find one, use it */
 	for (i=0; i<NUM_CACHE_BLOCKS; i++) {
 		if (cache[i]->sector == -1) break;
 	}
-	
+
 	/* If we didn't find one, kick an LRU block out of cache */
 	if (i >= NUM_CACHE_BLOCKS) { i = 0; }
-	
+
 	/* Load the requested block */
 	j = iso9660_dev->readSectors(sector, 1, cache[i]->data);
 	if (j < 0) {
-		
+
 		if (j==DISKIO_ERROR_NO_MEDIA) {
 			unlock(cache_mutex);
 			iso_reset();
 		} else
 			dbglog(DBG_ERROR, "fs_iso9660: can't read_sectors for %d: %d\n", (unsigned int)sector, j);
-		
+
 		rv = -1;
 		goto bread_exit;
 	}
 	cache[i]->sector = sector;
-	
+
 	/* Move it to the most-recently-used position */
 	bgrad_cache(cache, i);
 	rv = NUM_CACHE_BLOCKS - 1;
@@ -318,10 +318,10 @@ static int init_percd() {
 	int		i, blk;
 
 	//dbglog(DBG_NOTICE, "fs_iso9660: disc change detected\n");
-	
+
 	/* Start off with no cached blocks and no open files*/
 	iso_reset();
-	
+
 	/* Check for joliet extensions */
 	joliet = 0;
 	for (i=1; i<=3; i++) {
@@ -336,7 +336,7 @@ static int init_percd() {
 
 	/* If that failed, go after standard/RockRidge ISO */
 	if (!joliet) {
-		/* Grab and check the volume descriptor */	
+		/* Grab and check the volume descriptor */
 		blk = biread(session_base + 16);
 		if (blk < 0) return i;
 		if (memcmp((char*)icache[blk]->data, "\01CD001", 6)) {
@@ -349,7 +349,7 @@ static int init_percd() {
 	memcpy(&root_dirent, icache[blk]->data+156, sizeof(iso_dirent_t));
 	root_extent = iso_733(root_dirent.extent);
 	root_size = iso_733(root_dirent.size);
-	
+
 	return 0;
 }
 
@@ -385,12 +385,12 @@ static int fncompare(const char *isofn, int isosize, const char *normalfn) {
 
 /* Locate an ISO9660 object in the given directory; this can be a directory or
    a file, it works fine for either one. Pass in:
-   
+
    fn:		object filename (relative to the passed directory)
    dir:		0 if looking for a file, 1 if looking for a dir
    dir_extent:	directory extent to start with
    dir_size:	directory size (in bytes)
-   
+
    It will return a pointer to a transient dirent buffer (i.e., don't
    expect this buffer to stay around much longer than the call itself).
  */
@@ -414,11 +414,11 @@ static iso_dirent_t *find_object(const char *fn, int dir, u32 dir_extent, u32 di
 	/* If this is a Joliet CD, then UCSify the name */
 	if (joliet)
 		utf2ucs(ucsname, fn);
-	
+
 	while (size_left > 0) {
 		c = biread(dir_extent);
 		if (c < 0) return NULL;
-		
+
 		for (i=0; i<2048 && i<size_left; ) {
 			/* Locate the current dirent */
 			de = (iso_dirent_t *)(icache[c]->data + i);
@@ -433,7 +433,7 @@ static iso_dirent_t *find_object(const char *fn, int dir, u32 dir_extent, u32 di
 			} else {
 				/* Assume no Rock Ridge name */
 				rrnamelen = 0;
-		
+
 				/* Check for Rock Ridge NM extension */
 				len = de->length - sizeof(iso_dirent_t)
 					+ sizeof(de->name) - de->name_len;
@@ -451,18 +451,18 @@ static iso_dirent_t *find_object(const char *fn, int dir, u32 dir_extent, u32 di
 					len -= pnt[2];
 					pnt += pnt[2];
 				}
-			
+
 				/* Check the filename against the requested one */
 				if (rrnamelen > 0) {
 					char *p = strchr(fn, '/');
 					int fnlen;
-				
+
 					if (p)
 						fnlen = p - fn;
 					else
 						fnlen = strlen(fn);
 
-					if (!strnicmp(rrname, fn, fnlen)) {
+					if (!strncasecmp(rrname, fn, fnlen)) {
 						if (!((dir << 1) ^ de->flags))
 							return de;
 					}
@@ -473,14 +473,14 @@ static iso_dirent_t *find_object(const char *fn, int dir, u32 dir_extent, u32 di
 					}
 				}
 			}
-			
+
 			i += de->length;
 		}
-		
+
 		dir_extent++;
 		size_left -= 2048;
 	}
-	
+
 	return NULL;
 }
 
@@ -492,7 +492,7 @@ static iso_dirent_t *find_object(const char *fn, int dir, u32 dir_extent, u32 di
    dir:		0 if looking for a file, 1 if looking for a dir
    dir_extent:	directory extent to start with
    dir_size:	directory size (in bytes)
-   
+
    It will return a pointer to a transient dirent buffer (i.e., don't
    expect this buffer to stay around much longer than the call itself).
  */
@@ -506,7 +506,7 @@ static iso_dirent_t *find_object_path(const char *fn, int dir, iso_dirent_t *sta
 			/* Note: trailing path parts don't matter since find_object
 			   only compares based on the FN length on the disc. */
 			start = find_object(fn, 1, iso_733(start->extent), iso_733(start->size));
-			if (start == NULL) 
+			if (start == NULL)
 				return NULL;
 		}
 		fn = cur + 1;
@@ -568,7 +568,7 @@ static int iso_open(const char *fn, int mode) {
 	/* Make sure they don't want to open things as writeable */
 	if (mode != O_RDONLY && mode != O_DIR)
 		return 0;
-	
+
 	/* Do this only when we need to (this is still imperfect) */
 	if (!percd_done && init_percd() < 0)
 		return 0;
@@ -576,9 +576,9 @@ static int iso_open(const char *fn, int mode) {
 
 	/* Find the file we want */
 	de = find_object_path(fn, (mode & O_DIR)?1:0, &root_dirent);
-	if (!de)	
+	if (!de)
 		return 0;
-	
+
 	/* Find a free file handle */
 	lock(fh_mutex);
 	for (fd=0; fd<MAX_ISO_FILES; fd++){
@@ -597,7 +597,7 @@ static int iso_open(const char *fn, int mode) {
 	fh[fd].ptr = 0;
 	fh[fd].size = iso_733(de->size);
 	fh[fd].broken = 0;
-	
+
 	return fd;
 }
 
@@ -616,8 +616,8 @@ static ssize_t iso_read(int fd, void *buf, size_t bytes) {
 	u8 * outbuf;
 
 	/* Check that the fd is valid */
-	if (fd >= MAX_ISO_FILES || fh[fd].first_extent == 0 || fh[fd].broken)	
-		return -1;	
+	if (fd >= MAX_ISO_FILES || fh[fd].first_extent == 0 || fh[fd].broken)
+		return -1;
 
 	rv = 0;
 	outbuf = (u8 *)buf;
@@ -650,17 +650,19 @@ static ssize_t iso_read(int fd, void *buf, size_t bytes) {
 				thissect);*/
 
 			// Do the read
-			if (iso9660_dev->readSectors(fh[fd].first_extent + fh[fd].ptr/2048, thissect, outbuf) < 0)
+			// NOTE[TJ]: why is it checking if a bool is less than zero??????
+			// if (iso9660_dev->readSectors(fh[fd].first_extent + fh[fd].ptr/2048, thissect, outbuf) < 0)
+			if (!iso9660_dev->readSectors(fh[fd].first_extent + fh[fd].ptr/2048, thissect, outbuf))
 				return -2; // Something went wrong...
-		} else { 
+		} else {
 			toread = (toread > thissect) ? thissect : toread;
-		
+
 			/* Do the read */
 			c = bdread(fh[fd].first_extent + fh[fd].ptr/2048);
-			if (c < 0)			
-				return -3;			
+			if (c < 0)
+				return -3;
 			memcpy(outbuf, dcache[c]->data + (fh[fd].ptr%2048), toread);
-		} 
+		}
 
 		/* Adjust pointers */
 		outbuf += toread;
@@ -692,11 +694,11 @@ static off_t iso_seek(int fd, off_t offset, int whence) {
 		default:
 			return -1;
 	}
-	
+
 	/* Check bounds */
 	if (fh[fd].ptr < 0) fh[fd].ptr = 0;
 	if (fh[fd].ptr > fh[fd].size) fh[fd].ptr = fh[fd].size;
-	
+
 	return fh[fd].ptr;
 }
 
@@ -752,7 +754,7 @@ static struct dirent *iso_readdir(int fd) {
 		/* Get the current dirent block */
 		c = biread(fh[fd].first_extent + fh[fd].ptr/2048);
 		if (c < 0) return NULL;
-	
+
 		de = (iso_dirent_t *)(icache[c]->data + (fh[fd].ptr%2048));
 		if (de->length) break;
 
@@ -760,7 +762,7 @@ static struct dirent *iso_readdir(int fd) {
 		fh[fd].ptr += 2048 - (fh[fd].ptr%2048);
 	}
 	if (fh[fd].ptr >= fh[fd].size) return NULL;
-	
+
 	/* If we're at the first, skip the two blank entries */
 	if (!de->name[0] && de->name_len == 1) {
 		fh[fd].ptr += de->length;
@@ -793,7 +795,7 @@ static struct dirent *iso_readdir(int fd) {
 			pnt += pnt[2];
 		}
 	}
-	
+
 	//fh[fd].dirent.d_namlen = de->name_len;
 
 	if (de->flags & 2){
@@ -805,7 +807,7 @@ static struct dirent *iso_readdir(int fd) {
 	}
 
 	fh[fd].ptr += de->length;
-	
+
 	return &fh[fd].dirent;
 }
 
@@ -853,10 +855,10 @@ int fs_iso9660_init() {
 
 	/* Reset fd's */
 	memset(fh, 0, sizeof(fh));
-	
+
 	/* Mark the first as active so we can have an error FD of zero */
 	fh[0].first_extent = -1;
-	
+
 	/* Init thread mutexes */
 	cache_mutex = malloc(sizeof(u32));
 	fh_mutex = malloc(sizeof(u32));
@@ -896,7 +898,7 @@ int fs_iso9660_shutdown() {
 	if (fh_mutex != NULL)
 		free(fh_mutex);
 	cache_mutex = fh_mutex = NULL;
-	
+
 	return 0;
 }
 
@@ -1062,20 +1064,20 @@ static int _ISO9660_dirclose_r(struct _reent *r, DIR_ITER *dirState)
 static int _ISO9660_statvfs_r(struct _reent *r, const char *path, struct statvfs *buf)
 {
 	// FAT clusters = POSIX blocks
-	buf->f_bsize = 0x800; // File system block size. 
-	buf->f_frsize = 0x800; // Fundamental file system block size. 
+	buf->f_bsize = 0x800; // File system block size.
+	buf->f_frsize = 0x800; // Fundamental file system block size.
 
-	//buf->f_blocks	= totalsectors; // Total number of blocks on file system in units of f_frsize. 
-	buf->f_bfree = 0; // Total number of free blocks. 
-	buf->f_bavail = 0; // Number of free blocks available to non-privileged process. 
+	//buf->f_blocks	= totalsectors; // Total number of blocks on file system in units of f_frsize.
+	buf->f_bfree = 0; // Total number of free blocks.
+	buf->f_bavail = 0; // Number of free blocks available to non-privileged process.
 
 	// Treat requests for info on inodes as clusters
-	//buf->f_files = totalentries;	// Total number of file serial numbers. 
-	buf->f_ffree = 0; // Total number of free file serial numbers. 
-	buf->f_favail = 0; // Number of file serial numbers available to non-privileged process. 
+	//buf->f_files = totalentries;	// Total number of file serial numbers.
+	buf->f_ffree = 0; // Total number of free file serial numbers.
+	buf->f_favail = 0; // Number of file serial numbers available to non-privileged process.
 
 	// File system ID. 32bit ioType value
-	buf->f_fsid = 0; //??!!? 
+	buf->f_fsid = 0; //??!!?
 
 	// Bit mask of f_flag values.
 	buf->f_flag = ST_NOSUID // No support for ST_ISUID and ST_ISGID file mode bits
@@ -1157,7 +1159,7 @@ bool ISO9660_Mount(const char* name, const DISC_INTERFACE *disc_interface)
 static bool check_dev_name(const char* name, char *devname, size_t devname_size)
 {
     size_t len;
-    
+
 	if (!name)
 		return false;
 
@@ -1178,7 +1180,7 @@ bool ISO9660_Unmount(const char* name)
 	char devname[11];
 	if (! check_dev_name(name, devname, sizeof(devname)))
 		return false;
-	fs_iso9660_shutdown();	
+	fs_iso9660_shutdown();
 	if (RemoveDevice(name) == -1)
 		return false;
 	return true;

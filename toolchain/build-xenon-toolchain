@@ -4,7 +4,9 @@
 # changed for xenon by Felix Domke <tmbinc@elitedvb.net>, still public domain
 
 TARGET=xenon
-PREFIX=${PREFIX:-/usr/local/xenon} # Install location of your final toolchain
+# Install location of your final toolchain
+PREFIX=${PREFIX:-${DEVKITXENON}} # try PREFIX, fallback to DEVKITXENON
+PREFIX=${PREFIX:-/usr/local/xenon} # if PREFIX and DEVKITXENON not set, fallback to /usr/local/xenon
 PARALLEL=
 
 BINUTILS=binutils-2.32
@@ -12,10 +14,10 @@ GCC=gcc-9.2.0
 NEWLIB=newlib-3.1.0
 GDB=gdb-6.8
 
-ZLIB=zlib-1.2.11
-LIBPNG=libpng-1.5.10
-BZIP2=bzip2-1.0.6
-FREETYPE=freetype-2.10.4
+ZLIB=zlib-1.2.13
+LIBPNG=libpng-1.5.30
+BZIP2=bzip2-1.0.8
+FREETYPE=freetype-2.12.1
 
 # build stages
 BUILD_BINUTILS=true
@@ -178,7 +180,8 @@ function zlib_install
 {
 	if [ ! -f "$ZLIB.tar.gz" ]; then
 		echo -e "Downloading $ZLIB.tar.gz"
-		wget -c http://zlib.net/$ZLIB.tar.gz || fail_with_info
+		# if this breaks again, use github
+		wget -c https://www.zlib.net/fossils/$ZLIB.tar.gz || fail_with_info
 	fi;
 
 	echo -e "Extracting zlib..."
@@ -233,7 +236,7 @@ function libpng_install
 
 	echo -e "Building libpng..."
 	make $PARALLEL CROSS_COMPILE=$TARGET- >> $LOGFILE 2>&1 || fail_with_info
-	echo -e "Installing libpng..."	
+	echo -e "Installing libpng..."
 	make CROSS_COMPILE=$TARGET- install >> $LOGFILE 2>&1 || fail_with_info
 	cd ..
 	rm -rf $LIBPNG
@@ -272,7 +275,7 @@ function freetype_install
 		echo -e "Downloading $FREETYPE.tar.gz"
 		wget -c http://download.savannah.gnu.org/releases/freetype/$FREETYPE.tar.gz || fail_with_info
 	fi;
-	
+
 	echo -e "Extracting freetype..."
 	rm -rf $FREETYPE
 	tar xzf $FREETYPE.tar.gz >> $LOGFILE 2>&1 || fail_with_info
@@ -283,7 +286,7 @@ function freetype_install
 	export LDFLAGS="$CFLAGS"
 
 	echo -e "Configuring freetype..."
-	./configure --prefix=$DEVKITXENON/usr --host=ppc-elf --disable-shared >> $LOGFILE 2>&1 || fail_with_info
+	./configure --without-harfbuzz --without-brotli --prefix=$DEVKITXENON/usr --host=ppc-elf --disable-shared >> $LOGFILE 2>&1 || fail_with_info
 
 	echo -e "Building freetype..."
 	make $PARALLEL CROSS_COMPILE=$TARGET- >> $LOGFILE 2>&1 || fail_with_info
@@ -303,7 +306,7 @@ function filesystems_install
 {
 	echo -e "Building Filesystems..."
 
-	filesystems="fat-xenon ext2fs-xenon xtaflib" # ntfs-xenon ext2fs-xenon xtaflib
+	filesystems="fat-xenon ext2fs-xenon libxtaf libntfs"
 
 	for i in $filesystems
 	do
@@ -315,12 +318,12 @@ function filesystems_install
 				cd $i
 				git checkout $FSBRANCH >> $LOGFILE 2>&1
 				cd ..
-			fi			
+			fi
 		else
 			cd $i
 			if [ "" != "$FSBRANCH" ]; then
 				git checkout $FSBRANCH >> $LOGFILE 2>&1
-			fi	
+			fi
 			git remote update >> $LOGFILE 2>&1
 			git status -uno | grep -q behind
 			if [ 0 -eq $? ]; then
@@ -365,15 +368,15 @@ function cube
 		cp ../devkitxenon/examples/xenon/graphics/cube/cube.elf32 .
 		echo
 		echo -e "cube.elf32 compiled, run it via xell"
-		echo		
-		
+		echo
+
 	else
 		echo
 		echo -e "git is needed to download libxenon, install it and run this script again with \"libxenon\" as argument"
 		echo -e "If you are running debian/ubuntu : apt install git"
 		echo
 	fi
-	exit 0	
+	exit 0
 }
 
 function all_done

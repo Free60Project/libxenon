@@ -1,8 +1,8 @@
 <map id="XenosDevice" name="XenosDevice">
-<area shape="rect" id="node1" title=" " alt="" coords="284,257,383,284"/>
-<area shape="rect" id="node2" href="$structXenosVertexBuffer.html" title=" " alt="" coords="5,95,136,121"/>
-<area shape="rect" id="node3" href="$structXenosLock.html" title=" " alt="" coords="220,5,308,32"/>
-<area shape="rect" id="node5" href="$structXenosSurface.html" title=" " alt="" coords="212,95,316,121"/>
-<area shape="rect" id="node6" href="$structXenosIndexBuffer.html" title=" " alt="" coords="341,95,465,121"/>
-<area shape="rect" id="node4" href="$structXenosShader.html" title=" " alt="" coords="489,95,589,121"/>
+<area shape="rect" id="node1" title=" " alt="" coords="202,255,301,280"/>
+<area shape="rect" id="node2" href="$structXenosShader.html" title=" " alt="" coords="5,93,105,119"/>
+<area shape="rect" id="node3" href="$structXenosSurface.html" title=" " alt="" coords="130,93,234,119"/>
+<area shape="rect" id="node4" href="$structXenosLock.html" title=" " alt="" coords="279,5,367,31"/>
+<area shape="rect" id="node5" href="$structXenosVertexBuffer.html" title=" " alt="" coords="258,93,389,119"/>
+<area shape="rect" id="node6" href="$structXenosIndexBuffer.html" title=" " alt="" coords="465,93,589,119"/>
 </map>

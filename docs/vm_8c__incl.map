@@ -1,15 +1,15 @@
 <map id="libxenon/drivers/ppc/vm.c" name="libxenon/drivers/ppc/vm.c">
-<area shape="rect" id="node1" title=" " alt="" coords="106,5,275,32"/>
-<area shape="rect" id="node2" href="$vm_8h.html" title=" " alt="" coords="21,155,96,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="23,80,91,107"/>
-<area shape="rect" id="node5" href="$stdio_8h.html" title=" " alt="" coords="115,80,175,107"/>
-<area shape="rect" id="node6" href="$register_8h.html" title=" " alt="" coords="200,80,275,107"/>
-<area shape="rect" id="node8" href="$elf__abi_8h.html" title=" " alt="" coords="299,80,387,107"/>
-<area shape="rect" id="node9" href="$ehci__types_8h.html" title=" " alt="" coords="415,80,582,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="276,229,340,256"/>
-<area shape="rect" id="node7" href="$xenonsprs_8h.html" title=" " alt="" coords="189,155,280,181"/>
-<area shape="rect" id="node10" href="$xetypes_8h.html" title=" " alt="" coords="355,155,431,181"/>
-<area shape="rect" id="node12" title=" " alt="" coords="456,155,547,181"/>
-<area shape="rect" id="node13" title=" " alt="" coords="571,155,656,181"/>
-<area shape="rect" id="node11" title=" " alt="" coords="364,229,439,256"/>
+<area shape="rect" id="node1" title=" " alt="" coords="106,5,275,31"/>
+<area shape="rect" id="node2" href="$vm_8h.html" title=" " alt="" coords="21,152,96,177"/>
+<area shape="rect" id="node4" title=" " alt="" coords="23,79,91,104"/>
+<area shape="rect" id="node5" href="$stdio_8h.html" title=" " alt="" coords="115,79,175,104"/>
+<area shape="rect" id="node6" href="$register_8h.html" title=" " alt="" coords="200,79,275,104"/>
+<area shape="rect" id="node8" href="$elf__abi_8h.html" title=" " alt="" coords="299,79,387,104"/>
+<area shape="rect" id="node9" href="$ehci__types_8h.html" title=" " alt="" coords="415,79,582,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="276,225,340,251"/>
+<area shape="rect" id="node7" href="$xenonsprs_8h.html" title=" " alt="" coords="189,152,280,177"/>
+<area shape="rect" id="node10" href="$xetypes_8h.html" title=" " alt="" coords="355,152,431,177"/>
+<area shape="rect" id="node12" title=" " alt="" coords="456,152,547,177"/>
+<area shape="rect" id="node13" title=" " alt="" coords="571,152,656,177"/>
+<area shape="rect" id="node11" title=" " alt="" coords="364,225,439,251"/>
 </map>

@@ -1,16 +1,16 @@
 <map id="ehci_device_data" name="ehci_device_data">
-<area shape="rect" id="node1" title=" " alt="" coords="413,556,535,583"/>
-<area shape="rect" id="node2" href="$structehci__device.html" title=" " alt="" coords="487,363,578,389"/>
-<area shape="rect" id="node7" href="$structehci__hcd.html" title=" " alt="" coords="269,452,343,479"/>
-<area shape="rect" id="node14" href="$structusbstorage__handle.html" title=" " alt="" coords="409,452,539,479"/>
-<area shape="rect" id="node3" href="$struct__usbdevdesc.html" title=" " alt="" coords="483,273,582,300"/>
-<area shape="rect" id="node4" href="$struct__usbconfdesc.html" title=" " alt="" coords="481,184,584,211"/>
-<area shape="rect" id="node5" href="$struct__usbinterfacedesc.html" title=" " alt="" coords="469,95,597,121"/>
-<area shape="rect" id="node6" href="$struct__usbendpointdesc.html" title=" " alt="" coords="469,5,596,32"/>
-<area shape="rect" id="node8" href="$structehci__qh.html" title=" " alt="" coords="214,556,281,583"/>
-<area shape="rect" id="node9" href="$structehci__qtd.html" title=" " alt="" coords="5,363,76,389"/>
-<area shape="rect" id="node10" href="$structehci__urb.html" title=" " alt="" coords="5,273,76,300"/>
-<area shape="rect" id="node11" href="$structehci__regs.html" title=" " alt="" coords="152,363,231,389"/>
-<area shape="rect" id="node12" href="$structehci__dbg__port.html" title=" " alt="" coords="255,363,357,389"/>
-<area shape="rect" id="node13" href="$structehci__caps.html" title=" " alt="" coords="381,363,463,389"/>
+<area shape="rect" id="node1" title=" " alt="" coords="407,548,530,573"/>
+<area shape="rect" id="node2" href="$structehci__hcd.html" title=" " alt="" coords="259,445,334,471"/>
+<area shape="rect" id="node6" href="$structehci__qh.html" title=" " alt="" coords="205,548,271,573"/>
+<area shape="rect" id="node3" href="$structehci__caps.html" title=" " alt="" coords="152,357,233,383"/>
+<area shape="rect" id="node4" href="$structehci__regs.html" title=" " alt="" coords="257,357,336,383"/>
+<area shape="rect" id="node5" href="$structehci__dbg__port.html" title=" " alt="" coords="360,357,463,383"/>
+<area shape="rect" id="node7" href="$structehci__qtd.html" title=" " alt="" coords="5,357,76,383"/>
+<area shape="rect" id="node8" href="$structehci__urb.html" title=" " alt="" coords="5,269,76,295"/>
+<area shape="rect" id="node9" href="$structehci__device.html" title=" " alt="" coords="487,357,578,383"/>
+<area shape="rect" id="node14" href="$structusbstorage__handle.html" title=" " alt="" coords="403,445,534,471"/>
+<area shape="rect" id="node10" href="$struct__usbdevdesc.html" title=" " alt="" coords="483,269,582,295"/>
+<area shape="rect" id="node11" href="$struct__usbconfdesc.html" title=" " alt="" coords="481,181,584,207"/>
+<area shape="rect" id="node12" href="$struct__usbinterfacedesc.html" title=" " alt="" coords="469,93,597,119"/>
+<area shape="rect" id="node13" href="$struct__usbendpointdesc.html" title=" " alt="" coords="469,5,596,31"/>
 </map>

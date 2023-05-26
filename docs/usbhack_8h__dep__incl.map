@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/usb/usbhack.h" name="libxenon/drivers/usb/usbhack.h">
-<area shape="rect" id="node1" title=" " alt="" coords="247,5,384,47"/>
-<area shape="rect" id="node2" href="$ohci_8c.html" title=" " alt="" coords="5,95,143,136"/>
-<area shape="rect" id="node3" href="$usbdebug_8c.html" title=" " alt="" coords="167,95,304,136"/>
-<area shape="rect" id="node4" href="$usbdevs_8c.html" title=" " alt="" coords="328,95,465,136"/>
-<area shape="rect" id="node5" href="$usbserial_8c.html" title=" " alt="" coords="489,95,627,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="247,5,384,45"/>
+<area shape="rect" id="node2" href="$ohci_8c.html" title=" " alt="" coords="5,93,143,133"/>
+<area shape="rect" id="node3" href="$usbdebug_8c.html" title=" " alt="" coords="167,93,304,133"/>
+<area shape="rect" id="node4" href="$usbdevs_8c.html" title=" " alt="" coords="328,93,465,133"/>
+<area shape="rect" id="node5" href="$usbserial_8c.html" title=" " alt="" coords="489,93,627,133"/>
 </map>

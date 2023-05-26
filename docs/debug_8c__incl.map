@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/utils/debug.c" name="libxenon/drivers/utils/debug.c">
-<area shape="rect" id="node1" title=" " alt="" coords="109,5,249,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,68,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="93,95,159,121"/>
-<area shape="rect" id="node4" href="$register_8h.html" title=" " alt="" coords="184,95,284,121"/>
-<area shape="rect" id="node5" href="$xenonsprs_8h.html" title=" " alt="" coords="233,169,323,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="109,5,249,45"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,93,68,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="93,93,159,119"/>
+<area shape="rect" id="node4" href="$register_8h.html" title=" " alt="" coords="184,93,284,119"/>
+<area shape="rect" id="node5" href="$xenonsprs_8h.html" title=" " alt="" coords="233,167,323,192"/>
 </map>

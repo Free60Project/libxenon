@@ -1,16 +1,16 @@
 <map id="libxenon/drivers/lwip/xenon/src/sys_arch.c" name="libxenon/drivers/lwip/xenon/src/sys_arch.c">
-<area shape="rect" id="node1" title=" " alt="" coords="191,5,339,47"/>
-<area shape="rect" id="node2" href="$sys_8h.html" title=" " alt="" coords="91,169,169,196"/>
-<area shape="rect" id="node12" href="$def_8h.html" title=" " alt="" coords="343,244,421,271"/>
-<area shape="rect" id="node13" href="$timers_8h.html" title=" " alt="" coords="175,95,269,121"/>
-<area shape="rect" id="node14" title=" " alt="" coords="346,95,429,121"/>
-<area shape="rect" id="node3" href="$opt_8h.html" title=" " alt="" coords="178,319,255,345"/>
-<area shape="rect" id="node10" href="$err_8h.html" title=" " alt="" coords="245,244,319,271"/>
-<area shape="rect" id="node11" href="$sys__arch_8h.html" title=" " alt="" coords="5,244,119,271"/>
-<area shape="rect" id="node4" href="$lwipopts_8h.html" title=" " alt="" coords="65,393,145,420"/>
-<area shape="rect" id="node7" href="$drivers_2lwip_2include_2lwip_2debug_8h.html" title=" " alt="" coords="169,393,264,420"/>
-<area shape="rect" id="node5" title=" " alt="" coords="117,468,181,495"/>
-<area shape="rect" id="node6" href="$stdio_8h.html" title=" " alt="" coords="32,468,92,495"/>
-<area shape="rect" id="node8" href="$arch_8h.html" title=" " alt="" coords="260,468,344,495"/>
-<area shape="rect" id="node9" href="$cc_8h.html" title=" " alt="" coords="265,543,339,569"/>
+<area shape="rect" id="node1" title=" " alt="" coords="191,5,339,45"/>
+<area shape="rect" id="node2" href="$sys_8h.html" title=" " alt="" coords="91,167,169,192"/>
+<area shape="rect" id="node12" href="$def_8h.html" title=" " alt="" coords="343,240,421,265"/>
+<area shape="rect" id="node13" href="$timers_8h.html" title=" " alt="" coords="175,93,269,119"/>
+<area shape="rect" id="node14" title=" " alt="" coords="346,93,429,119"/>
+<area shape="rect" id="node3" href="$opt_8h.html" title=" " alt="" coords="178,313,255,339"/>
+<area shape="rect" id="node10" href="$err_8h.html" title=" " alt="" coords="245,240,319,265"/>
+<area shape="rect" id="node11" href="$sys__arch_8h.html" title=" " alt="" coords="5,240,119,265"/>
+<area shape="rect" id="node4" href="$lwipopts_8h.html" title=" " alt="" coords="65,387,145,412"/>
+<area shape="rect" id="node7" href="$drivers_2lwip_2include_2lwip_2debug_8h.html" title=" " alt="" coords="169,387,264,412"/>
+<area shape="rect" id="node5" title=" " alt="" coords="117,460,181,485"/>
+<area shape="rect" id="node6" href="$stdio_8h.html" title=" " alt="" coords="32,460,92,485"/>
+<area shape="rect" id="node8" href="$arch_8h.html" title=" " alt="" coords="260,460,344,485"/>
+<area shape="rect" id="node9" href="$cc_8h.html" title=" " alt="" coords="265,533,339,559"/>
 </map>

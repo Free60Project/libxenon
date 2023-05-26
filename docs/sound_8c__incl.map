@@ -1,9 +1,9 @@
 <map id="libxenon/drivers/xenon_sound/sound.c" name="libxenon/drivers/xenon_sound/sound.c">
-<area shape="rect" id="node1" title=" " alt="" coords="189,5,340,47"/>
-<area shape="rect" id="node2" href="$io_8h.html" title=" " alt="" coords="5,95,68,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="93,95,157,121"/>
-<area shape="rect" id="node5" href="$xenon__smc_8h.html" title=" " alt="" coords="181,95,349,121"/>
-<area shape="rect" id="node6" href="$xenon__gpio_8h.html" title=" " alt="" coords="373,95,540,121"/>
-<area shape="rect" id="node7" href="$drivers_2ppc_2cache_8h.html" title=" " alt="" coords="564,95,656,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="233,169,297,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="189,5,340,45"/>
+<area shape="rect" id="node2" href="$io_8h.html" title=" " alt="" coords="5,93,68,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="93,93,157,119"/>
+<area shape="rect" id="node5" href="$xenon__smc_8h.html" title=" " alt="" coords="181,93,349,119"/>
+<area shape="rect" id="node6" href="$xenon__gpio_8h.html" title=" " alt="" coords="373,93,540,119"/>
+<area shape="rect" id="node7" href="$drivers_2ppc_2cache_8h.html" title=" " alt="" coords="564,93,656,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="233,167,297,192"/>
 </map>

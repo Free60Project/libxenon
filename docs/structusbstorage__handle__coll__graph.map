@@ -1,8 +1,8 @@
 <map id="usbstorage_handle" name="usbstorage_handle">
-<area shape="rect" id="node1" title=" " alt="" coords="5,452,136,479"/>
-<area shape="rect" id="node2" href="$structehci__device.html" title=" " alt="" coords="25,363,116,389"/>
-<area shape="rect" id="node3" href="$struct__usbdevdesc.html" title=" " alt="" coords="21,273,120,300"/>
-<area shape="rect" id="node4" href="$struct__usbconfdesc.html" title=" " alt="" coords="19,184,122,211"/>
-<area shape="rect" id="node5" href="$struct__usbinterfacedesc.html" title=" " alt="" coords="7,95,135,121"/>
-<area shape="rect" id="node6" href="$struct__usbendpointdesc.html" title=" " alt="" coords="7,5,134,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,445,136,471"/>
+<area shape="rect" id="node2" href="$structehci__device.html" title=" " alt="" coords="25,357,116,383"/>
+<area shape="rect" id="node3" href="$struct__usbdevdesc.html" title=" " alt="" coords="21,269,120,295"/>
+<area shape="rect" id="node4" href="$struct__usbconfdesc.html" title=" " alt="" coords="19,181,122,207"/>
+<area shape="rect" id="node5" href="$struct__usbinterfacedesc.html" title=" " alt="" coords="7,93,135,119"/>
+<area shape="rect" id="node6" href="$struct__usbendpointdesc.html" title=" " alt="" coords="7,5,134,31"/>
 </map>

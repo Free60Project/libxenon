@@ -1,10 +1,10 @@
 <map id="libxenon/drivers/nocfe/lib_malloc.c" name="libxenon/drivers/nocfe/lib_malloc.c">
-<area shape="rect" id="node1" title=" " alt="" coords="29,5,177,47"/>
-<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,169,65,196"/>
-<area shape="rect" id="node3" title=" " alt="" coords="24,95,87,121"/>
-<area shape="rect" id="node4" href="$lib__types_8h.html" title=" " alt="" coords="111,95,194,121"/>
-<area shape="rect" id="node8" href="$lib__malloc_8h.html" title=" " alt="" coords="218,95,309,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="82,244,146,271"/>
-<area shape="rect" id="node6" href="$xetypes_8h.html" title=" " alt="" coords="152,169,228,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="170,244,245,271"/>
+<area shape="rect" id="node1" title=" " alt="" coords="29,5,177,45"/>
+<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,167,65,192"/>
+<area shape="rect" id="node3" title=" " alt="" coords="24,93,87,119"/>
+<area shape="rect" id="node4" href="$lib__types_8h.html" title=" " alt="" coords="111,93,194,119"/>
+<area shape="rect" id="node8" href="$lib__malloc_8h.html" title=" " alt="" coords="218,93,309,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="82,240,146,265"/>
+<area shape="rect" id="node6" href="$xetypes_8h.html" title=" " alt="" coords="152,167,228,192"/>
+<area shape="rect" id="node7" title=" " alt="" coords="170,240,245,265"/>
 </map>

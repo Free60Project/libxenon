@@ -1,9 +1,9 @@
 <map id="libxenon/drivers/lwip/include/lwip/udp.h" name="libxenon/drivers/lwip/include/lwip/udp.h">
-<area shape="rect" id="node1" title=" " alt="" coords="435,5,574,47"/>
-<area shape="rect" id="node2" href="$telnet__console_8c.html" title=" " alt="" coords="5,95,167,136"/>
-<area shape="rect" id="node3" href="$init_8c.html" title=" " alt="" coords="191,95,330,136"/>
-<area shape="rect" id="node4" href="$ip_8c.html" title=" " alt="" coords="354,95,493,136"/>
-<area shape="rect" id="node5" href="$ip6_8c.html" title=" " alt="" coords="517,95,655,136"/>
-<area shape="rect" id="node6" href="$memp_8c.html" title=" " alt="" coords="679,95,818,136"/>
-<area shape="rect" id="node7" href="$network_8c.html" title=" " alt="" coords="842,95,1005,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="435,5,574,45"/>
+<area shape="rect" id="node2" href="$telnet__console_8c.html" title=" " alt="" coords="5,93,167,133"/>
+<area shape="rect" id="node3" href="$init_8c.html" title=" " alt="" coords="191,93,330,133"/>
+<area shape="rect" id="node4" href="$ip_8c.html" title=" " alt="" coords="354,93,493,133"/>
+<area shape="rect" id="node5" href="$ip6_8c.html" title=" " alt="" coords="517,93,655,133"/>
+<area shape="rect" id="node6" href="$memp_8c.html" title=" " alt="" coords="679,93,818,133"/>
+<area shape="rect" id="node7" href="$network_8c.html" title=" " alt="" coords="842,93,1005,133"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="XCONFIG_SECURED_SETTINGS" name="XCONFIG_SECURED_SETTINGS">
-<area shape="rect" id="node1" title=" " alt="" coords="103,95,327,121"/>
-<area shape="rect" id="node2" href="$structXCONFIG__POWER__MODE.html" title=" " alt="" coords="5,5,188,32"/>
-<area shape="rect" id="node3" href="$structXCONFIG__POWER__VCS__CONTROL.html" title=" " alt="" coords="213,5,455,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="103,93,327,119"/>
+<area shape="rect" id="node2" href="$structXCONFIG__POWER__MODE.html" title=" " alt="" coords="5,5,188,31"/>
+<area shape="rect" id="node3" href="$structXCONFIG__POWER__VCS__CONTROL.html" title=" " alt="" coords="213,5,455,31"/>
 </map>

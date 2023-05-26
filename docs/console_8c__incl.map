@@ -1,13 +1,13 @@
 <map id="libxenon/drivers/console/console.c" name="libxenon/drivers/console/console.c">
-<area shape="rect" id="node1" title=" " alt="" coords="195,5,356,47"/>
-<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,95,65,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="142,244,206,271"/>
-<area shape="rect" id="node4" title=" " alt="" coords="141,95,205,121"/>
-<area shape="rect" id="node5" href="$drivers_2ppc_2cache_8h.html" title=" " alt="" coords="229,95,321,121"/>
-<area shape="rect" id="node6" href="$font__8x16_8h.html" title=" " alt="" coords="346,95,434,121"/>
-<area shape="rect" id="node7" href="$console_8h.html" title=" " alt="" coords="458,95,535,121"/>
-<area shape="rect" id="node10" href="$xenos_8h.html" title=" " alt="" coords="559,95,663,121"/>
-<area shape="rect" id="node8" href="$xetypes_8h.html" title=" " alt="" coords="300,169,376,196"/>
-<area shape="rect" id="node9" title=" " alt="" coords="301,244,375,271"/>
-<area shape="rect" id="node11" href="$xenos__videomodes_8h.html" title=" " alt="" coords="540,169,683,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="195,5,356,45"/>
+<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,93,65,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="142,240,206,265"/>
+<area shape="rect" id="node4" title=" " alt="" coords="141,93,205,119"/>
+<area shape="rect" id="node5" href="$drivers_2ppc_2cache_8h.html" title=" " alt="" coords="229,93,321,119"/>
+<area shape="rect" id="node6" href="$font__8x16_8h.html" title=" " alt="" coords="346,93,434,119"/>
+<area shape="rect" id="node7" href="$console_8h.html" title=" " alt="" coords="458,93,535,119"/>
+<area shape="rect" id="node10" href="$xenos_8h.html" title=" " alt="" coords="559,93,663,119"/>
+<area shape="rect" id="node8" href="$xetypes_8h.html" title=" " alt="" coords="300,167,376,192"/>
+<area shape="rect" id="node9" title=" " alt="" coords="301,240,375,265"/>
+<area shape="rect" id="node11" href="$xenos__videomodes_8h.html" title=" " alt="" coords="540,167,683,192"/>
 </map>

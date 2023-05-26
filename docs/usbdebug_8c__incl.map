@@ -1,12 +1,12 @@
 <map id="libxenon/drivers/usb/usbdebug.c" name="libxenon/drivers/usb/usbdebug.c">
-<area shape="rect" id="node1" title=" " alt="" coords="335,5,472,47"/>
-<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,95,65,121"/>
-<area shape="rect" id="node3" href="$time_8h.html" title=" " alt="" coords="89,95,147,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="171,95,249,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="274,95,338,121"/>
-<area shape="rect" id="node6" href="$usbhack_8h.html" title=" " alt="" coords="363,95,444,121"/>
-<area shape="rect" id="node7" href="$lib__malloc_8h.html" title=" " alt="" coords="469,95,559,121"/>
-<area shape="rect" id="node8" href="$lib__queue_8h.html" title=" " alt="" coords="584,95,671,121"/>
-<area shape="rect" id="node9" href="$usbchap9_8h.html" title=" " alt="" coords="698,169,786,196"/>
-<area shape="rect" id="node10" href="$usbd_8h.html" title=" " alt="" coords="747,95,807,121"/>
+<area shape="rect" id="node1" title=" " alt="" coords="335,5,472,45"/>
+<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,93,65,119"/>
+<area shape="rect" id="node3" href="$time_8h.html" title=" " alt="" coords="89,93,147,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="171,93,249,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="274,93,338,119"/>
+<area shape="rect" id="node6" href="$usbhack_8h.html" title=" " alt="" coords="363,93,444,119"/>
+<area shape="rect" id="node7" href="$lib__malloc_8h.html" title=" " alt="" coords="469,93,559,119"/>
+<area shape="rect" id="node8" href="$lib__queue_8h.html" title=" " alt="" coords="584,93,671,119"/>
+<area shape="rect" id="node9" href="$usbchap9_8h.html" title=" " alt="" coords="698,167,786,192"/>
+<area shape="rect" id="node10" href="$usbd_8h.html" title=" " alt="" coords="747,93,807,119"/>
 </map>

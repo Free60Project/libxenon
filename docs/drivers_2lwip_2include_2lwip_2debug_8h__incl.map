@@ -1,9 +1,9 @@
 <map id="libxenon/drivers/lwip/include/lwip/debug.h" name="libxenon/drivers/lwip/include/lwip/debug.h">
-<area shape="rect" id="node1" title=" " alt="" coords="81,5,224,47"/>
-<area shape="rect" id="node2" href="$arch_8h.html" title=" " alt="" coords="5,95,89,121"/>
-<area shape="rect" id="node4" href="$opt_8h.html" title=" " alt="" coords="114,95,191,121"/>
-<area shape="rect" id="node3" href="$cc_8h.html" title=" " alt="" coords="10,169,85,196"/>
-<area shape="rect" id="node5" href="$lwipopts_8h.html" title=" " alt="" coords="113,169,193,196"/>
-<area shape="rect" id="node6" title=" " alt="" coords="77,244,141,271"/>
-<area shape="rect" id="node7" href="$stdio_8h.html" title=" " alt="" coords="165,244,225,271"/>
+<area shape="rect" id="node1" title=" " alt="" coords="81,5,224,45"/>
+<area shape="rect" id="node2" href="$arch_8h.html" title=" " alt="" coords="5,93,89,119"/>
+<area shape="rect" id="node4" href="$opt_8h.html" title=" " alt="" coords="114,93,191,119"/>
+<area shape="rect" id="node3" href="$cc_8h.html" title=" " alt="" coords="10,167,85,192"/>
+<area shape="rect" id="node5" href="$lwipopts_8h.html" title=" " alt="" coords="113,167,193,192"/>
+<area shape="rect" id="node6" title=" " alt="" coords="77,240,141,265"/>
+<area shape="rect" id="node7" href="$stdio_8h.html" title=" " alt="" coords="165,240,225,265"/>
 </map>

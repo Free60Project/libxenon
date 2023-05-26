@@ -1,14 +1,14 @@
 <map id="libxenon/drivers/usb/ohci.c" name="libxenon/drivers/usb/ohci.c">
-<area shape="rect" id="node1" title=" " alt="" coords="416,5,553,47"/>
-<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,95,65,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="89,95,152,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="177,95,243,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="267,95,331,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="355,95,419,121"/>
-<area shape="rect" id="node7" href="$usbhack_8h.html" title=" " alt="" coords="444,95,525,121"/>
-<area shape="rect" id="node8" href="$lib__malloc_8h.html" title=" " alt="" coords="550,95,641,121"/>
-<area shape="rect" id="node9" href="$lib__queue_8h.html" title=" " alt="" coords="665,95,752,121"/>
-<area shape="rect" id="node10" href="$usbchap9_8h.html" title=" " alt="" coords="779,169,867,196"/>
-<area shape="rect" id="node11" href="$usbd_8h.html" title=" " alt="" coords="828,95,888,121"/>
-<area shape="rect" id="node12" href="$ohci_8h.html" title=" " alt="" coords="913,95,969,121"/>
+<area shape="rect" id="node1" title=" " alt="" coords="416,5,553,45"/>
+<area shape="rect" id="node2" href="$stdio_8h.html" title=" " alt="" coords="5,93,65,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="89,93,152,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="177,93,243,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="267,93,331,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="355,93,419,119"/>
+<area shape="rect" id="node7" href="$usbhack_8h.html" title=" " alt="" coords="444,93,525,119"/>
+<area shape="rect" id="node8" href="$lib__malloc_8h.html" title=" " alt="" coords="550,93,641,119"/>
+<area shape="rect" id="node9" href="$lib__queue_8h.html" title=" " alt="" coords="665,93,752,119"/>
+<area shape="rect" id="node10" href="$usbchap9_8h.html" title=" " alt="" coords="779,167,867,192"/>
+<area shape="rect" id="node11" href="$usbd_8h.html" title=" " alt="" coords="828,93,888,119"/>
+<area shape="rect" id="node12" href="$ohci_8h.html" title=" " alt="" coords="913,93,969,119"/>
 </map>

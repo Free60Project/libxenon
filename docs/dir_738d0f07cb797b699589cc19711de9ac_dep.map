@@ -1,27 +1,21 @@
 <map id="libxenon/drivers/lwip/xenon" name="libxenon/drivers/lwip/xenon">
-<area shape="rect" id="node1" href="dir_55c7f79cefdce8b79ff0812ec639a504.html" title="include" alt="" coords="323,159,395,207"/>
-<area shape="rect" id="node3" href="dir_75726d809c048dc2977e2f6ebb838cfd.html" title="include" alt="" coords="132,159,204,207"/>
-<area shape="rect" id="edge10-headlabel" href="dir_000015_000023.html" title="2" alt="" coords="218,184,226,198"/>
-<area shape="rect" id="node4" href="dir_a5b82bc786713421cc0eca85a72eb6e3.html" title="netif" alt="" coords="133,63,205,111"/>
-<area shape="rect" id="edge4-headlabel" href="dir_000030_000015.html" title="8" alt="" coords="306,138,314,153"/>
-<area shape="rect" id="node6" href="dir_0441fec06d5c21f3bbb65312bcddab82.html" title="xenon_smc" alt="" coords="469,255,557,303"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000030_000044.html" title="1" alt="" coords="506,227,514,242"/>
-<area shape="rect" id="node7" href="dir_3567e2e6620172c00a850e0a0c5e733a.html" title="pci" alt="" coords="436,351,508,399"/>
-<area shape="rect" id="edge2-headlabel" href="dir_000030_000035.html" title="1" alt="" coords="467,324,475,338"/>
-<area shape="rect" id="node8" href="dir_52f7d4a10f81d6a0f2424513fda5f659.html" title="xenon_nand" alt="" coords="616,159,707,207"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000030_000042.html" title="1" alt="" coords="596,142,604,157"/>
-<area shape="rect" id="node9" href="dir_6d92568c765db2e86b30dd2f1e0fa68a.html" title="ppc" alt="" coords="520,159,592,207"/>
-<area shape="rect" id="edge5-headlabel" href="dir_000030_000036.html" title="1" alt="" coords="502,144,510,158"/>
-<area shape="rect" id="node10" href="dir_a03a8d4b5aab536be7efad8fcbef728e.html" title="time" alt="" coords="603,255,675,303"/>
-<area shape="rect" id="edge6-headlabel" href="dir_000030_000037.html" title="1" alt="" coords="691,256,699,271"/>
-<area shape="rect" id="node5" href="dir_995a9d4e02fffaf8ca283f8b4d8417da.html" title="src" alt="" coords="37,63,109,111"/>
-<area shape="rect" id="edge13-headlabel" href="dir_000031_000015.html" title="4" alt="" coords="304,139,312,154"/>
-<area shape="rect" id="edge14-headlabel" href="dir_000031_000023.html" title="1" alt="" coords="134,132,142,147"/>
-<area shape="rect" id="edge12-headlabel" href="dir_000044_000035.html" title="2" alt="" coords="493,330,501,345"/>
-<area shape="rect" id="edge11-headlabel" href="dir_000042_000037.html" title="1" alt="" coords="653,232,661,246"/>
-<area shape="rect" id="edge8-headlabel" href="dir_000036_000044.html" title="1" alt="" coords="535,234,543,249"/>
-<area shape="rect" id="edge9-headlabel" href="dir_000036_000037.html" title="1" alt="" coords="600,228,608,243"/>
-<area shape="rect" id="edge7-headlabel" href="dir_000037_000036.html" title="1" alt="" coords="587,219,595,233"/>
-<area shape="rect" id="clust2" href="dir_738d0f07cb797b699589cc19711de9ac.html" alt="" coords="27,52,312,217"/>
-<area shape="rect" id="clust1" href="dir_65b6c0e2f385b56037870f80446bfcac.html" title="lwip" alt="" coords="16,16,405,228"/>
+<area shape="rect" id="node1" href="dir_55c7f79cefdce8b79ff0812ec639a504.html" title="include" alt="" coords="251,136,314,161"/>
+<area shape="rect" id="node3" href="dir_75726d809c048dc2977e2f6ebb838cfd.html" title="include" alt="" coords="38,136,101,161"/>
+<area shape="rect" id="node4" href="dir_a5b82bc786713421cc0eca85a72eb6e3.html" title="netif" alt="" coords="102,63,149,88"/>
+<area shape="rect" id="edge4-headlabel" href="dir_000027_000008.html" title="8" alt="" coords="239,113,247,128"/>
+<area shape="rect" id="node6" href="dir_0441fec06d5c21f3bbb65312bcddab82.html" title="xenon_smc" alt="" coords="339,136,427,161"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000027_000053.html" title="1" alt="" coords="319,116,327,131"/>
+<area shape="rect" id="node7" href="dir_3567e2e6620172c00a850e0a0c5e733a.html" title="pci" alt="" coords="451,136,490,161"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000027_000031.html" title="1" alt="" coords="431,120,439,134"/>
+<area shape="rect" id="node8" href="dir_52f7d4a10f81d6a0f2424513fda5f659.html" title="xenon_nand" alt="" coords="515,136,605,161"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000027_000051.html" title="1" alt="" coords="494,119,502,134"/>
+<area shape="rect" id="node9" href="dir_6d92568c765db2e86b30dd2f1e0fa68a.html" title="ppc" alt="" coords="629,136,672,161"/>
+<area shape="rect" id="edge5-headlabel" href="dir_000027_000035.html" title="1" alt="" coords="609,120,617,134"/>
+<area shape="rect" id="node10" href="dir_a03a8d4b5aab536be7efad8fcbef728e.html" title="time" alt="" coords="697,136,743,161"/>
+<area shape="rect" id="edge6-headlabel" href="dir_000027_000043.html" title="1" alt="" coords="676,120,684,135"/>
+<area shape="rect" id="node5" href="dir_995a9d4e02fffaf8ca283f8b4d8417da.html" title="src" alt="" coords="37,63,77,88"/>
+<area shape="rect" id="edge7-headlabel" href="dir_000038_000008.html" title="4" alt="" coords="232,117,240,132"/>
+<area shape="rect" id="edge8-headlabel" href="dir_000038_000009.html" title="1" alt="" coords="69,109,77,123"/>
+<area shape="rect" id="clust2" href="dir_738d0f07cb797b699589cc19711de9ac.html" alt="" coords="27,52,240,172"/>
+<area shape="rect" id="clust1" href="dir_65b6c0e2f385b56037870f80446bfcac.html" title="lwip" alt="" coords="16,16,325,183"/>
 </map>

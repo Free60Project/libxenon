@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/xb360/xb360.h" name="libxenon/drivers/xb360/xb360.h">
-<area shape="rect" id="node1" title=" " alt="" coords="267,5,417,47"/>
-<area shape="rect" id="node2" href="$xb360_8c.html" title=" " alt="" coords="5,95,156,136"/>
-<area shape="rect" id="node3" href="$xenon__config_8c.html" title=" " alt="" coords="180,95,331,136"/>
-<area shape="rect" id="node4" href="$xenon__sfcx_8c.html" title=" " alt="" coords="355,95,505,136"/>
-<area shape="rect" id="node5" href="$xenos_8c.html" title=" " alt="" coords="529,95,680,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="267,5,417,45"/>
+<area shape="rect" id="node2" href="$xb360_8c.html" title=" " alt="" coords="5,93,156,133"/>
+<area shape="rect" id="node3" href="$xenon__config_8c.html" title=" " alt="" coords="180,93,331,133"/>
+<area shape="rect" id="node4" href="$xenon__sfcx_8c.html" title=" " alt="" coords="355,93,505,133"/>
+<area shape="rect" id="node5" href="$xenos_8c.html" title=" " alt="" coords="529,93,680,133"/>
 </map>

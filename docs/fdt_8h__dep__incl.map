@@ -1,12 +1,12 @@
 <map id="libxenon/drivers/libfdt/fdt.h" name="libxenon/drivers/libfdt/fdt.h">
-<area shape="rect" id="node1" title=" " alt="" coords="601,5,745,47"/>
-<area shape="rect" id="node2" href="$fdt_8c.html" title=" " alt="" coords="328,184,472,225"/>
-<area shape="rect" id="node3" href="$fdt__ro_8c.html" title=" " alt="" coords="5,184,149,225"/>
-<area shape="rect" id="node4" href="$fdt__rw_8c.html" title=" " alt="" coords="496,184,640,225"/>
-<area shape="rect" id="node5" href="$fdt__strerror_8c.html" title=" " alt="" coords="1000,184,1144,225"/>
-<area shape="rect" id="node6" href="$fdt__sw_8c.html" title=" " alt="" coords="664,184,808,225"/>
-<area shape="rect" id="node7" href="$fdt__wip_8c.html" title=" " alt="" coords="832,184,976,225"/>
-<area shape="rect" id="node8" href="$libfdt_8h.html" title=" " alt="" coords="437,95,581,136"/>
-<area shape="rect" id="node10" href="$libfdt__internal_8h.html" title=" " alt="" coords="656,95,800,136"/>
-<area shape="rect" id="node9" href="$elf_8c.html" title=" " alt="" coords="173,184,304,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="601,5,745,45"/>
+<area shape="rect" id="node2" href="$fdt_8c.html" title=" " alt="" coords="328,181,472,221"/>
+<area shape="rect" id="node3" href="$fdt__ro_8c.html" title=" " alt="" coords="5,181,149,221"/>
+<area shape="rect" id="node4" href="$fdt__rw_8c.html" title=" " alt="" coords="496,181,640,221"/>
+<area shape="rect" id="node5" href="$fdt__strerror_8c.html" title=" " alt="" coords="1000,181,1144,221"/>
+<area shape="rect" id="node6" href="$fdt__sw_8c.html" title=" " alt="" coords="664,181,808,221"/>
+<area shape="rect" id="node7" href="$fdt__wip_8c.html" title=" " alt="" coords="832,181,976,221"/>
+<area shape="rect" id="node8" href="$libfdt_8h.html" title=" " alt="" coords="437,93,581,133"/>
+<area shape="rect" id="node10" href="$libfdt__internal_8h.html" title=" " alt="" coords="656,93,800,133"/>
+<area shape="rect" id="node9" href="$elf_8c.html" title=" " alt="" coords="173,181,304,221"/>
 </map>

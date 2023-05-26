@@ -1,6 +1,6 @@
 <map id="libxenon/drivers/xenos/xe.h" name="libxenon/drivers/xenos/xe.h">
-<area shape="rect" id="node1" title=" " alt="" coords="49,5,227,32"/>
-<area shape="rect" id="node2" href="$edram_8c.html" title=" " alt="" coords="5,169,156,211"/>
-<area shape="rect" id="node3" href="$edram_8h.html" title=" " alt="" coords="63,80,213,121"/>
-<area shape="rect" id="node4" href="$xe_8c.html" title=" " alt="" coords="237,87,415,114"/>
+<area shape="rect" id="node1" title=" " alt="" coords="49,5,227,31"/>
+<area shape="rect" id="node2" href="$edram_8c.html" title=" " alt="" coords="5,167,156,207"/>
+<area shape="rect" id="node3" href="$edram_8h.html" title=" " alt="" coords="63,79,213,119"/>
+<area shape="rect" id="node4" href="$xe_8c.html" title=" " alt="" coords="237,86,415,111"/>
 </map>

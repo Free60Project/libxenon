@@ -1,11 +1,11 @@
 <map id="usbreq_s" name="usbreq_s">
-<area shape="rect" id="node1" title=" " alt="" coords="338,291,413,317"/>
-<area shape="rect" id="node2" href="$structusbdev__s.html" title=" " alt="" coords="336,95,415,121"/>
-<area shape="rect" id="node4" href="$structusbbus__s.html" title=" " alt="" coords="15,200,94,227"/>
-<area shape="rect" id="node7" href="$structusbpipe__s.html" title=" " alt="" coords="443,200,524,227"/>
-<area shape="rect" id="node3" href="$structusb__driver__s.html" title=" " alt="" coords="186,5,282,32"/>
-<area shape="rect" id="node5" href="$structusb__hcdrv__s.html" title=" " alt="" coords="6,291,102,317"/>
-<area shape="rect" id="node6" href="$structusb__config__descr__s.html" title=" " alt="" coords="307,5,444,32"/>
-<area shape="rect" id="node8" href="$structusb__device__descr__s.html" title=" " alt="" coords="469,5,610,32"/>
-<area shape="rect" id="node9" href="$structqueue__s.html" title=" " alt="" coords="191,200,262,227"/>
+<area shape="rect" id="node1" title=" " alt="" coords="153,288,227,313"/>
+<area shape="rect" id="node2" href="$structqueue__s.html" title=" " alt="" coords="5,198,76,223"/>
+<area shape="rect" id="node3" href="$structusbdev__s.html" title=" " alt="" coords="281,93,360,119"/>
+<area shape="rect" id="node5" href="$structusbbus__s.html" title=" " alt="" coords="392,198,471,223"/>
+<area shape="rect" id="node7" href="$structusbpipe__s.html" title=" " alt="" coords="257,198,339,223"/>
+<area shape="rect" id="node4" href="$structusb__driver__s.html" title=" " alt="" coords="130,5,226,31"/>
+<area shape="rect" id="node6" href="$structusb__hcdrv__s.html" title=" " alt="" coords="357,288,453,313"/>
+<area shape="rect" id="node8" href="$structusb__device__descr__s.html" title=" " alt="" coords="250,5,391,31"/>
+<area shape="rect" id="node9" href="$structusb__config__descr__s.html" title=" " alt="" coords="416,5,553,31"/>
 </map>

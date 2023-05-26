@@ -1,10 +1,10 @@
 <map id="detailed_timing" name="detailed_timing">
-<area shape="rect" id="node1" title=" " alt="" coords="508,151,617,177"/>
-<area shape="rect" id="node2" href="$structdetailed__non__pixel.html" title=" " alt="" coords="259,123,387,149"/>
-<area shape="rect" id="node3" href="$structdetailed__data__string.html" title=" " alt="" coords="13,5,151,32"/>
-<area shape="rect" id="node4" href="$structdetailed__data__monitor__range.html" title=" " alt="" coords="7,57,157,98"/>
-<area shape="rect" id="node5" href="$structcvt__timing.html" title=" " alt="" coords="41,123,123,149"/>
-<area shape="rect" id="node6" href="$structdetailed__data__wpindex.html" title=" " alt="" coords="5,173,159,200"/>
-<area shape="rect" id="node7" href="$structstd__timing.html" title=" " alt="" coords="41,224,123,251"/>
-<area shape="rect" id="node8" href="$structdetailed__pixel__timing.html" title=" " alt="" coords="252,173,395,200"/>
+<area shape="rect" id="node1" title=" " alt="" coords="508,95,617,120"/>
+<area shape="rect" id="node2" href="$structdetailed__pixel__timing.html" title=" " alt="" coords="252,71,395,96"/>
+<area shape="rect" id="node3" href="$structdetailed__non__pixel.html" title=" " alt="" coords="259,120,387,145"/>
+<area shape="rect" id="node4" href="$structdetailed__data__string.html" title=" " alt="" coords="13,5,151,31"/>
+<area shape="rect" id="node5" href="$structdetailed__data__monitor__range.html" title=" " alt="" coords="7,55,157,95"/>
+<area shape="rect" id="node6" href="$structdetailed__data__wpindex.html" title=" " alt="" coords="5,120,159,145"/>
+<area shape="rect" id="node7" href="$structstd__timing.html" title=" " alt="" coords="41,169,123,195"/>
+<area shape="rect" id="node8" href="$structcvt__timing.html" title=" " alt="" coords="41,219,123,244"/>
 </map>

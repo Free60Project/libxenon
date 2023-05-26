@@ -1,10 +1,10 @@
 <map id="libxenon/drivers/ppc/xenonsprs.h" name="libxenon/drivers/ppc/xenonsprs.h">
-<area shape="rect" id="node1" title=" " alt="" coords="693,5,831,47"/>
-<area shape="rect" id="node2" href="$register_8h.html" title=" " alt="" coords="523,95,660,136"/>
-<area shape="rect" id="node7" href="$debug_8c.html" title=" " alt="" coords="692,184,832,225"/>
-<area shape="rect" id="node8" href="$xenon__power_8c.html" title=" " alt="" coords="856,184,1007,225"/>
-<area shape="rect" id="node3" href="$elf_8c.html" title=" " alt="" coords="361,184,491,225"/>
-<area shape="rect" id="node4" href="$xenon__syscalls_8c.html" title=" " alt="" coords="515,184,668,225"/>
-<area shape="rect" id="node5" href="$c__except_8c.html" title=" " alt="" coords="5,184,143,225"/>
-<area shape="rect" id="node6" href="$vm_8c.html" title=" " alt="" coords="167,191,336,218"/>
+<area shape="rect" id="node1" title=" " alt="" coords="695,5,832,45"/>
+<area shape="rect" id="node2" href="$register_8h.html" title=" " alt="" coords="524,93,661,133"/>
+<area shape="rect" id="node7" href="$debug_8c.html" title=" " alt="" coords="693,181,833,221"/>
+<area shape="rect" id="node8" href="$xenon__power_8c.html" title=" " alt="" coords="857,181,1008,221"/>
+<area shape="rect" id="node3" href="$elf_8c.html" title=" " alt="" coords="361,181,491,221"/>
+<area shape="rect" id="node4" href="$xenon__syscalls_8c.html" title=" " alt="" coords="516,181,669,221"/>
+<area shape="rect" id="node5" href="$c__except_8c.html" title=" " alt="" coords="5,181,143,221"/>
+<area shape="rect" id="node6" href="$vm_8c.html" title=" " alt="" coords="167,189,336,214"/>
 </map>

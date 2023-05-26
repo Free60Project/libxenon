@@ -1,14 +1,14 @@
 <map id="libxenon/drivers/utils/gmon.c" name="libxenon/drivers/utils/gmon.c">
-<area shape="rect" id="node1" title=" " alt="" coords="400,5,540,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,97,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="121,95,203,121"/>
-<area shape="rect" id="node4" href="$lib_8h.html" title=" " alt="" coords="227,95,302,121"/>
-<area shape="rect" id="node6" href="$gmon_8h.html" title=" " alt="" coords="326,95,390,121"/>
-<area shape="rect" id="node7" href="$timebase_8h.html" title=" " alt="" coords="415,95,525,121"/>
-<area shape="rect" id="node9" href="$stdio_8h.html" title=" " alt="" coords="549,95,609,121"/>
-<area shape="rect" id="node10" title=" " alt="" coords="633,95,691,121"/>
-<area shape="rect" id="node11" title=" " alt="" coords="715,95,782,121"/>
-<area shape="rect" id="node12" title=" " alt="" coords="806,95,873,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="233,169,297,196"/>
-<area shape="rect" id="node8" title=" " alt="" coords="438,169,502,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="400,5,540,45"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,93,97,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="121,93,203,119"/>
+<area shape="rect" id="node4" href="$lib_8h.html" title=" " alt="" coords="227,93,302,119"/>
+<area shape="rect" id="node6" href="$gmon_8h.html" title=" " alt="" coords="326,93,390,119"/>
+<area shape="rect" id="node7" href="$timebase_8h.html" title=" " alt="" coords="415,93,525,119"/>
+<area shape="rect" id="node9" href="$stdio_8h.html" title=" " alt="" coords="549,93,609,119"/>
+<area shape="rect" id="node10" title=" " alt="" coords="633,93,691,119"/>
+<area shape="rect" id="node11" title=" " alt="" coords="715,93,782,119"/>
+<area shape="rect" id="node12" title=" " alt="" coords="806,93,873,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="233,167,297,192"/>
+<area shape="rect" id="node8" title=" " alt="" coords="438,167,502,192"/>
 </map>

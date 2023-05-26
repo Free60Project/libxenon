@@ -1,9 +1,9 @@
 <map id="libxenon/include/sys/statvfs.h" name="libxenon/include/sys/statvfs.h">
-<area shape="rect" id="node1" title=" " alt="" coords="249,5,387,47"/>
-<area shape="rect" id="node2" href="$iosupport_8h.html" title=" " alt="" coords="249,95,387,136"/>
-<area shape="rect" id="node3" href="$iso9660_8h.html" title=" " alt="" coords="8,184,169,225"/>
-<area shape="rect" id="node5" href="$newlib_8c.html" title=" " alt="" coords="191,273,344,315"/>
-<area shape="rect" id="node6" href="$xenon__syscalls_8c.html" title=" " alt="" coords="368,273,521,315"/>
-<area shape="rect" id="node7" href="$dirent_8h.html" title=" " alt="" coords="195,184,334,225"/>
-<area shape="rect" id="node4" href="$iso9660_8c.html" title=" " alt="" coords="5,273,167,315"/>
+<area shape="rect" id="node1" title=" " alt="" coords="249,5,387,45"/>
+<area shape="rect" id="node2" href="$iosupport_8h.html" title=" " alt="" coords="249,93,387,133"/>
+<area shape="rect" id="node3" href="$iso9660_8h.html" title=" " alt="" coords="8,181,169,221"/>
+<area shape="rect" id="node5" href="$newlib_8c.html" title=" " alt="" coords="191,269,344,309"/>
+<area shape="rect" id="node6" href="$xenon__syscalls_8c.html" title=" " alt="" coords="368,269,521,309"/>
+<area shape="rect" id="node7" href="$dirent_8h.html" title=" " alt="" coords="195,181,334,221"/>
+<area shape="rect" id="node4" href="$iso9660_8c.html" title=" " alt="" coords="5,269,167,309"/>
 </map>

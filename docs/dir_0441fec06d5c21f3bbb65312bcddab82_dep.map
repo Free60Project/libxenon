@@ -1,11 +1,10 @@
 <map id="libxenon/drivers/xenon_smc" name="libxenon/drivers/xenon_smc">
-<area shape="rect" id="node1" href="dir_05dffae8faa37b2f37b2baa7f75d8a0c.html" title="xenon_uart" alt="" coords="27,148,112,196"/>
-<area shape="rect" id="node2" href="dir_3567e2e6620172c00a850e0a0c5e733a.html" title="pci" alt="" coords="136,148,208,196"/>
-<area shape="rect" id="node3" href="dir_0441fec06d5c21f3bbb65312bcddab82.html" title="xenon_smc" alt="" coords="120,52,208,100"/>
-<area shape="rect" id="edge2-headlabel" href="dir_000044_000047.html" title="1" alt="" coords="107,134,115,148"/>
-<area shape="rect" id="edge3-headlabel" href="dir_000044_000035.html" title="2" alt="" coords="173,122,181,136"/>
-<area shape="rect" id="node4" href="dir_dd460d755a81a785c3ccd8c5c0d198e6.html" title="include" alt="" coords="232,148,304,196"/>
-<area shape="rect" id="edge4-headlabel" href="dir_000044_000021.html" title="1" alt="" coords="231,122,239,137"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000021_000047.html" title="1" alt="" coords="111,136,119,151"/>
-<area shape="rect" id="clust1" href="dir_10e9e9b0aecc40ed0c478cfbe04e0e75.html" title="drivers" alt="" coords="16,16,219,207"/>
+<area shape="rect" id="node1" href="dir_05dffae8faa37b2f37b2baa7f75d8a0c.html" title="xenon_uart" alt="" coords="27,125,112,151"/>
+<area shape="rect" id="node2" href="dir_3567e2e6620172c00a850e0a0c5e733a.html" title="pci" alt="" coords="137,125,175,151"/>
+<area shape="rect" id="node3" href="dir_0441fec06d5c21f3bbb65312bcddab82.html" title="xenon_smc" alt="" coords="88,52,176,77"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000053_000056.html" title="1" alt="" coords="94,109,102,124"/>
+<area shape="rect" id="edge2-headlabel" href="dir_000053_000031.html" title="2" alt="" coords="150,98,158,112"/>
+<area shape="rect" id="node4" href="dir_dd460d755a81a785c3ccd8c5c0d198e6.html" title="include" alt="" coords="199,125,262,151"/>
+<area shape="rect" id="edge3-headlabel" href="dir_000053_000010.html" title="1" alt="" coords="200,100,208,115"/>
+<area shape="rect" id="clust1" href="dir_10e9e9b0aecc40ed0c478cfbe04e0e75.html" title="drivers" alt="" coords="16,16,187,161"/>
 </map>

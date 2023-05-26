@@ -1,5 +1,5 @@
 <map id="netbuf" name="netbuf">
-<area shape="rect" id="node1" title=" " alt="" coords="65,109,123,136"/>
-<area shape="rect" id="node2" href="$structpbuf.html" title=" " alt="" coords="5,5,52,32"/>
-<area shape="rect" id="node3" href="$structip__addr.html" title=" " alt="" coords="129,5,193,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="65,108,123,133"/>
+<area shape="rect" id="node2" href="$structpbuf.html" title=" " alt="" coords="5,5,52,31"/>
+<area shape="rect" id="node3" href="$structip__addr.html" title=" " alt="" coords="129,5,193,31"/>
 </map>

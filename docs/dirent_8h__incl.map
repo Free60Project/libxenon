@@ -1,9 +1,9 @@
 <map id="libxenon/include/sys/dirent.h" name="libxenon/include/sys/dirent.h">
-<area shape="rect" id="node1" title=" " alt="" coords="259,5,397,47"/>
-<area shape="rect" id="node2" href="$iosupport_8h.html" title=" " alt="" coords="129,95,239,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="242,244,329,271"/>
-<area shape="rect" id="node7" title=" " alt="" coords="365,95,472,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,169,67,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="91,169,170,196"/>
-<area shape="rect" id="node5" href="$statvfs_8h.html" title=" " alt="" coords="195,169,291,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="259,5,397,45"/>
+<area shape="rect" id="node2" href="$iosupport_8h.html" title=" " alt="" coords="129,93,239,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="242,240,329,265"/>
+<area shape="rect" id="node7" title=" " alt="" coords="365,93,472,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,167,67,192"/>
+<area shape="rect" id="node4" title=" " alt="" coords="91,167,170,192"/>
+<area shape="rect" id="node5" href="$statvfs_8h.html" title=" " alt="" coords="195,167,291,192"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/diskio/ata.h" name="libxenon/drivers/diskio/ata.h">
-<area shape="rect" id="node1" title=" " alt="" coords="22,5,173,47"/>
-<area shape="rect" id="node2" href="$xetypes_8h.html" title=" " alt="" coords="22,169,98,196"/>
-<area shape="rect" id="node5" href="$disc__io_8h.html" title=" " alt="" coords="98,95,171,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,244,80,271"/>
-<area shape="rect" id="node4" title=" " alt="" coords="104,244,168,271"/>
+<area shape="rect" id="node1" title=" " alt="" coords="22,5,173,45"/>
+<area shape="rect" id="node2" href="$xetypes_8h.html" title=" " alt="" coords="22,167,98,192"/>
+<area shape="rect" id="node5" href="$disc__io_8h.html" title=" " alt="" coords="98,93,171,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,240,80,265"/>
+<area shape="rect" id="node4" title=" " alt="" coords="104,240,168,265"/>
 </map>

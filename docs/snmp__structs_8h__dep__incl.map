@@ -1,6 +1,6 @@
 <map id="libxenon/drivers/lwip/include/lwip/snmp_structs.h" name="libxenon/drivers/lwip/include/lwip/snmp_structs.h">
-<area shape="rect" id="node1" title=" " alt="" coords="43,5,229,47"/>
-<area shape="rect" id="node2" href="$memp_8c.html" title=" " alt="" coords="5,184,144,225"/>
-<area shape="rect" id="node3" href="$snmp__msg_8h.html" title=" " alt="" coords="113,95,285,136"/>
-<area shape="rect" id="node4" href="$init_8c.html" title=" " alt="" coords="168,184,307,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="43,5,229,45"/>
+<area shape="rect" id="node2" href="$memp_8c.html" title=" " alt="" coords="5,181,144,221"/>
+<area shape="rect" id="node3" href="$snmp__msg_8h.html" title=" " alt="" coords="113,93,285,133"/>
+<area shape="rect" id="node4" href="$init_8c.html" title=" " alt="" coords="168,181,307,221"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="libxenon/drivers/usb/usbeth.h" name="libxenon/drivers/usb/usbeth.h">
-<area shape="rect" id="node1" title=" " alt="" coords="409,5,547,47"/>
-<area shape="rect" id="node2" href="$dev__usb__asix_8c.html" title=" " alt="" coords="5,95,143,136"/>
-<area shape="rect" id="node3" href="$dev__usb__catc_8c.html" title=" " alt="" coords="167,95,304,136"/>
-<area shape="rect" id="node4" href="$dev__usb__klsi_8c.html" title=" " alt="" coords="328,95,465,136"/>
-<area shape="rect" id="node5" href="$dev__usb__pegasus_8c.html" title=" " alt="" coords="490,95,631,136"/>
-<area shape="rect" id="node6" href="$dev__usb__rtek_8c.html" title=" " alt="" coords="656,95,793,136"/>
-<area shape="rect" id="node7" href="$usbeth_8c.html" title=" " alt="" coords="817,95,955,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="409,5,547,45"/>
+<area shape="rect" id="node2" href="$dev__usb__asix_8c.html" title=" " alt="" coords="5,93,143,133"/>
+<area shape="rect" id="node3" href="$dev__usb__catc_8c.html" title=" " alt="" coords="167,93,304,133"/>
+<area shape="rect" id="node4" href="$dev__usb__klsi_8c.html" title=" " alt="" coords="328,93,465,133"/>
+<area shape="rect" id="node5" href="$dev__usb__pegasus_8c.html" title=" " alt="" coords="490,93,631,133"/>
+<area shape="rect" id="node6" href="$dev__usb__rtek_8c.html" title=" " alt="" coords="656,93,793,133"/>
+<area shape="rect" id="node7" href="$usbeth_8c.html" title=" " alt="" coords="817,93,955,133"/>
 </map>

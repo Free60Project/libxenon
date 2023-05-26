@@ -1,5 +1,5 @@
 <map id="libxenon/drivers/usb/tinyehci/usb2.c" name="libxenon/drivers/usb/tinyehci/usb2.c">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,143,47"/>
-<area shape="rect" id="node2" href="$ehci_8c.html" title=" " alt="" coords="5,95,143,136"/>
-<area shape="rect" id="node3" href="$tinyehci_8c.html" title=" " alt="" coords="5,184,143,225"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,143,45"/>
+<area shape="rect" id="node2" href="$ehci_8c.html" title=" " alt="" coords="5,93,143,133"/>
+<area shape="rect" id="node3" href="$tinyehci_8c.html" title=" " alt="" coords="5,181,143,221"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/xenon_smc/xenon_gpio.h" name="libxenon/drivers/xenon_smc/xenon_gpio.h">
-<area shape="rect" id="node1" title=" " alt="" coords="255,5,406,47"/>
-<area shape="rect" id="node2" href="$enet_8c.html" title=" " alt="" coords="5,95,144,136"/>
-<area shape="rect" id="node3" href="$xenon__gpio_8c.html" title=" " alt="" coords="169,95,319,136"/>
-<area shape="rect" id="node4" href="$sound_8c.html" title=" " alt="" coords="343,95,494,136"/>
-<area shape="rect" id="node5" href="$xenos_8c.html" title=" " alt="" coords="518,95,669,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="255,5,406,45"/>
+<area shape="rect" id="node2" href="$enet_8c.html" title=" " alt="" coords="5,93,144,133"/>
+<area shape="rect" id="node3" href="$xenon__gpio_8c.html" title=" " alt="" coords="169,93,319,133"/>
+<area shape="rect" id="node4" href="$sound_8c.html" title=" " alt="" coords="343,93,494,133"/>
+<area shape="rect" id="node5" href="$xenos_8c.html" title=" " alt="" coords="518,93,669,133"/>
 </map>

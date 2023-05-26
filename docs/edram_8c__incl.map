@@ -1,14 +1,14 @@
 <map id="libxenon/drivers/xenos/edram.c" name="libxenon/drivers/xenos/edram.c">
-<area shape="rect" id="node1" title=" " alt="" coords="311,5,462,47"/>
-<area shape="rect" id="node2" href="$edram_8h.html" title=" " alt="" coords="5,95,112,121"/>
-<area shape="rect" id="node3" href="$xe_8h.html" title=" " alt="" coords="80,169,163,196"/>
-<area shape="rect" id="node4" href="$xetypes_8h.html" title=" " alt="" coords="122,244,198,271"/>
-<area shape="rect" id="node7" href="$xe__internal_8h.html" title=" " alt="" coords="238,95,333,121"/>
-<area shape="rect" id="node8" href="$stdio_8h.html" title=" " alt="" coords="357,95,417,121"/>
-<area shape="rect" id="node9" title=" " alt="" coords="441,95,503,121"/>
-<area shape="rect" id="node10" href="$time_8h.html" title=" " alt="" coords="527,95,614,121"/>
-<area shape="rect" id="node11" title=" " alt="" coords="639,95,703,121"/>
-<area shape="rect" id="node12" title=" " alt="" coords="727,95,795,121"/>
-<area shape="rect" id="node5" title=" " alt="" coords="76,319,151,345"/>
-<area shape="rect" id="node6" title=" " alt="" coords="175,319,239,345"/>
+<area shape="rect" id="node1" title=" " alt="" coords="311,5,462,45"/>
+<area shape="rect" id="node2" href="$edram_8h.html" title=" " alt="" coords="5,93,112,119"/>
+<area shape="rect" id="node3" href="$xe_8h.html" title=" " alt="" coords="80,167,163,192"/>
+<area shape="rect" id="node4" href="$xetypes_8h.html" title=" " alt="" coords="122,240,198,265"/>
+<area shape="rect" id="node7" href="$xe__internal_8h.html" title=" " alt="" coords="238,93,333,119"/>
+<area shape="rect" id="node8" href="$stdio_8h.html" title=" " alt="" coords="357,93,417,119"/>
+<area shape="rect" id="node9" title=" " alt="" coords="441,93,503,119"/>
+<area shape="rect" id="node10" href="$time_8h.html" title=" " alt="" coords="527,93,614,119"/>
+<area shape="rect" id="node11" title=" " alt="" coords="639,93,703,119"/>
+<area shape="rect" id="node12" title=" " alt="" coords="727,93,795,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="76,313,151,339"/>
+<area shape="rect" id="node6" title=" " alt="" coords="175,313,239,339"/>
 </map>

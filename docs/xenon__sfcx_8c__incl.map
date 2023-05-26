@@ -1,13 +1,13 @@
 <map id="libxenon/drivers/xenon_nand/xenon_sfcx.c" name="libxenon/drivers/xenon_nand/xenon_sfcx.c">
-<area shape="rect" id="node1" title=" " alt="" coords="323,5,474,47"/>
-<area shape="rect" id="node2" href="$xetypes_8h.html" title=" " alt="" coords="51,95,127,121"/>
-<area shape="rect" id="node5" href="$stdio_8h.html" title=" " alt="" coords="151,95,211,121"/>
-<area shape="rect" id="node6" title=" " alt="" coords="235,95,298,121"/>
-<area shape="rect" id="node7" title=" " alt="" coords="323,95,389,121"/>
-<area shape="rect" id="node8" title=" " alt="" coords="414,95,471,121"/>
-<area shape="rect" id="node9" href="$time_8h.html" title=" " alt="" coords="495,95,582,121"/>
-<area shape="rect" id="node10" href="$xb360_8h.html" title=" " alt="" coords="607,95,711,121"/>
-<area shape="rect" id="node11" href="$xenon__sfcx_8h.html" title=" " alt="" coords="735,95,833,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,169,80,196"/>
-<area shape="rect" id="node4" title=" " alt="" coords="104,169,168,196"/>
+<area shape="rect" id="node1" title=" " alt="" coords="323,5,474,45"/>
+<area shape="rect" id="node2" href="$xetypes_8h.html" title=" " alt="" coords="51,93,127,119"/>
+<area shape="rect" id="node5" href="$stdio_8h.html" title=" " alt="" coords="151,93,211,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="235,93,298,119"/>
+<area shape="rect" id="node7" title=" " alt="" coords="323,93,389,119"/>
+<area shape="rect" id="node8" title=" " alt="" coords="414,93,471,119"/>
+<area shape="rect" id="node9" href="$time_8h.html" title=" " alt="" coords="495,93,582,119"/>
+<area shape="rect" id="node10" href="$xb360_8h.html" title=" " alt="" coords="607,93,711,119"/>
+<area shape="rect" id="node11" href="$xenon__sfcx_8h.html" title=" " alt="" coords="735,93,833,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,167,80,192"/>
+<area shape="rect" id="node4" title=" " alt="" coords="104,167,168,192"/>
 </map>

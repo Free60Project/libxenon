@@ -1,6 +1,6 @@
 <map id="libxenon/drivers/xenon_uart/xenon_uart.h" name="libxenon/drivers/xenon_uart/xenon_uart.h">
-<area shape="rect" id="node1" title=" " alt="" coords="167,5,317,47"/>
-<area shape="rect" id="node2" href="$c__except_8c.html" title=" " alt="" coords="5,95,143,136"/>
-<area shape="rect" id="node3" href="$xenon__smc_8c.html" title=" " alt="" coords="167,95,317,136"/>
-<area shape="rect" id="node4" href="$include_2debug_8h.html" title=" " alt="" coords="342,102,505,129"/>
+<area shape="rect" id="node1" title=" " alt="" coords="167,5,317,45"/>
+<area shape="rect" id="node2" href="$c__except_8c.html" title=" " alt="" coords="5,93,143,133"/>
+<area shape="rect" id="node3" href="$xenon__smc_8c.html" title=" " alt="" coords="167,93,317,133"/>
+<area shape="rect" id="node4" href="$include_2debug_8h.html" title=" " alt="" coords="342,101,505,126"/>
 </map>

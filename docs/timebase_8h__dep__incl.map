@@ -1,8 +1,8 @@
 <map id="libxenon/drivers/ppc/timebase.h" name="libxenon/drivers/ppc/timebase.h">
-<area shape="rect" id="node1" title=" " alt="" coords="349,5,486,47"/>
-<area shape="rect" id="node2" href="$elf_8c.html" title=" " alt="" coords="5,95,136,136"/>
-<area shape="rect" id="node3" href="$network_8c.html" title=" " alt="" coords="160,95,323,136"/>
-<area shape="rect" id="node4" href="$time_8c.html" title=" " alt="" coords="347,95,488,136"/>
-<area shape="rect" id="node5" href="$tinyehci_8c.html" title=" " alt="" coords="513,95,650,136"/>
-<area shape="rect" id="node6" href="$gmon_8c.html" title=" " alt="" coords="674,95,814,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="349,5,486,45"/>
+<area shape="rect" id="node2" href="$elf_8c.html" title=" " alt="" coords="5,93,136,133"/>
+<area shape="rect" id="node3" href="$network_8c.html" title=" " alt="" coords="160,93,323,133"/>
+<area shape="rect" id="node4" href="$time_8c.html" title=" " alt="" coords="347,93,488,133"/>
+<area shape="rect" id="node5" href="$tinyehci_8c.html" title=" " alt="" coords="513,93,650,133"/>
+<area shape="rect" id="node6" href="$gmon_8c.html" title=" " alt="" coords="674,93,814,133"/>
 </map>

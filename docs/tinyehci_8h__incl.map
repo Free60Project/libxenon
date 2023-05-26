@@ -1,12 +1,12 @@
 <map id="libxenon/drivers/usb/tinyehci/tinyehci.h" name="libxenon/drivers/usb/tinyehci/tinyehci.h">
-<area shape="rect" id="node1" title=" " alt="" coords="74,5,211,47"/>
-<area shape="rect" id="node2" href="$xetypes_8h.html" title=" " alt="" coords="51,244,127,271"/>
-<area shape="rect" id="node5" href="$ehci_8h.html" title=" " alt="" coords="212,95,268,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,319,80,345"/>
-<area shape="rect" id="node4" title=" " alt="" coords="104,319,168,345"/>
-<area shape="rect" id="node6" href="$ehci__types_8h.html" title=" " alt="" coords="143,169,238,196"/>
-<area shape="rect" id="node9" href="$usb_8h.html" title=" " alt="" coords="263,169,316,196"/>
-<area shape="rect" id="node10" href="$ehci__defs_8h.html" title=" " alt="" coords="340,169,428,196"/>
-<area shape="rect" id="node7" title=" " alt="" coords="152,244,243,271"/>
-<area shape="rect" id="node8" title=" " alt="" coords="267,244,352,271"/>
+<area shape="rect" id="node1" title=" " alt="" coords="74,5,211,45"/>
+<area shape="rect" id="node2" href="$xetypes_8h.html" title=" " alt="" coords="51,240,127,265"/>
+<area shape="rect" id="node5" href="$ehci_8h.html" title=" " alt="" coords="212,93,268,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,313,80,339"/>
+<area shape="rect" id="node4" title=" " alt="" coords="104,313,168,339"/>
+<area shape="rect" id="node6" href="$ehci__types_8h.html" title=" " alt="" coords="143,167,238,192"/>
+<area shape="rect" id="node9" href="$usb_8h.html" title=" " alt="" coords="263,167,316,192"/>
+<area shape="rect" id="node10" href="$ehci__defs_8h.html" title=" " alt="" coords="340,167,428,192"/>
+<area shape="rect" id="node7" title=" " alt="" coords="152,240,243,265"/>
+<area shape="rect" id="node8" title=" " alt="" coords="267,240,352,265"/>
 </map>

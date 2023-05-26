@@ -1,11 +1,11 @@
 <map id="libxenon/drivers/diskio/disc_io.h" name="libxenon/drivers/diskio/disc_io.h">
-<area shape="rect" id="node1" title=" " alt="" coords="237,5,388,47"/>
-<area shape="rect" id="node2" href="$ata_8h.html" title=" " alt="" coords="5,95,156,136"/>
-<area shape="rect" id="node4" href="$iso9660_8c.html" title=" " alt="" coords="207,184,368,225"/>
-<area shape="rect" id="node5" href="$iso9660_8h.html" title=" " alt="" coords="232,95,393,136"/>
-<area shape="rect" id="node6" href="$newlib_8c.html" title=" " alt="" coords="417,95,571,136"/>
-<area shape="rect" id="node7" href="$usbstorage_8c.html" title=" " alt="" coords="595,95,743,136"/>
-<area shape="rect" id="node3" href="$ata_8c.html" title=" " alt="" coords="5,184,156,225"/>
-<area shape="rect" id="node8" href="$ehci_8c.html" title=" " alt="" coords="600,184,737,225"/>
-<area shape="rect" id="node9" href="$tinyehci_8c.html" title=" " alt="" coords="600,273,737,315"/>
+<area shape="rect" id="node1" title=" " alt="" coords="237,5,388,45"/>
+<area shape="rect" id="node2" href="$ata_8h.html" title=" " alt="" coords="5,93,156,133"/>
+<area shape="rect" id="node4" href="$iso9660_8c.html" title=" " alt="" coords="207,181,368,221"/>
+<area shape="rect" id="node5" href="$iso9660_8h.html" title=" " alt="" coords="232,93,393,133"/>
+<area shape="rect" id="node6" href="$newlib_8c.html" title=" " alt="" coords="417,93,571,133"/>
+<area shape="rect" id="node7" href="$usbstorage_8c.html" title=" " alt="" coords="595,93,743,133"/>
+<area shape="rect" id="node3" href="$ata_8c.html" title=" " alt="" coords="5,181,156,221"/>
+<area shape="rect" id="node8" href="$ehci_8c.html" title=" " alt="" coords="600,181,737,221"/>
+<area shape="rect" id="node9" href="$tinyehci_8c.html" title=" " alt="" coords="600,269,737,309"/>
 </map>

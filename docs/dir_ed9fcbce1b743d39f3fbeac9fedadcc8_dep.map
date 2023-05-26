@@ -1,6 +1,6 @@
 <map id="libxenon/drivers/lwip/core/snmp" name="libxenon/drivers/lwip/core/snmp">
-<area shape="rect" id="node1" href="dir_ed9fcbce1b743d39f3fbeac9fedadcc8.html" title="snmp" alt="" coords="27,52,99,100"/>
-<area shape="rect" id="node2" href="dir_55c7f79cefdce8b79ff0812ec639a504.html" title="include" alt="" coords="27,148,99,196"/>
-<area shape="rect" id="edge1-headlabel" href="dir_000014_000015.html" title="6" alt="" coords="67,122,75,137"/>
-<area shape="rect" id="clust1" href="dir_57b14b10431d6e62e5b83cce942d6f06.html" title="core" alt="" coords="16,16,109,111"/>
+<area shape="rect" id="node1" href="dir_ed9fcbce1b743d39f3fbeac9fedadcc8.html" title="snmp" alt="" coords="27,52,82,77"/>
+<area shape="rect" id="node2" href="dir_55c7f79cefdce8b79ff0812ec639a504.html" title="include" alt="" coords="23,125,86,151"/>
+<area shape="rect" id="edge1-headlabel" href="dir_000037_000008.html" title="6" alt="" coords="59,99,67,114"/>
+<area shape="rect" id="clust1" href="dir_57b14b10431d6e62e5b83cce942d6f06.html" title="core" alt="" coords="16,16,93,88"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="ehci_device" name="ehci_device">
-<area shape="rect" id="node1" title=" " alt="" coords="24,363,115,389"/>
-<area shape="rect" id="node2" href="$struct__usbdevdesc.html" title=" " alt="" coords="20,273,119,300"/>
-<area shape="rect" id="node3" href="$struct__usbconfdesc.html" title=" " alt="" coords="18,184,121,211"/>
-<area shape="rect" id="node4" href="$struct__usbinterfacedesc.html" title=" " alt="" coords="5,95,133,121"/>
-<area shape="rect" id="node5" href="$struct__usbendpointdesc.html" title=" " alt="" coords="6,5,133,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="24,357,115,383"/>
+<area shape="rect" id="node2" href="$struct__usbdevdesc.html" title=" " alt="" coords="20,269,119,295"/>
+<area shape="rect" id="node3" href="$struct__usbconfdesc.html" title=" " alt="" coords="18,181,121,207"/>
+<area shape="rect" id="node4" href="$struct__usbinterfacedesc.html" title=" " alt="" coords="5,93,133,119"/>
+<area shape="rect" id="node5" href="$struct__usbendpointdesc.html" title=" " alt="" coords="6,5,133,31"/>
 </map>

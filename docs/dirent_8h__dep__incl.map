@@ -1,6 +1,6 @@
 <map id="libxenon/include/sys/dirent.h" name="libxenon/include/sys/dirent.h">
-<area shape="rect" id="node1" title=" " alt="" coords="198,5,337,47"/>
-<area shape="rect" id="node2" href="$iso9660_8c.html" title=" " alt="" coords="5,95,167,136"/>
-<area shape="rect" id="node3" href="$newlib_8c.html" title=" " alt="" coords="191,95,344,136"/>
-<area shape="rect" id="node4" href="$xenon__syscalls_8c.html" title=" " alt="" coords="368,95,521,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="198,5,337,45"/>
+<area shape="rect" id="node2" href="$iso9660_8c.html" title=" " alt="" coords="5,93,167,133"/>
+<area shape="rect" id="node3" href="$newlib_8c.html" title=" " alt="" coords="191,93,344,133"/>
+<area shape="rect" id="node4" href="$xenon__syscalls_8c.html" title=" " alt="" coords="368,93,521,133"/>
 </map>

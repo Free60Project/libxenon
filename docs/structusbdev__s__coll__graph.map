@@ -1,9 +1,9 @@
 <map id="usbdev_s" name="usbdev_s">
-<area shape="rect" id="node1" title=" " alt="" coords="155,95,234,121"/>
-<area shape="rect" id="node3" href="$structusbbus__s.html" title=" " alt="" coords="55,199,134,225"/>
-<area shape="rect" id="node6" href="$structusbpipe__s.html" title=" " alt="" coords="250,199,331,225"/>
-<area shape="rect" id="node2" href="$structusb__driver__s.html" title=" " alt="" coords="5,5,101,32"/>
-<area shape="rect" id="node4" href="$structusb__hcdrv__s.html" title=" " alt="" coords="47,288,143,315"/>
-<area shape="rect" id="node5" href="$structusb__config__descr__s.html" title=" " alt="" coords="126,5,263,32"/>
-<area shape="rect" id="node7" href="$structusb__device__descr__s.html" title=" " alt="" coords="288,5,429,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="157,93,235,119"/>
+<area shape="rect" id="node3" href="$structusbbus__s.html" title=" " alt="" coords="57,196,135,221"/>
+<area shape="rect" id="node5" href="$structusbpipe__s.html" title=" " alt="" coords="251,196,333,221"/>
+<area shape="rect" id="node2" href="$structusb__driver__s.html" title=" " alt="" coords="5,5,101,31"/>
+<area shape="rect" id="node4" href="$structusb__hcdrv__s.html" title=" " alt="" coords="48,284,144,309"/>
+<area shape="rect" id="node6" href="$structusb__device__descr__s.html" title=" " alt="" coords="125,5,267,31"/>
+<area shape="rect" id="node7" href="$structusb__config__descr__s.html" title=" " alt="" coords="291,5,429,31"/>
 </map>

@@ -1,6 +1,6 @@
 <map id="libxenon/drivers/input/input.h" name="libxenon/drivers/input/input.h">
-<area shape="rect" id="node1" title=" " alt="" coords="171,5,315,47"/>
-<area shape="rect" id="node2" href="$input_8c.html" title=" " alt="" coords="5,95,149,136"/>
-<area shape="rect" id="node3" href="$dummy_8c.html" title=" " alt="" coords="174,95,311,136"/>
-<area shape="rect" id="node4" href="$usbctrl_8c.html" title=" " alt="" coords="335,95,473,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="171,5,315,45"/>
+<area shape="rect" id="node2" href="$input_8c.html" title=" " alt="" coords="5,93,149,133"/>
+<area shape="rect" id="node3" href="$dummy_8c.html" title=" " alt="" coords="174,93,311,133"/>
+<area shape="rect" id="node4" href="$usbctrl_8c.html" title=" " alt="" coords="335,93,473,133"/>
 </map>

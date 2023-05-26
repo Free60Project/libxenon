@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/xenon_soc/xenon_power.h" name="libxenon/drivers/xenon_soc/xenon_power.h">
-<area shape="rect" id="node1" title=" " alt="" coords="249,5,399,47"/>
-<area shape="rect" id="node2" href="$elf_8c.html" title=" " alt="" coords="5,95,136,136"/>
-<area shape="rect" id="node3" href="$newlib_8c.html" title=" " alt="" coords="159,95,313,136"/>
-<area shape="rect" id="node4" href="$xenon__syscalls_8c.html" title=" " alt="" coords="337,95,490,136"/>
-<area shape="rect" id="node5" href="$xenon__power_8c.html" title=" " alt="" coords="514,95,665,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="250,5,401,45"/>
+<area shape="rect" id="node2" href="$elf_8c.html" title=" " alt="" coords="5,93,136,133"/>
+<area shape="rect" id="node3" href="$newlib_8c.html" title=" " alt="" coords="161,93,314,133"/>
+<area shape="rect" id="node4" href="$xenon__syscalls_8c.html" title=" " alt="" coords="338,93,491,133"/>
+<area shape="rect" id="node5" href="$xenon__power_8c.html" title=" " alt="" coords="515,93,666,133"/>
 </map>

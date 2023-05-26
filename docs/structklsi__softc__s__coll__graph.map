@@ -1,12 +1,12 @@
 <map id="klsi_softc_s" name="klsi_softc_s">
-<area shape="rect" id="node1" title=" " alt="" coords="5,380,97,407"/>
-<area shape="rect" id="node2" href="$structusbdev__s.html" title=" " alt="" coords="259,95,337,121"/>
-<area shape="rect" id="node4" href="$structusbbus__s.html" title=" " alt="" coords="68,200,147,227"/>
-<area shape="rect" id="node7" href="$structusbpipe__s.html" title=" " alt="" coords="404,200,485,227"/>
-<area shape="rect" id="node9" href="$structusbreq__s.html" title=" " alt="" coords="289,291,363,317"/>
-<area shape="rect" id="node3" href="$structusb__driver__s.html" title=" " alt="" coords="109,5,205,32"/>
-<area shape="rect" id="node5" href="$structusb__hcdrv__s.html" title=" " alt="" coords="135,291,231,317"/>
-<area shape="rect" id="node6" href="$structusb__config__descr__s.html" title=" " alt="" coords="229,5,367,32"/>
-<area shape="rect" id="node8" href="$structusb__device__descr__s.html" title=" " alt="" coords="391,5,533,32"/>
-<area shape="rect" id="node10" href="$structqueue__s.html" title=" " alt="" coords="244,200,315,227"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,376,97,401"/>
+<area shape="rect" id="node2" href="$structusbdev__s.html" title=" " alt="" coords="259,93,337,119"/>
+<area shape="rect" id="node4" href="$structusbbus__s.html" title=" " alt="" coords="68,198,147,223"/>
+<area shape="rect" id="node6" href="$structusbpipe__s.html" title=" " alt="" coords="404,198,485,223"/>
+<area shape="rect" id="node9" href="$structusbreq__s.html" title=" " alt="" coords="289,288,363,313"/>
+<area shape="rect" id="node3" href="$structusb__driver__s.html" title=" " alt="" coords="107,5,203,31"/>
+<area shape="rect" id="node5" href="$structusb__hcdrv__s.html" title=" " alt="" coords="135,288,231,313"/>
+<area shape="rect" id="node7" href="$structusb__device__descr__s.html" title=" " alt="" coords="227,5,369,31"/>
+<area shape="rect" id="node8" href="$structusb__config__descr__s.html" title=" " alt="" coords="393,5,531,31"/>
+<area shape="rect" id="node10" href="$structqueue__s.html" title=" " alt="" coords="244,198,315,223"/>
 </map>

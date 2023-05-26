@@ -1,12 +1,12 @@
 <map id="usbhub_softc_s" name="usbhub_softc_s">
-<area shape="rect" id="node1" title=" " alt="" coords="444,199,559,225"/>
-<area shape="rect" id="node2" href="$structusbdev__s.html" title=" " alt="" coords="185,95,263,121"/>
-<area shape="rect" id="node4" href="$structusbbus__s.html" title=" " alt="" coords="27,199,106,225"/>
-<area shape="rect" id="node7" href="$structusbpipe__s.html" title=" " alt="" coords="241,199,322,225"/>
-<area shape="rect" id="node3" href="$structusb__driver__s.html" title=" " alt="" coords="35,5,131,32"/>
-<area shape="rect" id="node5" href="$structusb__hcdrv__s.html" title=" " alt="" coords="19,288,115,315"/>
-<area shape="rect" id="node6" href="$structusb__config__descr__s.html" title=" " alt="" coords="155,5,293,32"/>
-<area shape="rect" id="node8" href="$structusb__device__descr__s.html" title=" " alt="" coords="317,5,459,32"/>
-<area shape="rect" id="node9" href="$structusb__hub__status__s.html" title=" " alt="" coords="437,95,565,121"/>
-<area shape="rect" id="node10" href="$structusb__hub__descr__s.html" title=" " alt="" coords="590,95,714,121"/>
+<area shape="rect" id="node1" title=" " alt="" coords="161,196,275,221"/>
+<area shape="rect" id="node2" href="$structusb__hub__descr__s.html" title=" " alt="" coords="5,93,129,119"/>
+<area shape="rect" id="node3" href="$structusb__hub__status__s.html" title=" " alt="" coords="154,93,282,119"/>
+<area shape="rect" id="node4" href="$structusbdev__s.html" title=" " alt="" coords="499,93,577,119"/>
+<area shape="rect" id="node6" href="$structusbbus__s.html" title=" " alt="" coords="417,196,496,221"/>
+<area shape="rect" id="node8" href="$structusbpipe__s.html" title=" " alt="" coords="631,196,712,221"/>
+<area shape="rect" id="node5" href="$structusb__driver__s.html" title=" " alt="" coords="347,5,443,31"/>
+<area shape="rect" id="node7" href="$structusb__hcdrv__s.html" title=" " alt="" coords="409,284,505,309"/>
+<area shape="rect" id="node9" href="$structusb__device__descr__s.html" title=" " alt="" coords="467,5,609,31"/>
+<area shape="rect" id="node10" href="$structusb__config__descr__s.html" title=" " alt="" coords="633,5,771,31"/>
 </map>

@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/lwip/xenon/include/arch/perf.h" name="libxenon/drivers/lwip/xenon/include/arch/perf.h">
-<area shape="rect" id="node1" title=" " alt="" coords="233,5,404,47"/>
-<area shape="rect" id="node2" href="$ip_8c.html" title=" " alt="" coords="5,95,144,136"/>
-<area shape="rect" id="node3" href="$ip6_8c.html" title=" " alt="" coords="168,95,307,136"/>
-<area shape="rect" id="node4" href="$pbuf_8c.html" title=" " alt="" coords="331,95,469,136"/>
-<area shape="rect" id="node5" href="$perf_8c.html" title=" " alt="" coords="493,95,632,136"/>
+<area shape="rect" id="node1" title=" " alt="" coords="233,5,404,45"/>
+<area shape="rect" id="node2" href="$ip_8c.html" title=" " alt="" coords="5,93,144,133"/>
+<area shape="rect" id="node3" href="$ip6_8c.html" title=" " alt="" coords="168,93,307,133"/>
+<area shape="rect" id="node4" href="$pbuf_8c.html" title=" " alt="" coords="331,93,469,133"/>
+<area shape="rect" id="node5" href="$perf_8c.html" title=" " alt="" coords="493,93,632,133"/>
 </map>

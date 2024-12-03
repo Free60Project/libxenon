@@ -1,0 +1,16 @@
+diff -ruN ../newlib-4.4.0.20231231/config.sub newlib-4.4.0.20231231/config.sub
+--- ../newlib-4.4.0.20231231/config.sub	2023-12-31 17:00:18.000000000 +0000
++++ newlib-4.4.0.20231231/config.sub	2024-12-03 20:26:12.842278137 +0000
+@@ -872,6 +872,12 @@
+ 		cpu=i386
+ 		vendor=ibm
+ 		;;
++	ppu)
++		cpu=powerpc64
++		;;
++	xenon)
++		cpu=powerpc64
++		;;
+ 	rm[46]00)
+ 		cpu=mips
+ 		vendor=siemens

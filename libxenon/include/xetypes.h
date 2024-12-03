@@ -9,6 +9,7 @@
 #endif /* __cplusplus */
 
 /*+----------------------------------------------------------------------------------------------+*/
+typedef unsigned int uint;	///< unsigned integer
 typedef uint8_t u8;					///< 8bit unsigned integer
 typedef uint16_t u16;				///< 16bit unsigned integer
 typedef uint32_t u32;				///< 32bit unsigned integer

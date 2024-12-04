@@ -12,10 +12,10 @@ GCC=gcc-14.2.0
 NEWLIB=newlib-4.4.0.20231231
 GDB=gdb-15.1
 
-ZLIB=zlib-1.2.11
-LIBPNG=libpng-1.5.10
-BZIP2=bzip2-1.0.6
-FREETYPE=freetype-2.10.4
+ZLIB=zlib-1.3.1
+LIBPNG=libpng-1.5.30
+BZIP2=bzip2-1.0.8
+FREETYPE=freetype-2.13.3
 
 # build stages
 BUILD_BINUTILS=true
@@ -303,7 +303,7 @@ function filesystems_install
 {
 	echo -e "Building Filesystems..."
 
-	filesystems="fat-xenon ext2fs-xenon xtaflib" # ntfs-xenon ext2fs-xenon xtaflib
+	filesystems="fat-xenon ext2fs-xenon" # xtaflib ntfs-xenon ext2fs-xenon xtaflib
 
 	for i in $filesystems
 	do

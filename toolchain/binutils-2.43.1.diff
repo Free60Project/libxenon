@@ -1,0 +1,14 @@
+diff -ruN ../binutils-2.43.1/config.sub binutils-2.43.1/config.sub
+--- ../binutils-2.43.1/config.sub	2024-08-17 00:00:00.000000000 +0100
++++ binutils-2.43.1/config.sub	2024-12-03 04:03:37.186489604 +0000
+@@ -884,6 +884,10 @@
+ 		cpu=power
+ 		vendor=ibm
+ 		;;
++	xenon)
++		cpu=powerpc64
++		basic_os=linux
++		;;
+ 	ps2)
+ 		cpu=i386
+ 		vendor=ibm

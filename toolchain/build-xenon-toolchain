@@ -7,15 +7,15 @@ TARGET=xenon
 PREFIX=${PREFIX:-/usr/local/xenon} # Install location of your final toolchain
 PARALLEL=
 
-BINUTILS=binutils-2.32
-GCC=gcc-9.2.0
-NEWLIB=newlib-3.1.0
-GDB=gdb-6.8
+BINUTILS=binutils-2.43.1
+GCC=gcc-14.2.0
+NEWLIB=newlib-4.4.0.20231231
+GDB=gdb-15.1
 
-ZLIB=zlib-1.2.11
-LIBPNG=libpng-1.5.10
-BZIP2=bzip2-1.0.6
-FREETYPE=freetype-2.10.4
+ZLIB=zlib-1.3.1
+LIBPNG=libpng-1.5.30
+BZIP2=bzip2-1.0.8
+FREETYPE=freetype-2.13.3
 
 # build stages
 BUILD_BINUTILS=true
@@ -161,7 +161,7 @@ function toolchain_install
           ../$GCC/configure --target=$TARGET --prefix=$PREFIX --with-libiconv-prefix=/opt/local --with-cpu=cell \
                   --with-gmp=/opt/local --with-mpfr=/opt/local --disable-decimal-float --disable-libquadmath \
                   --enable-languages=c,c++ --disable-libssp --disable-libsanitizer --with-newlib --enable-cxx-flags="-G0" \
-                  --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-altivec \
+                  --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-libstdcxx-time=no --enable-altivec \
                   --disable-libatomic --disable-threads --disable-libgomp --disable-libitm -v >> $LOGFILE 2>&1 || fail_with_info
           echo -e "Building gcc - 2nd pass, this could take a while..."
           make $PARALLEL 2>&1 >> $LOGFILE || fail_with_info
@@ -189,7 +189,7 @@ function zlib_install
 	export TARGET_SAVE=$TARGET
 	export CC=$TARGET-gcc
 	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 -Wno-error -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
-	export LDFLAGS="$CFLAGS"
+	export LDFLAGS=""
 	export TARGET=`gcc -v 2>&1 | sed -n '2p' | awk '{print $2}'`
 
 	echo -e "Configuring zlib..."
@@ -226,7 +226,7 @@ function libpng_install
 
 	export CC=$TARGET-gcc
 	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 $DEVKITXENON/usr/lib/libxenon.a -L$DEVKITXENON/xenon/lib/32 -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
-	export LDFLAGS="$CFLAGS"
+	export LDFLAGS=""
 
 	echo -e "Configuring libpng..."
 	./configure --disable-shared --enable-static --prefix=$DEVKITXENON/usr --host=ppc-elf >> $LOGFILE 2>&1 || fail_with_info
@@ -280,7 +280,7 @@ function freetype_install
 
 	export CC=$TARGET-gcc
 	export CFLAGS="-mcpu=cell -mtune=cell -m32 -fno-pic -mpowerpc64 $DEVKITXENON/usr/lib/libxenon.a -L$DEVKITXENON/xenon/lib/32/ -T$DEVKITXENON/app.lds -u read -u _start -u exc_base -L$DEVKITXENON/usr/lib -I$DEVKITXENON/usr/include"
-	export LDFLAGS="$CFLAGS"
+	export LDFLAGS=""
 
 	echo -e "Configuring freetype..."
 	./configure --prefix=$DEVKITXENON/usr --host=ppc-elf --disable-shared >> $LOGFILE 2>&1 || fail_with_info
@@ -303,7 +303,7 @@ function filesystems_install
 {
 	echo -e "Building Filesystems..."
 
-	filesystems="fat-xenon ext2fs-xenon xtaflib" # ntfs-xenon ext2fs-xenon xtaflib
+	filesystems="fat-xenon ext2fs-xenon" # xtaflib ntfs-xenon ext2fs-xenon xtaflib
 
 	for i in $filesystems
 	do

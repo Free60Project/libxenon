@@ -3,8 +3,12 @@ name: docker
 on:
   push:
     branches: [ master ]
+    paths-ignore: 
+      - README.md
   pull_request:
     branches: [ master ]
+    paths-ignore: 
+      - README.md
 
 jobs:
   build_toolchain:
@@ -81,7 +85,7 @@ jobs:
         # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-cache-toolchain
-          rm -rf /tmp/.buildx-cache-libxenon
-          mv /tmp/.buildx-cache-toolchain-new /tmp/.buildx-cache-toolchain
-          mv /tmp/.buildx-cache-libxenon-new /tmp/.buildx-cache-libxenon
+          test -d /tmp/.buildx-cache-toolchain-new && rm -rf /tmp/.buildx-cache-toolchain
+          test -d /tmp/.buildx-cache-libxenon-new && rm -rf /tmp/.buildx-cache-libxenon
+          test -d /tmp/.buildx-cache-toolchain-new && mv /tmp/.buildx-cache-toolchain-new /tmp/.buildx-cache-toolchain
+          test -d /tmp/.buildx-cache-libxenon-new && mv /tmp/.buildx-cache-libxenon-new /tmp/.buildx-cache-libxenon

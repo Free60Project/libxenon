@@ -281,7 +281,7 @@ $(function() {
 <div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> = ~val;</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
 <div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="comment">// 26 bit ecc data</span></div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    edc[0] = ((<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &lt;&lt; 6) | (<a class="code hl_variable" href="xenos__edid_8h.html#a56acf619bc699e8ba21453eb121d5688">data</a>[0x20C] &amp; 0x3F)) &amp; 0xFF;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    edc[0] = (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &lt;&lt; 6) &amp; 0xFF;</div>
 <div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    edc[1] = (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &gt;&gt; 2) &amp; 0xFF;</div>
 <div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    edc[2] = (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &gt;&gt; 10) &amp; 0xFF;</div>
 <div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span>    edc[3] = (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &gt;&gt; 18) &amp; 0xFF;</div>

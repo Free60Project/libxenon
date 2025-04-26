@@ -42,7 +42,7 @@ var searchData=
   ['netdb_2ec_39',['netdb.c',['../netdb_8c.html',1,'']]],
   ['netdb_2eh_40',['netdb.h',['../lwip_2netdb_8h.html',1,'(Global Namespace)'],['../posix_2netdb_8h.html',1,'(Global Namespace)']]],
   ['netgear_41',['NETGEAR',['../dev__usb__asix_8c.html#a0411cd49bb5b71852cecd93bcbf0ca2da480a21ed0649bf210465f1a7f902d0f6',1,'dev_usb_asix.c']]],
-  ['netif_42',['netif',['../network_8c.html#aa6bbdc5bf46854efec635a2d54a8c90b',1,'netif():&#160;network.c'],['../network_8h.html#aa6bbdc5bf46854efec635a2d54a8c90b',1,'netif():&#160;network.c'],['../structtcpip__msg.html#a6d19f55f8a96b18f2d6ab5bc9733f81b',1,'tcpip_msg::netif()'],['../structnetif.html',1,'netif']]],
+  ['netif_42',['netif',['../structnetif.html',1,'netif'],['../network_8c.html#aa6bbdc5bf46854efec635a2d54a8c90b',1,'netif():&#160;network.c'],['../network_8h.html#aa6bbdc5bf46854efec635a2d54a8c90b',1,'netif():&#160;network.c'],['../structtcpip__msg.html#a6d19f55f8a96b18f2d6ab5bc9733f81b',1,'tcpip_msg::netif()']]],
   ['netif_2ec_43',['netif.c',['../netif_8c.html',1,'']]],
   ['netif_2eh_44',['netif.h',['../netif_8h.html',1,'']]],
   ['netif_5fadd_45',['netif_add',['../netif_8h.html#a54313475c233c2c43326b4959a69e2a7',1,'netif_add(struct netif *netif, ip_addr_t *ipaddr, ip_addr_t *netmask, ip_addr_t *gw, void *state, netif_init_fn init, netif_input_fn input):&#160;netif.c'],['../netif_8c.html#a54313475c233c2c43326b4959a69e2a7',1,'netif_add(struct netif *netif, ip_addr_t *ipaddr, ip_addr_t *netmask, ip_addr_t *gw, void *state, netif_init_fn init, netif_input_fn input):&#160;netif.c']]],

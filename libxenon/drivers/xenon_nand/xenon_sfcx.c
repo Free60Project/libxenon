@@ -6,6 +6,7 @@
 #include <time/time.h>
 #include <xb360/xb360.h>
 #include "xenon_sfcx.h"
+#include "xenon_emmc.h"
 
 struct sfc sfc = {0};
 unsigned char* blockbuf;
@@ -590,19 +591,29 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
       delay(10);
    }
 
-	if((size == (RAW_NAND_64*4)) || (size == (RAW_NAND_64*8))) // 256 or 512M NAND image, only flash 64M
-		size = RAW_NAND_64;
-	else if((size != 0x1080000)&& (size != RAW_NAND_64)) // 16 M size
-	{
-		printf("error: %s - size %d is not valid image size!\n", filename, size);
-		close(f);
-		return -1;
+	if(xenon_get_console_type() != REV_CORONA_PHISON){
+		if((size == (RAW_NAND_64*4)) || (size == (RAW_NAND_64*8))) // 256 or 512M NAND image, only flash 64M
+			size = RAW_NAND_64;
+		else if((size != 0x1080000)&& (size != RAW_NAND_64)) // 16 M size
+		{
+			printf("error: %s - size %d is not valid image size!\n", filename, size);
+			close(f);
+			return -1;
+		}
+	} else {
+		if(size != EMMC_NAND_48){
+			printf("error: %s - size %d is not valid eMMC 48MB image!\n", filename, size);
+			close(f);
+			return -1;
+		}
 	}
 
     printf("\n * found '%s'. press power NOW if you don't want to flash the NAND.\n",filename);
     delay(15);
 
-	printf(" * Checking NAND File to be of matching type...\n");
+	int result;
+	if(xenon_get_console_type() != REV_CORONA_PHISON){
+		printf(" * Checking NAND File to be of matching type...\n");
 
    if (rawflash_checkImage(f) != 0)
    {
@@ -623,13 +634,18 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
       printf(" * Image matches expected data...\n");
    }
 
-	close(f); // to re-align it to the start again
-	f = open(filename, O_RDONLY);
-	if (f < 0)	
-		return f; //Can't open file!
-        
-	printf("%s opened OK, attempting to write 0x%x bytes to flash...\n",filename, size);
-	if(rawflash_writeImage(size, f) == 1)
+		close(f); // to re-align it to the start again
+		f = open(filename, O_RDONLY);
+		if (f < 0)	
+			return f; //Can't open file!
+			
+		printf("%s opened OK, attempting to write 0x%x bytes to flash...\n",filename, size);
+		result = rawflash_writeImage(size, f);
+	} else {
+		result = emmc_rawflash_writeImage(size, f);
+	}
+
+	if(result == 1)
 		printf("image written, shut down now!\n");
 	else
 		printf("failed to write image :(\n");

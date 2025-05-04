@@ -7,6 +7,7 @@
 
 uint32_t emmc_istatus;
 char* emmc_pio_write_buf;
+int emmc_init_status = 0;
 
 #define EMMC_DMA_TRANSFER_BUF_SZ 0x1000
 #define EMMC_DMA_DESCRIPTOR_BUF_SZ 0x100
@@ -177,6 +178,7 @@ int emmc_init(){
     printf("emmc_num_sectors: %08X\n", num_sectors);
     if(num_sectors == 0){
         printf("emmc_num_sectors=0: failed to initialize emmc controller\n");
+        emmc_init_status = -1;
         return -1;
     }
 
@@ -184,24 +186,48 @@ int emmc_init(){
     memset((void*)emmc_dma_descriptors, 0, EMMC_DMA_DESCRIPTOR_BUF_SZ);
     memset((void*)emmc_dma_buffer, 0, EMMC_DMA_TRANSFER_BUF_SZ);
 
+    emmc_init_status = 1;
+
     return 0;
 }
 
 int emmc_rawflash_writeImage(int len, int f){
+
+    if(emmc_init_status <= 0){
+        emmc_init();
+    }
+
     char* dmabuf = (char*)get_emmc_dma_buffer();
-    for(int offset = 0; offset < EMMC_NAND_48; offset+=0x1000){
+    for(int offset = 0; offset < EMMC_NAND_48; offset+=EMMC_DMA_TRANSFER_BUF_SZ){
         if((offset & 0x3FFF) == 0){
             printf("... write block 0x%x\n", offset>>14);
         }
-        if(read(f, dmabuf, 0x1000) < 0){
+        if(read(f, dmabuf, EMMC_DMA_TRANSFER_BUF_SZ) < 0){
             printf("failed to read source file @ 0x%08X\n", offset);
             return -1;
         }
         asm volatile("sync");
         
-        emmc_cmd(EMMC_CMD_SET_BLOCK_COUNT, 8, EMMC_FLAG_NONE);
+        // Note: Error handling logic is not well tested, as errors currently aren't happening during testing
+        int retry_count = 0;
+        retry:
+        if(retry_count >= 5){
+            printf("... eMMC: too many retries, aborting operation\n");
+            return -1;
+        }
+        if(emmc_cmd(EMMC_CMD_SET_BLOCK_COUNT, 8, EMMC_FLAG_NONE) < 0){
+            printf("... eMMC failed to SET_BLOCK_COUNT for write, retry\n");
+            mdelay(500);
+            retry_count += 1;
+            goto retry;
+        }
         emmc_setup_dma();
-        emmc_cmd(EMMC_CMD_WRITE_MULIPLE_BLOCK, offset>>9, EMMC_FLAG_DMA_WRITE); //CMD24 READ_SINGLE_BLOCK
+        if(emmc_cmd(EMMC_CMD_WRITE_MULIPLE_BLOCK, offset>>9, EMMC_FLAG_DMA_WRITE) < 0){
+            printf("... eMMC failed to WRITE_MULIPLE_BLOCK, retry\n");
+            mdelay(500);
+            retry_count += 1;
+            goto retry;
+        }
     }
     return 1;
 }

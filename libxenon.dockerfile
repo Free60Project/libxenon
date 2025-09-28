@@ -1,6 +1,6 @@
 FROM free60/toolchain:latest
 
-RUN apt update && apt install nano && \
+RUN apt update && apt install nano bc && \
   apt -y clean autoclean autoremove && \
   rm -rf /var/lib/{apt,dpkg,cache,log}/
 

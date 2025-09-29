@@ -6,7 +6,7 @@ var searchData=
   ['igmp_2ec_3',['igmp.c',['../igmp_8c.html',1,'']]],
   ['igmp_2eh_4',['igmp.h',['../igmp_8h.html',1,'']]],
   ['inet_2ec_5',['inet.c',['../inet_8c.html',1,'']]],
-  ['inet_2eh_6',['inet.h',['../ipv4_2lwip_2inet_8h.html',1,'(Global Namespace)'],['../ipv6_2lwip_2inet_8h.html',1,'(Global Namespace)']]],
+  ['inet_2eh_6',['inet.h',['../ipv6_2lwip_2inet_8h.html',1,'(Global Namespace)'],['../ipv4_2lwip_2inet_8h.html',1,'(Global Namespace)']]],
   ['inet6_2ec_7',['inet6.c',['../inet6_8c.html',1,'']]],
   ['inet_5fchksum_2ec_8',['inet_chksum.c',['../inet__chksum_8c.html',1,'']]],
   ['inet_5fchksum_2eh_9',['inet_chksum.h',['../inet__chksum_8h.html',1,'']]],

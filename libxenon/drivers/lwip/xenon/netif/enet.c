@@ -182,7 +182,15 @@ err_t enet_init(struct netif *netif)
 	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
 
 #if LWIP_NETIF_HOSTNAME
-    netif->hostname = "XeLL";
+    // Make this a unique identifier using the MAC address as a base.
+    // It should help with DHCP assignment or rebinding issues.
+    char *gen_hostname = (char*)malloc(21 * sizeof(char));
+    // Print `MACADDRESS-xenon` on `gen_hostname`
+    sprintf(gen_hostname, "%02%02%02%02%02%02-xenon", netif->hwaddr[0], netif->hwaddr[1], netif->hwaddr[2],
+	netif->hwaddr[3], netif->hwaddr[4], netif->hwaddr[5]);
+
+    // Set the default hostname to `MACADDRESS-xenon`
+    netif->hostname = gen_hostname;
 #endif
 
 	//printf("NETIF at %p\n", netif);

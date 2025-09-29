@@ -139,19 +139,20 @@ void crashdump(u32 exception,u64 * context)
  		usb_do_poll();
 
 		// Read UART char or telnet
-		switch(getch()){
-			case 'x':
-				exit(0);
-				break;
-			case 'h':
-				xenon_smc_power_shutdown();
-				for(;;);
-				break;
-			case 'r':
-				xenon_smc_power_reboot();
-				for(;;);
-				break;
+		if(kbhit()){
+			switch(getch()){
+				case 'x':
+					exit(0);
+					break;
+				case 'h':
+					xenon_smc_power_shutdown();
+					for(;;);
+					break;
+				case 'r':
+					xenon_smc_power_reboot();
+					for(;;);
+					break;
+				}
+			}
 		}
-
-	}
 }

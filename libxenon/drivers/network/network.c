@@ -64,10 +64,11 @@ void network_init()
 
 	dhcp_wait=mftb();
 	int i = 0;
+	// Extend timeouts to accomodate slower network links such as wireless<->ethernet bridges
 	while (netif.ip_addr.addr==0 && i < 90) {
 		network_poll();
 		now2=mftb();
-		if (tb_diff_msec(now2, dhcp_wait) >= 250){
+		if (tb_diff_msec(now2, dhcp_wait) >= 300){
 			dhcp_wait=mftb();
 			i++;
 			if (i % 2)
@@ -120,7 +121,8 @@ void network_print_config()
 {
 	printf(" * network config: %d.%d.%d.%d / %d.%d.%d.%d\n",
 		NTOA(netif.ip_addr), NTOA(netif.netmask));
-	printf("              MAC: %02X%02X%02X%02X%02X%02X\n\n",
+	// Add colon separators for the PHY MAC address.
+	printf("              MAC: %02X:%02X:%02X:%02X:%02X:%02X\n\n",
 			netif.hwaddr[0], netif.hwaddr[1], netif.hwaddr[2],
 			netif.hwaddr[3], netif.hwaddr[4], netif.hwaddr[5]);
 }

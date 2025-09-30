@@ -1,4 +1,5 @@
 //#include "lwipopts.h"
+#include <stdlib.h>
 #include "lwip/opt.h"
 #include "lwip/def.h"
 #include "lwip/mem.h"
@@ -182,7 +183,11 @@ err_t enet_init(struct netif *netif)
 	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
 
 #if LWIP_NETIF_HOSTNAME
-    netif->hostname = "XeLL";
+    // Make this a unique identifier using the MAC address as a base.
+    // It should help with DHCP assignment or rebinding issues.
+    char *gen_hostname;
+    asprintf(&gen_hostname, "%02X%02X%02X%02X%02X%02X-xenon", netif->hwaddr[0], netif->hwaddr[1], netif->hwaddr[2], netif->hwaddr[3], netif->hwaddr[4], netif->hwaddr[5]);
+    netif->hostname = gen_hostname;
 #endif
 
 	//printf("NETIF at %p\n", netif);

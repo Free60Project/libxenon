@@ -541,7 +541,7 @@ $(function() {
 <div class="line"><a id="l00462" name="l00462"></a><span class="lineno">  462</span>                    <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00463" name="l00463"></a><span class="lineno">  463</span>                        fnlen = strlen(fn);</div>
 <div class="line"><a id="l00464" name="l00464"></a><span class="lineno">  464</span> </div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>                    <span class="keywordflow">if</span> (!strnicmp(rrname, fn, fnlen)) {</div>
+<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>                    <span class="keywordflow">if</span> (!strncasecmp(rrname, fn, fnlen)) {</div>
 <div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>                        <span class="keywordflow">if</span> (!((<a class="code hl_variable" href="iso9660_8c.html#a851cf68c8f607573c1a5e987784c83f6">dir</a> &lt;&lt; 1) ^ de-&gt;<a class="code hl_variable" href="structiso__dirent__t.html#a7f91ef0a6b3c3973bd353fcb92c149f2">flags</a>))</div>
 <div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>                            <span class="keywordflow">return</span> de;</div>
 <div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>                    }</div>

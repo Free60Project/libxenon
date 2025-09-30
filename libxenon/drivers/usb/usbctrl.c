@@ -346,11 +346,22 @@ static int usbctrl_ireq_callback(usbreq_t *ur)
 
 			usbctrl_set_rol(controller_mask);
 
+			set_controller_type(uhid->index, CTRL_TYPE_NONE);
+
 			uhid->index = -1;
 			goto ignore;
 
 		}
 
+		if (b[0] == 0x0 && b[5] == 0xCC)
+		{
+			unsigned char pad_type = b[25] & 0x7F;
+			unsigned short pad_vendor = ((b[22] & 0xf) | b[24] << 4) << 8 | b[23];
+
+			set_controller_type(uhid->index, pad_type);
+
+			goto ignore;
+		}
 
 
 
@@ -588,6 +599,15 @@ static int usbctrl_attach(usbdev_t *dev,usb_driver_t *drv)
 
 	usbctrl_set_rol(controller_mask);
 
+	// TODO: detect controller type from xbox id descriptor
+	if ((GETUSBFIELD(&dev->ud_devdescr, idVendor) == 0x1430 && // xplorer
+		GETUSBFIELD(&dev->ud_devdescr, idProduct) == 0x4748) ||
+		(GETUSBFIELD(&dev->ud_devdescr, idVendor) == 0x1bad && // rb
+		GETUSBFIELD(&dev->ud_devdescr, idProduct) == 0x0002))
+		set_controller_type(softc->index, CTRL_TYPE_GUITAR);
+	else
+		set_controller_type(softc->index, CTRL_TYPE_GAMEPAD);
+
 	/*
 	 * Allocate a DMA buffer
 	 */
@@ -654,6 +674,8 @@ static int usbctrl_detach(usbdev_t *dev)
 	controller_mask &= ~(1<<uhid->index);
 
 	usbctrl_set_rol(controller_mask);
+
+	set_controller_type(uhid->index, CTRL_TYPE_NONE);
 
 	return 0;
 

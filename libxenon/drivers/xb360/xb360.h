@@ -75,7 +75,6 @@ unsigned int xenon_get_kv_offset();
 
 #define VFUSES_SIZE               0x60
 #define VFUSES_OFFSETS_COUNT      3
-
 static const unsigned int vfusesOffsets[VFUSES_OFFSETS_COUNT] = { 0x95000,   // JTAG image virtual fuses
                                                                   0xC0000,   // DevGL/Glitch2m retail virtual fuses
                                                                   0xE0000 }; // DevGL/Glitch2m devkit virtual fuses
@@ -85,7 +84,7 @@ static const unsigned int vfusesOffsets[VFUSES_OFFSETS_COUNT] = { 0x95000,   // 
 #define XELL_FOOTER_LENGTH 16
 #define XELL_FOOTER "xxxxxxxxxxxxxxxx"
 
-#define XELL_OFFSET_COUNT         6
+#define XELL_OFFSET_COUNT         7
 static const unsigned int xelloffsets[XELL_OFFSET_COUNT] = {0x70000, // ggBoot main xell-gggggg
 															0x95060,   // FreeBOOT Single-NAND main xell-2f
 															0x100000,  // XeLL-Only Image (Main)

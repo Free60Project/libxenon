@@ -72,9 +72,14 @@ unsigned int xenon_get_kv_offset();
 #define KV_FLASH_OFFSET			  xenon_get_kv_offset()
 #define KV_FLASH_PAGES            KV_FLASH_SIZE / 0x200
 #define KV_FLASH_PTR              0x6C
+
 #define VFUSES_SIZE               0x60
-#define VFUSES_OFFSET			  0x95000
-#define ZFUSES_OFFSET           0xC0000
+#define VFUSES_OFFSETS_COUNT      3
+
+static const unsigned int vfusesOffsets[VFUSES_OFFSETS_COUNT] = { 0x95000,   // JTAG image virtual fuses
+                                                                  0xC0000,   // DevGL/Glitch2m retail virtual fuses
+                                                                  0xE0000 }; // DevGL/Glitch2m devkit virtual fuses
+
 #define XELL_SIZE (256*1024)
 #define XELL_FOOTER_OFFSET (256*1024-16)
 #define XELL_FOOTER_LENGTH 16
@@ -82,10 +87,11 @@ unsigned int xenon_get_kv_offset();
 
 #define XELL_OFFSET_COUNT         6
 static const unsigned int xelloffsets[XELL_OFFSET_COUNT] = {0x70000, // ggBoot main xell-gggggg
-															0x95060, // FreeBOOT Single-NAND main xell-2f
-															0x100000, // XeLL-Only Image
-															0xC0000,
+															0x95060,   // FreeBOOT Single-NAND main xell-2f
+															0x100000,  // XeLL-Only Image (Main)
+															0xC0000,   // XeLL-Only Image (Backup)
 															0xE0000,
+                                             0xF0000,   // DevGL/Glitch2m xell-gggggg in flashfs
 															0xB80000};
 
 #define REV_XENON 0

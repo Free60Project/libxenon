@@ -104,24 +104,11 @@ int get_virtual_cpukey(unsigned char *data)
 {
    unsigned char buffer[VFUSES_SIZE];
 
-   if (xenon_get_logical_nand_data(&buffer, VFUSES_OFFSET, VFUSES_SIZE) == -1)
+   for (int i = 0; i < VFUSES_OFFSETS_COUNT; i++)
    {
-         return 2; //Unable to read NAND data...
-   }
-
-   //if we got here then it was at least able to read from nand
-   //now we need to verify the data somehow
-   if(buffer[0]==0xC0 && buffer[1]==0xFF && buffer[2]==0xFF && buffer[3]==0xFF)
-   {
-      memcpy(data,&buffer[0x20],0x10);
-      return 0;
-   }
-   else
-   {
-      // No Virtual Fuses were found at 0x95000, check again at 0xC0000 (Zero fuse DevGL consoles)
-      if (xenon_get_logical_nand_data(&buffer, ZFUSES_OFFSET, VFUSES_SIZE) == -1)
+      if (xenon_get_logical_nand_data(&buffer, vfusesOffsets[i], VFUSES_SIZE) == -1)
       {
-         return 2; //Unable to read NAND data...
+            return 2; //Unable to read NAND data...
       }
 
       //if we got here then it was at least able to read from nand
@@ -131,10 +118,10 @@ int get_virtual_cpukey(unsigned char *data)
          memcpy(data,&buffer[0x20],0x10);
          return 0;
       }
-
-      // No virtual fuses at 0x95000 or 0xC0000
-      return 1;
    }
+
+   // No virtual fuses found 
+   return 1;
 }
 
 

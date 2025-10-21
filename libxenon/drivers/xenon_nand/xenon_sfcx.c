@@ -558,10 +558,10 @@ int rawflash_writeImage(int len, int f)
 
 int try_rawflash(char *filename)
 {
-   return try_rawflash_internal(filename, 0);
+   return try_rawflash_internal(filename, false);
 }
 
-int try_rawflash_internal(char *filename, int bIgnoreMetadataCheck)
+int try_rawflash_internal(char *filename, bool bIgnoreMetadataCheck)
 {
 	struct stat s;
 
@@ -604,9 +604,9 @@ int try_rawflash_internal(char *filename, int bIgnoreMetadataCheck)
 
 	printf(" * Checking NAND File to be of matching type...\n");
 
-	if (rawflash_checkImage(f) != 0)
+   if (rawflash_checkImage(f) != 0)
    {
-		printf(" ! Bad Image for this console... ");
+      printf(" ! Bad Image for this console... ");
 
       if(bIgnoreMetadataCheck)
       {
@@ -617,10 +617,10 @@ int try_rawflash_internal(char *filename, int bIgnoreMetadataCheck)
          printf("Please replace the file and try again...\n");
          return -1;
       }
-	}
-	else
-   {	
-		printf(" * Image matches expected data...\n");
+   }
+   else
+   {
+      printf(" * Image matches expected data...\n");
    }
 
 	close(f); // to re-align it to the start again

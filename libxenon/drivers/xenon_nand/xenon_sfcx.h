@@ -1,6 +1,8 @@
 #ifndef __xenon_sfcx_h
 #define __xenon_sfcx_h
 
+#include <xetypes.h>
+
 //Registers
 #define SFCX_CONFIG				0x00
 #define SFCX_STATUS 			0x04
@@ -132,7 +134,7 @@ int sfcx_block_to_rawaddress(int block);
 int sfcx_rawaddress_to_block(int address);
 int rawflash_writeImage(int len, int f);
 int try_rawflash(char *filename);
-int try_rawflash_internal(char *filename, int bIgnoreMetadataCheck);
+int try_rawflash_internal(char *filename, bool bIgnoreMetadataCheck);
 
 int sfcx_read_metadata_type(void);
 

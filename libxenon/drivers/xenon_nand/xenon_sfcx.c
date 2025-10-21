@@ -561,7 +561,7 @@ int try_rawflash(char *filename)
    return try_rawflash_internal(filename, false);
 }
 
-int try_rawflash_internal(char *filename, bool bIgnoreMetadataCheck)
+int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
 {
 	struct stat s;
 
@@ -577,7 +577,7 @@ int try_rawflash_internal(char *filename, bool bIgnoreMetadataCheck)
 
 	printf(" * rawflash v5 started (by cOz, modified By Swizzy)\n");
 
-   if(bIgnoreMetadataCheck)
+   if(ignoreMetadataCheck)
    {
       printf("\n" \
              " ! ****** Warning ******\n" \
@@ -608,7 +608,7 @@ int try_rawflash_internal(char *filename, bool bIgnoreMetadataCheck)
    {
       printf(" ! Bad Image for this console... ");
 
-      if(bIgnoreMetadataCheck)
+      if(ignoreMetadataCheck)
       {
          printf("rawflash_checkImage result ignored, flashing the image anyway...\n");
       }

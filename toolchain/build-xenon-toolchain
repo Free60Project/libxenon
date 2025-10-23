@@ -56,8 +56,7 @@ check_priv()
 
         if [ ! -f "$PREFIX"/check_priv ]; then
             echo "For your selected prefix (\"$PREFIX\"), root privileges are required for this feature:"
-            sudo "$@"
-            rm -f "$PREFIX"/check_priv
+            sudo PREFIX="$PREFIX" "$@"
             exit 0
         fi
 

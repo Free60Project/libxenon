@@ -90,8 +90,9 @@ static const unsigned int xelloffsets[XELL_OFFSET_COUNT] = {0x70000, // ggBoot m
 															0x100000,  // XeLL-Only Image (Main)
 															0xC0000,   // XeLL-Only Image (Backup)
 															0xE0000,
-															0xF0000,   // DevGL/Glitch2m xell-gggggg in flashfs
-															0xB80000};
+															0xF0000,   // DevGL/Glitch2m xell-gggggg in flashfs (16mb)
+                                             0xF4000,   // DevGL xell-gggggg in flashfs (64mb)
+															0xB80000}; // DevGL/Glitch2m xell-gggggg in flashfs (BB 256/512mb)
 
 #define REV_XENON 0
 #define REV_ZEPHYR 1

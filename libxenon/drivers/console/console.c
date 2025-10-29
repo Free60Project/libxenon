@@ -42,7 +42,7 @@ uint32_t console_oldbg, console_oldfg;
 
 static unsigned char *console_fb = 0LL;
 
-static int cursor_x, cursor_y, max_x, max_y, offset_x, offset_y, pixel_max_x;
+static int cursor_x, cursor_y, max_x, max_y, offset_x, offset_y, pixel_max_x, pixel_max_y;
 
 struct ati_info {
 	uint32_t unknown1[4];
@@ -185,7 +185,8 @@ void console_init(void) {
 	cursor_x = cursor_y = 0;
 	pixel_max_x = ai->width - offset_x * 2;
 	max_x = pixel_max_x / 8;
-	max_y = (ai->height - offset_y * 2) / 16;
+	pixel_max_y = ai->height - offset_y * 2;
+	max_y = pixel_max_y / 16;
 	
 	console_clrscr();
 	

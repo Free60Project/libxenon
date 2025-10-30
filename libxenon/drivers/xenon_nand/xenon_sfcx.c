@@ -558,6 +558,11 @@ int rawflash_writeImage(int len, int f)
 
 int try_rawflash(char *filename)
 {
+   return try_rawflash_internal(filename, false);
+}
+
+int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
+{
 	struct stat s;
 
   	memset(&s, 0, sizeof(struct stat));
@@ -571,6 +576,19 @@ int try_rawflash(char *filename)
 		return f; //Can't open file!
 
 	printf(" * rawflash v5 started (by cOz, modified By Swizzy)\n");
+
+   if(ignoreMetadataCheck)
+   {
+      printf("\n" \
+             " ! ****** Warning ******\n" \
+             " ! NAND image validity checks are being skipped for this flash!\n" \
+             " ! This should only be used when intentionally flashing an image\n" \
+             " ! with mismatching metadata, e.g. a PSB image on an XSB console.\n" \
+             " ! Press power NOW to shut down and delete %s\n" \
+             " ! if you don't understand what this means!\n", filename);
+
+      delay(10);
+   }
 
 	if((size == (RAW_NAND_64*4)) || (size == (RAW_NAND_64*8))) // 256 or 512M NAND image, only flash 64M
 		size = RAW_NAND_64;
@@ -586,12 +604,24 @@ int try_rawflash(char *filename)
 
 	printf(" * Checking NAND File to be of matching type...\n");
 
-	if (rawflash_checkImage(f) != 0) {
-		printf(" ! Bad Image for this console... Please replace the file and try again...\n");
-		return -1;
-	}
-	else	
-		printf(" * Image matches expected data...\n");	
+   if (rawflash_checkImage(f) != 0)
+   {
+      printf(" ! Bad Image for this console... ");
+
+      if(ignoreMetadataCheck)
+      {
+         printf("rawflash_checkImage result ignored, flashing the image anyway...\n");
+      }
+      else
+      {
+         printf("Please replace the file and try again...\n");
+         return -1;
+      }
+   }
+   else
+   {
+      printf(" * Image matches expected data...\n");
+   }
 
 	close(f); // to re-align it to the start again
 	f = open(filename, O_RDONLY);

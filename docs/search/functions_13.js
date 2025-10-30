@@ -7,7 +7,7 @@ var searchData=
   ['tcpip_5finit_4',['tcpip_init',['../tcpip_8c.html#a1f3a88b8df6ba3b9ed1c00e0a305e3db',1,'tcpip_init(tcpip_init_done_fn initfunc, void *arg):&#160;tcpip.c'],['../tcpip_8h.html#ac104b53faf0e3905ad0e970866835661',1,'tcpip_init(tcpip_init_done_fn tcpip_init_done, void *arg):&#160;tcpip.c']]],
   ['tcpip_5finit_5fdone_5',['tcpip_init_done',['../xenon_2include_2arch_2init_8h.html#a012ac59527716d6497b9dd003e5751c3',1,'init.h']]],
   ['tcpip_5finput_6',['tcpip_input',['../tcpip_8c.html#ae510f195171bed8499ae94e264a92717',1,'tcpip_input(struct pbuf *p, struct netif *inp):&#160;tcpip.c'],['../tcpip_8h.html#ae510f195171bed8499ae94e264a92717',1,'tcpip_input(struct pbuf *p, struct netif *inp):&#160;tcpip.c']]],
-  ['tcpip_5ftrycallback_7',['tcpip_trycallback',['../tcpip_8h.html#acfc81ad493f68714a22b3b8ea7d04378',1,'tcpip_trycallback(struct tcpip_callback_msg *msg):&#160;tcpip.c'],['../tcpip_8c.html#acfc81ad493f68714a22b3b8ea7d04378',1,'tcpip_trycallback(struct tcpip_callback_msg *msg):&#160;tcpip.c']]],
+  ['tcpip_5ftrycallback_7',['tcpip_trycallback',['../tcpip_8c.html#acfc81ad493f68714a22b3b8ea7d04378',1,'tcpip_trycallback(struct tcpip_callback_msg *msg):&#160;tcpip.c'],['../tcpip_8h.html#acfc81ad493f68714a22b3b8ea7d04378',1,'tcpip_trycallback(struct tcpip_callback_msg *msg):&#160;tcpip.c']]],
   ['telldir_8',['telldir',['../newlib_8c.html#a43985c2447726be927b83ca9227681a7',1,'telldir(DIR *dirp):&#160;newlib.c'],['../dirent_8h.html#a43985c2447726be927b83ca9227681a7',1,'telldir(DIR *dirp):&#160;newlib.c']]],
   ['telnet_5fconsole_5fclose_9',['telnet_console_close',['../telnet__console_8c.html#a9c1442792761a082645a728c43dd1718',1,'telnet_console_close(void):&#160;telnet_console.c'],['../telnet__console_8h.html#a4e18817b735e2cbab46405becdfa681f',1,'telnet_console_close():&#160;telnet_console.c']]],
   ['telnet_5fconsole_5finit_10',['telnet_console_init',['../telnet__console_8c.html#aabc75f997aea79549e9299abe54dde27',1,'telnet_console_init(void):&#160;telnet_console.c'],['../telnet__console_8h.html#a4f028d8dfecaa82b8645ee322885e562',1,'telnet_console_init():&#160;telnet_console.c']]],
@@ -15,5 +15,6 @@ var searchData=
   ['telnet_5fprocess_12',['telnet_process',['../telnet__console_8c.html#a6dd7859fd8b51959f8186af69cd8fd75',1,'telnet_console.c']]],
   ['texture_5ffetch_13',['TEXTURE_FETCH',['../xe_8c.html#aa5cf9eae53adaaaee51c0f6d8e5a38b0',1,'xe.c']]],
   ['try_5frawflash_14',['try_rawflash',['../xenon__sfcx_8c.html#ad48eec33f05a8c175e702ccf228dabad',1,'try_rawflash(char *filename):&#160;xenon_sfcx.c'],['../xenon__sfcx_8h.html#ad48eec33f05a8c175e702ccf228dabad',1,'try_rawflash(char *filename):&#160;xenon_sfcx.c']]],
-  ['try_5freturn_5fto_5fxell_15',['try_return_to_xell',['../xenon__syscalls_8c.html#aa4f8b14c735dc88e50708de97ea7f3c0',1,'xenon_syscalls.c']]]
+  ['try_5frawflash_5finternal_15',['try_rawflash_internal',['../xenon__sfcx_8c.html#ab7d4c05f439cda89b092980b59af8bef',1,'try_rawflash_internal(char *filename, bool ignoreMetadataCheck):&#160;xenon_sfcx.c'],['../xenon__sfcx_8h.html#ab7d4c05f439cda89b092980b59af8bef',1,'try_rawflash_internal(char *filename, bool ignoreMetadataCheck):&#160;xenon_sfcx.c']]],
+  ['try_5freturn_5fto_5fxell_16',['try_return_to_xell',['../xenon__syscalls_8c.html#aa4f8b14c735dc88e50708de97ea7f3c0',1,'xenon_syscalls.c']]]
 ];

@@ -93,17 +93,17 @@ Include dependency graph for xenon_sfcx.c:</div>
 <div class="dyncontent">
 <div class="center"><img src="xenon__sfcx_8c__incl.png" border="0" usemap="#alibxenon_2drivers_2xenon__nand_2xenon__sfcx_8c" alt=""/></div>
 <map name="alibxenon_2drivers_2xenon__nand_2xenon__sfcx_8c" id="alibxenon_2drivers_2xenon__nand_2xenon__sfcx_8c">
-<area shape="rect" title=" " alt="" coords="323,5,474,45"/>
-<area shape="rect" href="xetypes_8h.html" title=" " alt="" coords="51,93,127,119"/>
-<area shape="rect" href="stdio_8h.html" title=" " alt="" coords="151,93,211,119"/>
-<area shape="rect" title=" " alt="" coords="235,93,298,119"/>
-<area shape="rect" title=" " alt="" coords="323,93,389,119"/>
-<area shape="rect" title=" " alt="" coords="414,93,471,119"/>
-<area shape="rect" href="time_8h.html" title=" " alt="" coords="495,93,582,119"/>
-<area shape="rect" href="xb360_8h.html" title=" " alt="" coords="607,93,711,119"/>
-<area shape="rect" href="xenon__sfcx_8h.html" title=" " alt="" coords="735,93,833,119"/>
-<area shape="rect" title=" " alt="" coords="5,167,80,192"/>
-<area shape="rect" title=" " alt="" coords="104,167,168,192"/>
+<area shape="rect" title=" " alt="" coords="202,5,353,45"/>
+<area shape="rect" href="xetypes_8h.html" title=" " alt="" coords="289,167,365,192"/>
+<area shape="rect" href="stdio_8h.html" title=" " alt="" coords="30,93,90,119"/>
+<area shape="rect" title=" " alt="" coords="114,93,177,119"/>
+<area shape="rect" title=" " alt="" coords="202,93,268,119"/>
+<area shape="rect" title=" " alt="" coords="293,93,350,119"/>
+<area shape="rect" href="time_8h.html" title=" " alt="" coords="374,93,461,119"/>
+<area shape="rect" href="xb360_8h.html" title=" " alt="" coords="486,93,590,119"/>
+<area shape="rect" href="xenon__sfcx_8h.html" title=" " alt="" coords="614,93,712,119"/>
+<area shape="rect" title=" " alt="" coords="243,240,318,265"/>
+<area shape="rect" title=" " alt="" coords="342,240,406,265"/>
 </map>
 </div>
 </div>
@@ -167,6 +167,8 @@ Functions</h2></td></tr>
 <tr class="separator:aa8a9d5a2e3039e7d3b2afbe329540a4c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad48eec33f05a8c175e702ccf228dabad"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__sfcx_8c.html#ad48eec33f05a8c175e702ccf228dabad">try_rawflash</a> (char *filename)</td></tr>
 <tr class="separator:ad48eec33f05a8c175e702ccf228dabad"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab7d4c05f439cda89b092980b59af8bef"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__sfcx_8c.html#ab7d4c05f439cda89b092980b59af8bef">try_rawflash_internal</a> (char *filename, bool ignoreMetadataCheck)</td></tr>
+<tr class="separator:ab7d4c05f439cda89b092980b59af8bef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad93732a4755869b14fe81afeaeba7d9b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__sfcx_8c.html#ad93732a4755869b14fe81afeaeba7d9b">sfcx_init</a> (void)</td></tr>
 <tr class="separator:ad93732a4755869b14fe81afeaeba7d9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -474,7 +476,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="xenon__sfcx_8c_source.html#l00646">646</a> of file <a class="el" href="xenon__sfcx_8c_source.html">xenon_sfcx.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="xenon__sfcx_8c_source.html#l00676">676</a> of file <a class="el" href="xenon__sfcx_8c_source.html">xenon_sfcx.c</a>.</p>
 
 </div>
 </div>
@@ -857,6 +859,36 @@ Variables</h2></td></tr>
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="xenon__sfcx_8c_source.html#l00559">559</a> of file <a class="el" href="xenon__sfcx_8c_source.html">xenon_sfcx.c</a>.</p>
+
+</div>
+</div>
+<a id="ab7d4c05f439cda89b092980b59af8bef" name="ab7d4c05f439cda89b092980b59af8bef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7d4c05f439cda89b092980b59af8bef">&#9670;&#160;</a></span>try_rawflash_internal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int try_rawflash_internal </td>
+          <td>(</td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>filename</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>ignoreMetadataCheck</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="xenon__sfcx_8c_source.html#l00564">564</a> of file <a class="el" href="xenon__sfcx_8c_source.html">xenon_sfcx.c</a>.</p>
 
 </div>
 </div>

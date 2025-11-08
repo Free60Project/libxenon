@@ -513,7 +513,7 @@ int xenon_get_console_type()
 
 	if(PVR <= 0x710300) // DD3 or older CPU, must be a Xenon or Zephyr
 	{
-		if(DVE >= 0x11) // We've got HANA, this must be a zephyr
+		if(DVEversion >= 0x11) // We've got HANA, this must be a zephyr
 		{
 			return REV_ZEPHYR;
 		}

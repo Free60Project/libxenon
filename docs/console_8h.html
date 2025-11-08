@@ -130,12 +130,16 @@ Macros</h2></td></tr>
 <tr class="separator:afbc5befe1180163d93a78ca4299c3273"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a60f0e55954e693c3e32ed8c9b6469c24"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a60f0e55954e693c3e32ed8c9b6469c24">CONSOLE_COLOR_PINK</a>&#160;&#160;&#160;0xFF66FF00</td></tr>
 <tr class="separator:a60f0e55954e693c3e32ed8c9b6469c24"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af3550f03a7932c9a3ccc98a41f22da5a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#af3550f03a7932c9a3ccc98a41f22da5a">CONSOLE_SUCCESS</a>&#160;&#160;&#160;<a class="el" href="console_8h.html#a2c90d0bd2c9454e1838fe77172839cd4">CONSOLE_COLOR_GREEN</a></td></tr>
+<tr class="separator:af3550f03a7932c9a3ccc98a41f22da5a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b26d676a2db4ea5149db7868cbfe5b7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a5b26d676a2db4ea5149db7868cbfe5b7">CONSOLE_WARN</a>&#160;&#160;&#160;<a class="el" href="console_8h.html#aaf1eb3de2f6c10b8c5a9021262f1efcc">CONSOLE_COLOR_YELLOW</a></td></tr>
 <tr class="separator:a5b26d676a2db4ea5149db7868cbfe5b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adaf4d25348bb6de867a32509b91fb103"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#adaf4d25348bb6de867a32509b91fb103">CONSOLE_ERR</a>&#160;&#160;&#160;<a class="el" href="console_8h.html#afbc5befe1180163d93a78ca4299c3273">CONSOLE_COLOR_ORANGE</a></td></tr>
 <tr class="separator:adaf4d25348bb6de867a32509b91fb103"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aeb4672746e823da1626fec637f837903"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#aeb4672746e823da1626fec637f837903">PRINT_COL</a>(bg,  fg,  s, ...)</td></tr>
 <tr class="separator:aeb4672746e823da1626fec637f837903"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a595caaa9bc0f1ff484cb196ae97695ef"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a595caaa9bc0f1ff484cb196ae97695ef">PRINT_SUCCESS</a>(s, ...)&#160;&#160;&#160;<a class="el" href="console_8h.html#aeb4672746e823da1626fec637f837903">PRINT_COL</a>(<a class="el" href="console_8c.html#ae7091d20520fe706d2bb2d492419d5ab">console_color</a>[0],<a class="el" href="console_8h.html#af3550f03a7932c9a3ccc98a41f22da5a">CONSOLE_SUCCESS</a>, s, ##__VA_ARGS__)</td></tr>
+<tr class="separator:a595caaa9bc0f1ff484cb196ae97695ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a044b5f046155433a64f4e8d6e9b281db"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a044b5f046155433a64f4e8d6e9b281db">PRINT_WARN</a>(s, ...)&#160;&#160;&#160;<a class="el" href="console_8h.html#aeb4672746e823da1626fec637f837903">PRINT_COL</a>(<a class="el" href="console_8c.html#ae7091d20520fe706d2bb2d492419d5ab">console_color</a>[0],<a class="el" href="console_8h.html#a5b26d676a2db4ea5149db7868cbfe5b7">CONSOLE_WARN</a>, s, ##__VA_ARGS__)</td></tr>
 <tr class="separator:a044b5f046155433a64f4e8d6e9b281db"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa081cce6a75a4b33a304b6f57dfcd6ea"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#aa081cce6a75a4b33a304b6f57dfcd6ea">PRINT_ERR</a>(s, ...)&#160;&#160;&#160;<a class="el" href="console_8h.html#aeb4672746e823da1626fec637f837903">PRINT_COL</a>(<a class="el" href="console_8c.html#ae7091d20520fe706d2bb2d492419d5ab">console_color</a>[0],<a class="el" href="console_8h.html#adaf4d25348bb6de867a32509b91fb103">CONSOLE_ERR</a>, s, ##__VA_ARGS__)</td></tr>
@@ -155,8 +159,14 @@ Functions</h2></td></tr>
 <tr class="separator:aa485e819d172420172d4cb6d8da300d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acadd2a5d99d952e55a4580dbc8f8739d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#acadd2a5d99d952e55a4580dbc8f8739d">console_init</a> (void)</td></tr>
 <tr class="separator:acadd2a5d99d952e55a4580dbc8f8739d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a882fdd49c80ba6327714125b54b65967"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a882fdd49c80ba6327714125b54b65967">console_open</a> (void)</td></tr>
+<tr class="separator:a882fdd49c80ba6327714125b54b65967"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a9ed5cc1deb770fc76e6a91356af5fb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a1a9ed5cc1deb770fc76e6a91356af5fb">console_close</a> (void)</td></tr>
 <tr class="separator:a1a9ed5cc1deb770fc76e6a91356af5fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc0b25ac32e7fad4eef067ac170a4e0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#afc0b25ac32e7fad4eef067ac170a4e0f">console_pset</a> (int x, int y, <a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char r, <a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char g, <a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char b)</td></tr>
+<tr class="separator:afc0b25ac32e7fad4eef067ac170a4e0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e1fe5ed49736a9dc2556494e06fd5ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="console_8h.html#a5e1fe5ed49736a9dc2556494e06fd5ad">console_pset_right</a> (int x, int y, <a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char r, <a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char g, <a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char b)</td></tr>
+<tr class="separator:a5e1fe5ed49736a9dc2556494e06fd5ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
 Variables</h2></td></tr>
@@ -356,7 +366,23 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00026">26</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00027">27</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
+
+</div>
+</div>
+<a id="af3550f03a7932c9a3ccc98a41f22da5a" name="af3550f03a7932c9a3ccc98a41f22da5a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af3550f03a7932c9a3ccc98a41f22da5a">&#9670;&#160;</a></span>CONSOLE_SUCCESS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CONSOLE_SUCCESS&#160;&#160;&#160;<a class="el" href="console_8h.html#a2c90d0bd2c9454e1838fe77172839cd4">CONSOLE_COLOR_GREEN</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00025">25</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
 
 </div>
 </div>
@@ -372,7 +398,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00025">25</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00026">26</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
 
 </div>
 </div>
@@ -422,7 +448,7 @@ Variables</h2></td></tr>
 <div class="ttc" id="aconsole_8h_html_a18ae8d1b5f4be647243e1389a2cf6c1a"><div class="ttname"><a href="console_8h.html#a18ae8d1b5f4be647243e1389a2cf6c1a">console_oldbg</a></div><div class="ttdeci">uint32_t console_oldbg</div><div class="ttdef"><b>Definition:</b> <a href="console_8c_source.html#l00041">console.c:41</a></div></div>
 <div class="ttc" id="aconsole_8h_html_ae7091d20520fe706d2bb2d492419d5ab"><div class="ttname"><a href="console_8h.html#ae7091d20520fe706d2bb2d492419d5ab">console_color</a></div><div class="ttdeci">uint32_t console_color[2]</div><div class="ttdef"><b>Definition:</b> <a href="console_8c_source.html#l00040">console.c:40</a></div></div>
 </div><!-- fragment -->
-<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00028">28</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00029">29</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
 
 </div>
 </div>
@@ -448,6 +474,36 @@ Variables</h2></td></tr>
           <td></td>
           <td>)</td>
           <td></td><td>&#160;&#160;&#160;<a class="el" href="console_8h.html#aeb4672746e823da1626fec637f837903">PRINT_COL</a>(<a class="el" href="console_8c.html#ae7091d20520fe706d2bb2d492419d5ab">console_color</a>[0],<a class="el" href="console_8h.html#adaf4d25348bb6de867a32509b91fb103">CONSOLE_ERR</a>, s, ##__VA_ARGS__)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00037">37</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
+
+</div>
+</div>
+<a id="a595caaa9bc0f1ff484cb196ae97695ef" name="a595caaa9bc0f1ff484cb196ae97695ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a595caaa9bc0f1ff484cb196ae97695ef">&#9670;&#160;</a></span>PRINT_SUCCESS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define PRINT_SUCCESS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">s, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td>&#160;&#160;&#160;<a class="el" href="console_8h.html#aeb4672746e823da1626fec637f837903">PRINT_COL</a>(<a class="el" href="console_8c.html#ae7091d20520fe706d2bb2d492419d5ab">console_color</a>[0],<a class="el" href="console_8h.html#af3550f03a7932c9a3ccc98a41f22da5a">CONSOLE_SUCCESS</a>, s, ##__VA_ARGS__)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -482,7 +538,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00034">34</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8h_source.html#l00036">36</a> of file <a class="el" href="console_8h_source.html">console.h</a>.</p>
 
 </div>
 </div>
@@ -503,7 +559,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00201">201</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00214">214</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>
@@ -522,7 +578,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00094">94</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00100">100</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>
@@ -541,7 +597,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00082">82</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00088">88</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>
@@ -571,7 +627,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00196">196</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00204">204</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>
@@ -591,7 +647,123 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00163">163</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00169">169</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+
+</div>
+</div>
+<a id="a882fdd49c80ba6327714125b54b65967" name="a882fdd49c80ba6327714125b54b65967"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a882fdd49c80ba6327714125b54b65967">&#9670;&#160;</a></span>console_open()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void console_open </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00209">209</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+
+</div>
+</div>
+<a id="afc0b25ac32e7fad4eef067ac170a4e0f" name="afc0b25ac32e7fad4eef067ac170a4e0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc0b25ac32e7fad4eef067ac170a4e0f">&#9670;&#160;</a></span>console_pset()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void console_pset </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00067">67</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+
+</div>
+</div>
+<a id="a5e1fe5ed49736a9dc2556494e06fd5ad" name="a5e1fe5ed49736a9dc2556494e06fd5ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e1fe5ed49736a9dc2556494e06fd5ad">&#9670;&#160;</a></span>console_pset_right()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void console_pset_right </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>y</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> char&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00073">73</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>
@@ -611,7 +783,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00139">139</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00145">145</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>
@@ -641,7 +813,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00191">191</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="console_8c_source.html#l00199">199</a> of file <a class="el" href="console_8c_source.html">console.c</a>.</p>
 
 </div>
 </div>

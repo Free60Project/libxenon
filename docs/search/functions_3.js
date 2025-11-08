@@ -17,11 +17,13 @@ var searchData=
   ['console_5finit_14',['console_init',['../console_8c.html#acadd2a5d99d952e55a4580dbc8f8739d',1,'console_init(void):&#160;console.c'],['../console_8h.html#acadd2a5d99d952e55a4580dbc8f8739d',1,'console_init(void):&#160;console.c']]],
   ['console_5flog_15',['console_log',['../usbhack_8c.html#a1678ac935794f8f004d78959b9c11ecf',1,'console_log(const char *tmplt,...):&#160;usbhack.c'],['../usbhack_8h.html#a1678ac935794f8f004d78959b9c11ecf',1,'console_log(const char *tmplt,...):&#160;usbhack.c']]],
   ['console_5fnewline_16',['console_newline',['../console_8c.html#a6c663b27337c472d58dc4403953f3b46',1,'console.c']]],
-  ['console_5fpset_17',['console_pset',['../console_8c.html#afc0b25ac32e7fad4eef067ac170a4e0f',1,'console.c']]],
-  ['console_5fputch_18',['console_putch',['../console_8c.html#af9d252415fab508f347a89e5228758e7',1,'console_putch(const char c):&#160;console.c'],['../console_8h.html#af9d252415fab508f347a89e5228758e7',1,'console_putch(const char c):&#160;console.c']]],
-  ['console_5fset_5fcolors_19',['console_set_colors',['../console_8c.html#a6f2ef969603a184842ba6479d0d77f39',1,'console_set_colors(unsigned int background, unsigned int foreground):&#160;console.c'],['../console_8h.html#a6f2ef969603a184842ba6479d0d77f39',1,'console_set_colors(unsigned int background, unsigned int foreground):&#160;console.c']]],
-  ['cpu_5fget_5fkey_20',['cpu_get_key',['../xb360_8c.html#afd56a93a08b55ddcad4b1a6bbe5671b8',1,'cpu_get_key(unsigned char *data):&#160;xb360.c'],['../xb360_8h.html#afd56a93a08b55ddcad4b1a6bbe5671b8',1,'cpu_get_key(unsigned char *data):&#160;xb360.c']]],
-  ['cpusleep_21',['cpusleep',['../xenon__power_8c.html#ad5b4a971185fb23ab9942c1bffc507b9',1,'xenon_power.c']]],
-  ['cputime_22',['cputime',['../gmon_8c.html#a46b78354961f7fb31f0e50607f5c7231',1,'gmon.c']]],
-  ['crashdump_23',['crashdump',['../c__except_8c.html#a68ab52ed9d3996ada2eae3d66cd71c73',1,'c_except.c']]]
+  ['console_5fopen_17',['console_open',['../console_8c.html#a882fdd49c80ba6327714125b54b65967',1,'console_open(void):&#160;console.c'],['../console_8h.html#a882fdd49c80ba6327714125b54b65967',1,'console_open(void):&#160;console.c']]],
+  ['console_5fpset_18',['console_pset',['../console_8c.html#afc0b25ac32e7fad4eef067ac170a4e0f',1,'console_pset(int x, int y, unsigned char r, unsigned char g, unsigned char b):&#160;console.c'],['../console_8h.html#afc0b25ac32e7fad4eef067ac170a4e0f',1,'console_pset(int x, int y, unsigned char r, unsigned char g, unsigned char b):&#160;console.c']]],
+  ['console_5fpset_5fright_19',['console_pset_right',['../console_8h.html#a5e1fe5ed49736a9dc2556494e06fd5ad',1,'console_pset_right(int x, int y, unsigned char r, unsigned char g, unsigned char b):&#160;console.c'],['../console_8c.html#a5e1fe5ed49736a9dc2556494e06fd5ad',1,'console_pset_right(int x, int y, unsigned char r, unsigned char g, unsigned char b):&#160;console.c']]],
+  ['console_5fputch_20',['console_putch',['../console_8c.html#af9d252415fab508f347a89e5228758e7',1,'console_putch(const char c):&#160;console.c'],['../console_8h.html#af9d252415fab508f347a89e5228758e7',1,'console_putch(const char c):&#160;console.c']]],
+  ['console_5fset_5fcolors_21',['console_set_colors',['../console_8c.html#a6f2ef969603a184842ba6479d0d77f39',1,'console_set_colors(unsigned int background, unsigned int foreground):&#160;console.c'],['../console_8h.html#a6f2ef969603a184842ba6479d0d77f39',1,'console_set_colors(unsigned int background, unsigned int foreground):&#160;console.c']]],
+  ['cpu_5fget_5fkey_22',['cpu_get_key',['../xb360_8c.html#afd56a93a08b55ddcad4b1a6bbe5671b8',1,'cpu_get_key(unsigned char *data):&#160;xb360.c'],['../xb360_8h.html#afd56a93a08b55ddcad4b1a6bbe5671b8',1,'cpu_get_key(unsigned char *data):&#160;xb360.c']]],
+  ['cpusleep_23',['cpusleep',['../xenon__power_8c.html#ad5b4a971185fb23ab9942c1bffc507b9',1,'xenon_power.c']]],
+  ['cputime_24',['cputime',['../gmon_8c.html#a46b78354961f7fb31f0e50607f5c7231',1,'gmon.c']]],
+  ['crashdump_25',['crashdump',['../c__except_8c.html#a68ab52ed9d3996ada2eae3d66cd71c73',1,'c_except.c']]]
 ];

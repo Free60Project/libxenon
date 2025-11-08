@@ -505,26 +505,37 @@ unsigned int xenon_get_XenosID()
 
 int xenon_get_console_type()
 {
-    unsigned int PVR, PCIBridgeRevisionID, consoleVersion, DVEversion;
-    
-    PCIBridgeRevisionID = xenon_get_PCIBridgeRevisionID();
-    consoleVersion = xenon_get_XenosID();
-    DVEversion = xenon_get_DVE();
-    PVR = xenon_get_CPU_PVR();
-	if(PVR == 0x710200 || PVR == 0x710300) //TODO: Add XenosID check also!
-		return REV_ZEPHYR;
-    if(consoleVersion < 0x5821)
-		return REV_XENON;
-	else if(consoleVersion >= 0x5821 && consoleVersion < 0x5831)
+	unsigned int PVR, PCIBridgeRevisionID, DVEversion;
+	 
+	PCIBridgeRevisionID = xenon_get_PCIBridgeRevisionID();
+	DVEversion = xenon_get_DVE();
+	PVR = xenon_get_CPU_PVR();
+
+	if(PVR <= 0x710300) // DD3 or older CPU, must be a Xenon or Zephyr
 	{
-		return REV_FALCON;
+		if(DVEversion >= 0x11) // We've got HANA, this must be a zephyr
+		{
+			return REV_ZEPHYR;
+		}
+		else
+		{
+			return REV_XENON;
+		}
 	}
-	else if(consoleVersion >= 0x5831 && consoleVersion < 0x5841)
-		return REV_JASPER;
-	else if(consoleVersion >= 0x5841 && consoleVersion < 0x5851)
+	else if(PVR <= 0x710500) // Loki CPU, must be a Falcon or Jasper
 	{
-		//TODO: If PVR is always the same for trinity, move it to the if statement above...
-		if (DVEversion >= 0x20 && PVR == 0x710800)
+		if(PCIBridgeRevisionID >= 0x60)
+		{
+			return REV_JASPER;
+		}
+		else
+		{
+			return REV_FALCON;
+		}
+	}
+	else if(PVR <= 0x710800) // Vejle CPU, must be Trinity or Corona
+	{
+		if (DVEversion >= 0x20)
 		{
 			if (PCIBridgeRevisionID >= 0x70 && sfcx_readreg(SFCX_PHISON) != 0)
 				return REV_CORONA_PHISON;
@@ -533,13 +544,14 @@ int xenon_get_console_type()
 		else
 			return REV_TRINITY;
 	}
-	else if(consoleVersion >= 0x5851)
+	else if(PVR <= 0x710A00) // Oban CPU, must be Winchester
 	{
 		if (PCIBridgeRevisionID >= 0x70 && sfcx_readreg(SFCX_PHISON) != 0)
 			return REV_WINCHESTER_MMC;
 		return REV_WINCHESTER;
 	}
-    return REV_UNKNOWN;
+
+	return REV_UNKNOWN;
 }
 
 int xenon_logical_nand_data_ok()

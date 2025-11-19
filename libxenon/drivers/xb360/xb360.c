@@ -110,8 +110,9 @@ int get_virtual_cpukey(unsigned char *data)
 
    const unsigned char fuseline0[0x8] = { 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
-   // Check the JTAG vfuse offset
-   if (xenon_get_logical_nand_data(&buffer, VFUSES_JTAG_OFFSET, VFUSES_SIZE) == -1)
+   // JTAG virtual fuses must be checked manually, since they're not stored
+   // at the beginning of either of the patch slots like Glitch/DevGL images
+   if (xenon_get_logical_nand_data(&buffer, VFUSES_OFFSET, VFUSES_SIZE) == -1)
    {
       // Error reading NAND data
       return 2;

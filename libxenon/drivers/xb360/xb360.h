@@ -72,7 +72,6 @@ unsigned int xenon_get_kv_offset();
 #define KV_FLASH_OFFSET			  xenon_get_kv_offset()
 #define KV_FLASH_PAGES            KV_FLASH_SIZE / 0x200
 #define KV_FLASH_PTR              0x6C
-
 #define VFUSES_SIZE               0x60
 #define VFUSES_OFFSET			  0x95000
 

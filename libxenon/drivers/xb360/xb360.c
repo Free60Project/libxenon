@@ -93,6 +93,15 @@ void print_key(char *name, unsigned char *data)
 	printf("\n");
 }
 
+void print_cserial(char *name, unsigned char *data)
+{
+	int i = 0;
+	printf("%s: ", name);
+	for (i = 0; i < 12; i++)
+		printf("%c", data[i]);
+	printf("\n");
+}
+
 int cpu_get_key(unsigned char *data)
 {
 	*(unsigned long long*)&data[0] = xenon_secotp_read_line(3) | xenon_secotp_read_line(4);
@@ -222,26 +231,43 @@ int kv_read(unsigned char *data, int virtualcpukey)
 	return 0;
 }
 
+void kv_print_hash_failure()
+{
+	unsigned int kvOffset = xenon_get_kv_offset();
+	unsigned int kvSize = xenon_get_kv_size();
+
+	// Physical KV offset = page number * physical page size + offset in page
+	kvOffset = ((kvOffset / sfc.page_sz) * sfc.page_sz_phys) + (kvOffset % sfc.page_sz);
+
+	// Physical KV size = page count * physical page size (KV is a multiple of page size)
+	kvSize = (kvSize / sfc.page_sz) * sfc.page_sz_phys;
+
+	printf(" !   the hash check failed probably as a result of decryption failure\n");
+	printf(" !   make sure that the CORRECT key vault for this console is in flash\n");
+	printf(" !   the key vault should be at offset 0x%x for a length of 0x%x\n", kvOffset, kvSize);
+	printf(" !   in the 'raw' flash binary from THIS console\n");
+
+	return;
+}
+
 int kv_get_dvd_key(unsigned char *dvd_key)
 {
 	if (KV_FLASH_SIZE == 0)
 		return -1; //It's bad data!
-	unsigned char buffer[KV_FLASH_SIZE], tmp[0x10];
+	unsigned char buffer[KV_FLASH_SIZE], cpukeyTmp[0x10];
 	int result = 0;
 	int keylen = 0x10;
 
 	result = kv_read(buffer, 0);
-        if (result == 2 && get_virtual_cpukey(tmp) == 0){
-            printf("! Attempting to decrypt DVDKey with Virtual CPU Key !\n");
-            result = kv_read(buffer, 1);
-        }
+	if (result == 2 && get_virtual_cpukey(cpukeyTmp) == 0){
+		result = kv_read(buffer, 1);
+	}
+
 	if (result != 0){
 		printf(" ! kv_get_dvd_key Failure: kv_read\n");
-		if (result == 2){ //Hash failure
-			printf(" !   the hash check failed probably as a result of decryption failure\n");
-			printf(" !   make sure that the CORRECT key vault for this console is in flash\n");
-			printf(" !   the key vault should be at offset 0x4200 for a length of 0x4200\n");
-			printf(" !   in the 'raw' flash binary from THIS console\n");
+		// Hash failure
+		if (result == 2){
+			kv_print_hash_failure();
 		}
 		return 1;
 	}
@@ -252,32 +278,79 @@ int kv_get_dvd_key(unsigned char *dvd_key)
 		return result;
 	}
 
-	//print_key("dvd key", dvd_key);
 	return 0;
+}
 
+int kv_get_cserial(unsigned char *serial)
+{
+	if (KV_FLASH_SIZE == 0)
+		return -1; //It's bad data!
+	unsigned char buffer[KV_FLASH_SIZE], cpukeyTmp[0x10];
+	int result = 0;
+	int serialLen = 0xC;
+
+	result = kv_read(buffer, 0);
+	if (result == 2 && get_virtual_cpukey(cpukeyTmp) == 0){
+		result = kv_read(buffer, 1);
+	}
+
+	if (result != 0){
+		printf(" ! kv_get_cserial Failure: kv_read\n");
+		// Hash failure
+		if (result == 2){
+			kv_print_hash_failure();
+		}
+		return 1;
+	}
+
+	result = kv_get_key(XEKEY_CONSOLE_SERIAL_NUMBER, serial, &serialLen, buffer);
+	if (result != 0){
+		printf(" ! kv_get_cserial Failure: kv_get_key %d\n", result);
+		return result;
+	}
+
+	return 0;
 }
 
 void print_cpu_dvd_keys(void)
 {
 	unsigned char key[0x10];
+	unsigned char cserial[0xC];
 
 	printf("\n");
 
 	memset(key, '\0', sizeof(key));
+
 	if (cpu_get_key(key)==0)
-		print_key(" * your cpu key", key);
-	if (xenon_logical_nand_data_ok() == 0)
+	{
+		print_key(" * CPU key", key);
+	}
+
+	if (xenon_logical_nand_data_ok() != 0)
+	{
+		printf(" ! Unable to read Keyvault data from NAND\n");
+		printf(" ! xenon_logical_nand_data_ok error\n");
+	}
+	else if(KV_FLASH_OFFSET == 0 || KV_FLASH_SIZE == 0)
+	{
+		printf(" ! Unable to read Keyvault data from NAND\n");
+		printf(" ! Keyvault size or offset is zero\n");
+	}
+	else
 	{
 		memset(key, '\0',sizeof(key));
 		if (get_virtual_cpukey(key)==0)
-			print_key(" * your virtual cpu key", key);
+			print_key(" * Virtual CPU key", key);
 
 		memset(key, '\0', sizeof(key));
 		if (kv_get_dvd_key(key)==0)
-			print_key(" * your dvd key", key);
+			print_key(" * DVD key", key);
+
+		memset(cserial, '\0', sizeof(cserial));
+		if (kv_get_cserial(cserial)==0)
+			print_cserial(" * Serial", cserial);
 	}
-	else
-		printf(" ! Unable to read Keyvault data from NAND\n");
+		
 	printf("\n");
 }
 

@@ -1,3 +1,6 @@
+#
+# Ignore build artifacts
+#
 *.o
 *.d
 *.a
@@ -6,4 +9,16 @@ toolchain/build.log
 toolchain/*.tar.gz
 toolchain/*.tar.bz2
 toolchain/*.tar.xz
+
+#
+# Ignore dependency folders created when
+# build-xenon-toolchain is run
+#
+toolchain/binutils*/
+toolchain/gcc*/
+toolchain/newlib*/
+toolchain/xtaflib*/
+toolchain/fat-xenon*/
+toolchain/ext2fs-xenon*/
+
 docs/

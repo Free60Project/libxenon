@@ -64,10 +64,10 @@ int network_init()
 
 	dhcp_wait=mftb();
 	int i = 0;
-	while (netif.ip_addr.addr==0 && i < 60) {
+	while (netif.ip_addr.addr==0 && i < 90) {
 		network_poll();
 		now2=mftb();
-		if (tb_diff_msec(now2, dhcp_wait) >= 250){
+		if (tb_diff_msec(now2, dhcp_wait) >= 300){
 			dhcp_wait=mftb();
 			i++;
 			if (i % 2)

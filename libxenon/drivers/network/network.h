@@ -9,7 +9,7 @@ extern "C" {
 #include <lwip/dhcp.h>
 
 #define NETWORK_INIT_SUCCESS 0
-#define NETWORK_INIT_STATIC_IP 1
+#define NETWORK_INIT_DHCP_FAILURE 1
 #define NETWORK_INIT_FAILURE -1
 
 int  network_init();

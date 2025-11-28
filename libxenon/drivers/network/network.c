@@ -86,7 +86,7 @@ int network_init()
 		IP4_ADDR(&netmask, 255, 255, 255, 0);
 		netif_set_addr(&netif, &ipaddr, &netmask, &gateway);
 		netif_set_up(&netif);
-		return NETWORK_INIT_STATIC_IP;
+		return NETWORK_INIT_DHCP_FAILURE;
 	}
 
 	return NETWORK_INIT_SUCCESS;

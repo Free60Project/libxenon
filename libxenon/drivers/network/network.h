@@ -8,7 +8,11 @@ extern "C" {
 #include <lwip/netif.h>
 #include <lwip/dhcp.h>
 
-void network_init();
+#define NETWORK_INIT_SUCCESS 0
+#define NETWORK_INIT_STATIC_IP 1
+#define NETWORK_INIT_FAILURE -1
+
+int  network_init();
 void network_poll();
 void network_print_config();
 

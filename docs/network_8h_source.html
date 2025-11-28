@@ -87,22 +87,26 @@ $(function() {
 <div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;<a class="code" href="netif_8h.html">lwip/netif.h</a>&gt;</span></div>
 <div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;<a class="code" href="dhcp_8h.html">lwip/dhcp.h</a>&gt;</span></div>
 <div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span> </div>
-<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="keywordtype">void</span> <a class="code hl_function" href="network_8h.html#a53866cf213c2b2ea49bce93552ac766f">network_init</a>();</div>
-<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="keywordtype">void</span> <a class="code hl_function" href="network_8h.html#a80436bc3a901b46543882adbad388afb">network_poll</a>();</div>
-<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="keywordtype">void</span> <a class="code hl_function" href="network_8h.html#ae4c6bf4be83673fffc9d8e57a5e76994">network_print_config</a>();</div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno"><a class="line" href="network_8h.html#ae8c9949dfe35eea1b1d5b8bca38975cc">   11</a></span><span class="preprocessor">#define NETWORK_INIT_SUCCESS 0</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="network_8h.html#a365441ec9c51e04ca6149671b3aa9f2f">   12</a></span><span class="preprocessor">#define NETWORK_INIT_DHCP_FAILURE 1</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno"><a class="line" href="network_8h.html#a70abbaa616d3b330b0b96030047c882e">   13</a></span><span class="preprocessor">#define NETWORK_INIT_FAILURE -1</span></div>
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keyword">extern</span> <span class="keyword">struct </span><a class="code hl_struct" href="structnetif.html">netif</a> <a class="code hl_struct" href="structnetif.html">netif</a>;</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#ifdef __cplusplus</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>}</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="keywordtype">int</span>  <a class="code hl_function" href="network_8h.html#a5e995b539e8194c43dec8459620b088a">network_init</a>();</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span><span class="keywordtype">void</span> <a class="code hl_function" href="network_8h.html#a80436bc3a901b46543882adbad388afb">network_poll</a>();</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="keywordtype">void</span> <a class="code hl_function" href="network_8h.html#ae4c6bf4be83673fffc9d8e57a5e76994">network_print_config</a>();</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="keyword">extern</span> <span class="keyword">struct </span><a class="code hl_struct" href="structnetif.html">netif</a> <a class="code hl_struct" href="structnetif.html">netif</a>;</div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#ifdef __cplusplus</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>}</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#endif</span></div>
 <div class="ttc" id="adhcp_8h_html"><div class="ttname"><a href="dhcp_8h.html">dhcp.h</a></div></div>
 <div class="ttc" id="anetif_8h_html"><div class="ttname"><a href="netif_8h.html">netif.h</a></div></div>
-<div class="ttc" id="anetwork_8h_html_a53866cf213c2b2ea49bce93552ac766f"><div class="ttname"><a href="network_8h.html#a53866cf213c2b2ea49bce93552ac766f">network_init</a></div><div class="ttdeci">void network_init()</div><div class="ttdef"><b>Definition:</b> <a href="network_8c_source.html#l00034">network.c:34</a></div></div>
-<div class="ttc" id="anetwork_8h_html_a80436bc3a901b46543882adbad388afb"><div class="ttname"><a href="network_8h.html#a80436bc3a901b46543882adbad388afb">network_poll</a></div><div class="ttdeci">void network_poll()</div><div class="ttdef"><b>Definition:</b> <a href="network_8c_source.html#l00092">network.c:92</a></div></div>
-<div class="ttc" id="anetwork_8h_html_ae4c6bf4be83673fffc9d8e57a5e76994"><div class="ttname"><a href="network_8h.html#ae4c6bf4be83673fffc9d8e57a5e76994">network_print_config</a></div><div class="ttdeci">void network_print_config()</div><div class="ttdef"><b>Definition:</b> <a href="network_8c_source.html#l00119">network.c:119</a></div></div>
+<div class="ttc" id="anetwork_8h_html_a5e995b539e8194c43dec8459620b088a"><div class="ttname"><a href="network_8h.html#a5e995b539e8194c43dec8459620b088a">network_init</a></div><div class="ttdeci">int network_init()</div><div class="ttdef"><b>Definition:</b> <a href="network_8c_source.html#l00034">network.c:34</a></div></div>
+<div class="ttc" id="anetwork_8h_html_a80436bc3a901b46543882adbad388afb"><div class="ttname"><a href="network_8h.html#a80436bc3a901b46543882adbad388afb">network_poll</a></div><div class="ttdeci">void network_poll()</div><div class="ttdef"><b>Definition:</b> <a href="network_8c_source.html#l00095">network.c:95</a></div></div>
+<div class="ttc" id="anetwork_8h_html_ae4c6bf4be83673fffc9d8e57a5e76994"><div class="ttname"><a href="network_8h.html#ae4c6bf4be83673fffc9d8e57a5e76994">network_print_config</a></div><div class="ttdeci">void network_print_config()</div><div class="ttdef"><b>Definition:</b> <a href="network_8c_source.html#l00122">network.c:122</a></div></div>
 <div class="ttc" id="astructnetif_html"><div class="ttname"><a href="structnetif.html">netif</a></div><div class="ttdef"><b>Definition:</b> <a href="netif_8h_source.html#l00136">netif.h:136</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

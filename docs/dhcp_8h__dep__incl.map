@@ -1,7 +1,7 @@
 <map id="libxenon/drivers/lwip/include/lwip/dhcp.h" name="libxenon/drivers/lwip/include/lwip/dhcp.h">
-<area shape="rect" id="node1" title=" " alt="" coords="112,5,251,45"/>
-<area shape="rect" id="node2" href="$telnet__console_8c.html" title=" " alt="" coords="141,181,302,221"/>
-<area shape="rect" id="node3" href="$ip_8c.html" title=" " alt="" coords="26,93,164,133"/>
-<area shape="rect" id="node4" href="$network_8c.html" title=" " alt="" coords="188,93,351,133"/>
-<area shape="rect" id="node5" href="$network_8h.html" title=" " alt="" coords="375,93,538,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="110,5,249,45"/>
+<area shape="rect" id="node2" href="$telnet__console_8c.html" title=" " alt="" coords="12,181,174,221"/>
+<area shape="rect" id="node3" href="$ip_8c.html" title=" " alt="" coords="24,93,162,133"/>
+<area shape="rect" id="node4" href="$network_8c.html" title=" " alt="" coords="245,181,408,221"/>
+<area shape="rect" id="node5" href="$network_8h.html" title=" " alt="" coords="186,93,349,133"/>
 </map>

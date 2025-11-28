@@ -1,4 +1,5 @@
 <map id="libxenon/drivers/network/network.h" name="libxenon/drivers/network/network.h">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,168,45"/>
-<area shape="rect" id="node2" href="$telnet__console_8c.html" title=" " alt="" coords="6,93,167,133"/>
+<area shape="rect" id="node1" title=" " alt="" coords="98,5,261,45"/>
+<area shape="rect" id="node2" href="$telnet__console_8c.html" title=" " alt="" coords="5,93,167,133"/>
+<area shape="rect" id="node3" href="$network_8c.html" title=" " alt="" coords="191,93,354,133"/>
 </map>

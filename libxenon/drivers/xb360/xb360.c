@@ -660,3 +660,15 @@ unsigned int xenon_get_kv_offset()
 		return ret;
 	return 0;
 }
+
+unsigned int xenon_get_ram_size()
+{
+	unsigned int hostRegisterE104 = 0;
+
+   // 0xE1040000 is the host bridge register where HWINIT stores a little endian uint32
+   // representing the amount of memory (in bytes) installed on the system. CB_B looks
+   // here to determine whether or not to throw panic 0xAF (UNSUPPORTED_RAM_SIZE)
+   memcpy(&hostRegisterE104, (const void*)(0x80000200E1040000ULL), sizeof(hostRegisterE104));
+
+	return __builtin_bswap32(hostRegisterE104);
+}

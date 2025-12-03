@@ -119,6 +119,8 @@ unsigned int xenon_get_DVE();
 unsigned int xenon_get_PCIBridgeRevisionID();
 unsigned int xenon_get_CPU_PVR();
 unsigned int xenon_get_XenosID();
+unsigned int xenon_get_ram_size();
+
 int xenon_get_console_type(void);
 
 int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len);

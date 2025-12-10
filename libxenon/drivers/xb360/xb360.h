@@ -74,19 +74,21 @@ unsigned int xenon_get_kv_offset();
 #define KV_FLASH_PTR              0x6C
 #define VFUSES_SIZE               0x60
 #define VFUSES_OFFSET			  0x95000
-#define ZFUSES_OFFSET           0xC0000
+
 #define XELL_SIZE (256*1024)
 #define XELL_FOOTER_OFFSET (256*1024-16)
 #define XELL_FOOTER_LENGTH 16
 #define XELL_FOOTER "xxxxxxxxxxxxxxxx"
 
-#define XELL_OFFSET_COUNT         6
+#define XELL_OFFSET_COUNT         8
 static const unsigned int xelloffsets[XELL_OFFSET_COUNT] = {0x70000, // ggBoot main xell-gggggg
-															0x95060, // FreeBOOT Single-NAND main xell-2f
-															0x100000, // XeLL-Only Image
-															0xC0000,
+															0x95060,   // FreeBOOT Single-NAND main xell-2f
+															0x100000,  // XeLL-Only Image (Main)
+															0xC0000,   // XeLL-Only Image (Backup)
 															0xE0000,
-															0xB80000};
+															0xF0000,   // DevGL/Glitch2m xell-gggggg in flashfs (16mb)
+															0xF4000,   // DevGL xell-gggggg in flashfs (64mb)
+															0xB80000}; // DevGL/Glitch2m xell-gggggg in flashfs (BB 256/512mb)
 
 #define REV_XENON 0
 #define REV_ZEPHYR 1

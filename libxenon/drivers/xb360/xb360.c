@@ -113,37 +113,80 @@ int get_virtual_cpukey(unsigned char *data)
 {
    unsigned char buffer[VFUSES_SIZE];
 
+   uint32_t patchSlotOffset = 0;
+   uint32_t patchSlotSize = 0;
+   uint16_t patchSlotCount = 0;
+
+   const unsigned char fuseline0[0x8] = { 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
+   // JTAG virtual fuses must be checked manually, since they're not stored
+   // at the beginning of either of the patch slots like Glitch/DevGL images
    if (xenon_get_logical_nand_data(&buffer, VFUSES_OFFSET, VFUSES_SIZE) == -1)
    {
-         return 2; //Unable to read NAND data...
+      // Error reading NAND data
+      return 2;
    }
 
-   //if we got here then it was at least able to read from nand
-   //now we need to verify the data somehow
-   if(buffer[0]==0xC0 && buffer[1]==0xFF && buffer[2]==0xFF && buffer[3]==0xFF)
+   // Data was read from NAND, verify that it looks like a virtual fuse set
+   // by comparing it with what is expected for fuseline 0.
+   if( 0 == memcmp(buffer, fuseline0, sizeof(fuseline0)) )
    {
       memcpy(data,&buffer[0x20],0x10);
       return 0;
    }
-   else
+
+   // If virtual fuses were not found at the JTAG offset, check the beginning of each patch slot.
+   // Patch slot offset, count, and size are stored at the beginning of NAND
+
+   // Patch slot offset = DWORD at 0x64
+   if (xenon_get_logical_nand_data(&patchSlotOffset, 0x64, sizeof(patchSlotOffset)) == -1)
    {
-      // No Virtual Fuses were found at 0x95000, check again at 0xC0000 (Zero fuse DevGL consoles)
-      if (xenon_get_logical_nand_data(&buffer, ZFUSES_OFFSET, VFUSES_SIZE) == -1)
+      return 2;
+   }
+
+   // Patch slot count  = WORD at 0x68
+   if (xenon_get_logical_nand_data(&patchSlotCount, 0x68, sizeof(patchSlotCount)) == -1)
+   {
+      return 2;
+   }
+   
+   // Patch slot size = DWORD at 0x70
+   if (xenon_get_logical_nand_data(&patchSlotSize, 0x70, sizeof(patchSlotSize)) == -1)
+   {
+      return 2;
+   }
+
+   // XeBuild has a bug where the patch slot size is set to zero for
+   // Falcon/Zephyr/Xenon DevGL and Glitch2m images. In this case, use
+   // the expected patch slot size of 0x10000 bytes.
+   if( 0 == patchSlotSize )
+   {
+      patchSlotSize = 0x10000;
+   }
+
+   // Check the beginning of each patch slot for a virtual fuse set
+   for(int i = 0; i < patchSlotCount; i++)
+   {
+      uint32_t patchSlotAddress = patchSlotOffset + (i * patchSlotSize);
+
+      // Read the virtual fuse set from NAND
+      if (xenon_get_logical_nand_data(&buffer, patchSlotAddress, VFUSES_SIZE) == -1)
       {
-         return 2; //Unable to read NAND data...
+         return 2;
       }
 
-      //if we got here then it was at least able to read from nand
-      //now we need to verify the data somehow
-      if(buffer[0]==0xC0 && buffer[1]==0xFF && buffer[2]==0xFF && buffer[3]==0xFF)
+      // Data was read from NAND, verify that it looks like a virtual fuse set
+      // by comparing it with what is expected for fuseline 0. If it doesn't
+      // match, the next patch slot will be checked.
+      if( 0 == memcmp(buffer, fuseline0, sizeof(fuseline0)) )
       {
          memcpy(data,&buffer[0x20],0x10);
          return 0;
       }
-
-      // No virtual fuses at 0x95000 or 0xC0000
-      return 1;
    }
+
+   // No virtual fuses found 
+   return 1;
 }
 
 

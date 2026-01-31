@@ -18,11 +18,72 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #include <time/time.h>
 #include <unistd.h>
 #include <xenon_soc/xenon_power.h>
-
 #include "elf.h"
 #include "elf_abi.h"
 #include "xetypes.h"
+#include <stdint.h>
 
+unsigned int xenon_get_ram_size()
+{
+	return __builtin_bswap32(*(unsigned int *)0xE1040000);
+}
+static int fdt_fixup_memory_reg(void *fdt)
+{
+    int mem = fdt_path_offset(fdt, "/memory");
+    if (mem < 0) return mem;
+
+    uint32_t ram_bytes = xenon_get_ram_size(); // bytes
+
+    // 512MiB contiguous
+    uint32_t reg_512[] = {
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x1e000000),
+    };
+
+    // 992MiB stable split (480MiB low + 512MiB high)
+    uint32_t reg_992[] = {
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x1e000000),
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x20000000), cpu_to_fdt32(0x20000000),
+    };
+
+    const void *regp;
+    int reglen;
+
+    if (ram_bytes <= 0x20000000) {          // assume retail unless proven otherwise
+        regp = reg_512;
+        reglen = (int)sizeof(reg_512);
+    } else {
+        regp = reg_992;
+        reglen = (int)sizeof(reg_992);
+    }
+
+    return fdt_setprop(fdt, mem, "reg", regp, reglen);
+}
+static void dump_memory_reg(void *fdt)
+{
+    int mem = fdt_path_offset(fdt, "/memory");
+    if (mem < 0) {
+        printf("[FDT] /memory not found: %s\n", fdt_strerror(mem));
+        return;
+    }
+
+    int len = 0;
+    const uint32_t *reg = fdt_getprop(fdt, mem, "reg", &len);
+    if (!reg) {
+        printf("[FDT] /memory reg missing\n");
+        return;
+    }
+    uint32_t ram_bytes = xenon_get_ram_size();
+    uint32_t ram_mib   = ram_bytes / (1024 * 1024);
+
+    printf(" * Patching device tree for %u MiB RAM\n", ram_mib);
+    printf(" * /memory/reg (%d bytes, %d cells):", len, len / 4);
+
+    int i;
+    for (i = 0; i < (len / 4); i++)
+        printf(" %08x", fdt32_to_cpu(reg[i]));
+
+    printf("\n");
+}
 #define ELF_DEVTREE_START ((void *)0x85FE0000)
 #define ELF_DEVTREE_MAX_SIZE 0x00010000
 #define MAX_CMDLINE_SIZE 255
@@ -471,7 +532,12 @@ int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
     printf(" ! fdt_open_into() failed\n");
     return res;
   }
-
+    res = fdt_fixup_memory_reg(ELF_DEVTREE_START);
+  if (res < 0) {
+    printf(" ! fdt_fixup_memory_reg() failed: %s\n", fdt_strerror(res));
+    return res;
+  }
+  dump_memory_reg(ELF_DEVTREE_START);
   node = fdt_path_offset(ELF_DEVTREE_START, "/chosen");
   if (node < 0) {
     printf(" ! /chosen node not found in devtree\n");

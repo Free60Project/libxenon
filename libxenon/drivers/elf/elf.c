@@ -562,13 +562,6 @@ int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr, int dt_si
     uint32_t ram_bytes = xenon_get_ram_size();
     uint32_t ram_mib   = ram_bytes >> 20;
 
-    /* If no DTB is supplied (e.g. rawflash), just run the ELF */
-    if (!dt_addr || dt_size <= 0) {
-        printf("[ELF loader] No device tree supplied; running ELF without DT\n");
-        elf_runFromMemory(elf_addr, elf_size);
-        return -1; /* If we return, ELF execution failed */
-    }
-
     if (dt_size > ELF_DEVTREE_MAX_SIZE) {
         printf("[ELF loader] Device tree too big (> %d bytes) !\n", ELF_DEVTREE_MAX_SIZE);
         return -1;

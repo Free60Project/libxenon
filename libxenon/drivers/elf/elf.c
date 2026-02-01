@@ -18,72 +18,11 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #include <time/time.h>
 #include <unistd.h>
 #include <xenon_soc/xenon_power.h>
+
 #include "elf.h"
 #include "elf_abi.h"
 #include "xetypes.h"
-#include <stdint.h>
 
-unsigned int xenon_get_ram_size()
-{
-	return __builtin_bswap32(*(unsigned int *)0xE1040000);
-}
-static int fdt_fixup_memory_reg(void *fdt)
-{
-    int mem = fdt_path_offset(fdt, "/memory");
-    if (mem < 0) return mem;
-
-    uint32_t ram_bytes = xenon_get_ram_size(); // bytes
-
-    // 512MiB contiguous
-    uint32_t reg_512[] = {
-        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x1e000000),
-    };
-
-    // 992MiB stable split (480MiB low + 512MiB high)
-    uint32_t reg_992[] = {
-        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x1e000000),
-        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x20000000), cpu_to_fdt32(0x20000000),
-    };
-
-    const void *regp;
-    int reglen;
-
-    if (ram_bytes <= 0x20000000) {          // assume retail unless proven otherwise
-        regp = reg_512;
-        reglen = (int)sizeof(reg_512);
-    } else {
-        regp = reg_992;
-        reglen = (int)sizeof(reg_992);
-    }
-
-    return fdt_setprop(fdt, mem, "reg", regp, reglen);
-}
-static void dump_memory_reg(void *fdt)
-{
-    int mem = fdt_path_offset(fdt, "/memory");
-    if (mem < 0) {
-        printf("[FDT] /memory not found: %s\n", fdt_strerror(mem));
-        return;
-    }
-
-    int len = 0;
-    const uint32_t *reg = fdt_getprop(fdt, mem, "reg", &len);
-    if (!reg) {
-        printf("[FDT] /memory reg missing\n");
-        return;
-    }
-    uint32_t ram_bytes = xenon_get_ram_size();
-    uint32_t ram_mib   = ram_bytes / (1024 * 1024);
-
-    printf(" * Patching device tree for %u MiB RAM\n", ram_mib);
-    printf(" * /memory/reg (%d bytes, %d cells):", len, len / 4);
-
-    int i;
-    for (i = 0; i < (len / 4); i++)
-        printf(" %08x", fdt32_to_cpu(reg[i]));
-
-    printf("\n");
-}
 #define ELF_DEVTREE_START ((void *)0x85FE0000)
 #define ELF_DEVTREE_MAX_SIZE 0x00010000
 #define MAX_CMDLINE_SIZE 255
@@ -514,155 +453,290 @@ int elf_runFromDisk(char *filename) {
 
   return 0;
 }
+unsigned int xenon_get_ram_size()
+{	
+  return __builtin_bswap32(*(unsigned int *)0xE1040000);
+}
 
-int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
-                          int dt_size) {
-  int res, node;
-  uint32_t cpufreq;
 
-  if (dt_size > ELF_DEVTREE_MAX_SIZE) {
-    printf("[ELF loader] Device tree too big (> %d bytes) !\n",
-           ELF_DEVTREE_MAX_SIZE);
-    return -1;
-  }
-  memset(ELF_DEVTREE_START, 0, ELF_DEVTREE_MAX_SIZE);
+static int fdt_fixup_memory_reg(void *fdt)
+{
+    int mem = fdt_path_offset(fdt, "/memory");
+    if (mem < 0) return mem;
 
-  res = fdt_open_into(dt_addr, ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
-  if (res < 0) {
-    printf(" ! fdt_open_into() failed\n");
-    return res;
-  }
-    res = fdt_fixup_memory_reg(ELF_DEVTREE_START);
-  if (res < 0) {
-    printf(" ! fdt_fixup_memory_reg() failed: %s\n", fdt_strerror(res));
-    return res;
-  }
-  dump_memory_reg(ELF_DEVTREE_START);
-  node = fdt_path_offset(ELF_DEVTREE_START, "/chosen");
-  if (node < 0) {
-    printf(" ! /chosen node not found in devtree\n");
-    return node;
-  }
+    uint32_t ram_bytes = xenon_get_ram_size();
 
-  if (bootargs[0]) {
-    res = fdt_setprop(ELF_DEVTREE_START, node, "bootargs", bootargs,
-                      strlen(bootargs) + 1);
+    /* Only patch DT on 1GiB systems; 512MiB DTB is the default */
+    if (ram_bytes != 0x40000000)
+        return 0;
+
+    /* Split map (480MiB low + 512MiB high) */
+    uint32_t reg_992[] = {
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x1e000000),
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x20000000), cpu_to_fdt32(0x20000000),
+    };
+
+    return fdt_setprop(fdt, mem, "reg", reg_992, sizeof(reg_992));
+}
+
+static int fdt_fixup_pci_ranges_ram(void *fdt, uint32_t ram_bytes)
+{
+    /* Only patch on 1GiB systems */
+    if (ram_bytes != 0x40000000)
+        return 0;
+
+    int off = -1;
+    int depth = 0;
+
+    for (off = fdt_next_node(fdt, -1, &depth);
+         off >= 0;
+         off = fdt_next_node(fdt, off, &depth))
+    {
+        /* Identify PCI host node */
+        int len = 0;
+        const char *dtype = fdt_getprop(fdt, off, "device_type", &len);
+        int is_pci = (dtype && len >= 3 && !memcmp(dtype, "pci", 3));
+
+        if (!is_pci) {
+            const char *compat = fdt_getprop(fdt, off, "compatible", &len);
+            if (compat && len > 0) {
+                /* crude but effective: scan compat strings for "pci" */
+                for (int i = 0; i < len - 2; i++) {
+                    if (compat[i] == 'p' && compat[i+1] == 'c' && compat[i+2] == 'i') {
+                        is_pci = 1;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!is_pci)
+            continue;
+
+        /* Fetch and patch ranges */
+        const uint32_t *ranges = fdt_getprop(fdt, off, "ranges", &len);
+        if (!ranges || (len % 4) || len < (6 * 2 * 4))
+            continue;
+
+        int cells = len / 4;
+        /* Your DT shows 2 entries * 6 cells = 12 cells */
+        if (cells < 12)
+            continue;
+
+        /* Copy to writable buffer */
+        uint32_t tmp[64];
+        if (cells > (int)(sizeof(tmp)/sizeof(tmp[0])))
+            continue;
+
+        for (int i = 0; i < cells; i++)
+            tmp[i] = ranges[i];
+
+        /*
+         * Look for the “RAM is 1:1 mapped” entry:
+         * 0x02000000 0 0  0 0  0x20000000
+         * Change last cell to 0x40000000.
+         */
+        int patched = 0;
+        for (int i = 0; i + 5 < cells; i += 6) {
+            uint32_t c0 = fdt32_to_cpu(tmp[i + 0]);
+            uint32_t b1 = fdt32_to_cpu(tmp[i + 1]);
+            uint32_t b2 = fdt32_to_cpu(tmp[i + 2]);
+            uint32_t p1 = fdt32_to_cpu(tmp[i + 3]);
+            uint32_t p2 = fdt32_to_cpu(tmp[i + 4]);
+            uint32_t sz = fdt32_to_cpu(tmp[i + 5]);
+
+            if (c0 == 0x02000000 && b1 == 0 && b2 == 0 && p1 == 0 && p2 == 0 && sz == 0x20000000) {
+                tmp[i + 5] = cpu_to_fdt32(0x40000000);
+                patched = 1;
+                break;
+            }
+        }
+
+        if (patched)
+            return fdt_setprop(fdt, off, "ranges", tmp, len);
+    }
+
+    return 0; /* Not fatal if we didn’t find it */
+}
+
+int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr, int dt_size)
+{
+    int res, node;
+    uint32_t cpufreq;
+
+    /* Detect RAM once (MMIO), reuse for prints + gating */
+    uint32_t ram_bytes = xenon_get_ram_size();
+    uint32_t ram_mib   = ram_bytes >> 20;
+
+    /* If no DTB is supplied (e.g. rawflash), just run the ELF */
+    if (!dt_addr || dt_size <= 0) {
+        printf("[ELF loader] No device tree supplied; running ELF without DT\n");
+        elf_runFromMemory(elf_addr, elf_size);
+        return -1; /* If we return, ELF execution failed */
+    }
+
+    if (dt_size > ELF_DEVTREE_MAX_SIZE) {
+        printf("[ELF loader] Device tree too big (> %d bytes) !\n", ELF_DEVTREE_MAX_SIZE);
+        return -1;
+    }
+
+    /* Validate DTB header/magic before touching libfdt */
+    res = fdt_check_header(dt_addr);
     if (res < 0) {
-      printf(" ! couldn't set chosen.bootargs property\n");
-      return res;
+        printf("[ELF loader] Invalid DTB (%s); running ELF without DT\n", fdt_strerror(res));
+        elf_runFromMemory(elf_addr, elf_size);
+        return -1;
     }
-  }
 
-  if (initrd_start && initrd_size) {
-    kernel_relocate_initrd(initrd_start, initrd_size);
+    /* Prepare writable DTB copy */
+    memset(ELF_DEVTREE_START, 0, ELF_DEVTREE_MAX_SIZE);
 
-    u64 start, end;
-    start = (u32)PHYSADDR((u32)initrd_start);
-    res = fdt_setprop(ELF_DEVTREE_START, node, "linux,initrd-start", &start,
-                      sizeof(start));
+    res = fdt_open_into(dt_addr, ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
     if (res < 0) {
-      printf("couldn't set chosen.linux,initrd-start property\n");
-      return res;
+        printf(" ! fdt_open_into() failed: %s\n", fdt_strerror(res));
+        return res;
     }
 
-    end = (u32)PHYSADDR(((u32)initrd_start + (u32)initrd_size));
-    res = fdt_setprop(ELF_DEVTREE_START, node, "linux,initrd-end", &end,
-                      sizeof(end));
+    /* Now operate only on the expanded DTB copy */
+    void *fdt = (void *)ELF_DEVTREE_START;
+
+    /* Apply DT fixups only on 1GiB systems */
+    if (ram_bytes == 0x40000000) {
+        printf(" * Detected RAM size: 0x%x (%u MiB); patching device tree\n",
+               (unsigned int)ram_bytes, (unsigned int)ram_mib);
+
+        res = fdt_fixup_memory_reg(fdt);
+        if (res < 0) {
+            printf(" ! fdt_fixup_memory_reg() failed: %s\n", fdt_strerror(res));
+            /* continue: do not hard-fail boot */
+        }
+
+        res = fdt_fixup_pci_ranges_ram(fdt, ram_bytes);
+        if (res < 0) {
+            printf(" ! fdt_fixup_pci_ranges_ram() failed: %s\n", fdt_strerror(res));
+            /* continue */
+        }
+    } else {
+        /* 512MiB is default DTB; leave unchanged */
+        printf(" * Detected RAM size: 0x%x (%u MiB); leaving device tree unchanged\n",
+               (unsigned int)ram_bytes, (unsigned int)ram_mib);
+    }
+
+    /* /chosen node */
+    node = fdt_path_offset(fdt, "/chosen");
+    if (node < 0) {
+        printf(" ! /chosen node not found in devtree\n");
+        return node;
+    }
+
+    if (bootargs[0]) {
+        res = fdt_setprop(fdt, node, "bootargs", bootargs, strlen(bootargs) + 1);
+        if (res < 0) {
+            printf(" ! couldn't set chosen.bootargs property: %s\n", fdt_strerror(res));
+            return res;
+        }
+    }
+
+    /* initrd */
+    if (initrd_start && initrd_size) {
+        kernel_relocate_initrd(initrd_start, initrd_size);
+
+        u64 start, end;
+        start = (u32)PHYSADDR((u32)initrd_start);
+
+        res = fdt_setprop(fdt, node, "linux,initrd-start", &start, sizeof(start));
+        if (res < 0) {
+            printf("couldn't set chosen.linux,initrd-start property: %s\n", fdt_strerror(res));
+            return res;
+        }
+
+        end = (u32)PHYSADDR(((u32)initrd_start + (u32)initrd_size));
+
+        res = fdt_setprop(fdt, node, "linux,initrd-end", &end, sizeof(end));
+        if (res < 0) {
+            printf("couldn't set chosen.linux,initrd-end property: %s\n", fdt_strerror(res));
+            return res;
+        }
+
+        res = fdt_add_mem_rsv(fdt, start, initrd_size);
+        if (res < 0) {
+            printf("couldn't add reservation for the initrd: %s\n", fdt_strerror(res));
+            return res;
+        }
+    }
+
+    /* Ensure /memory exists (kept from original) */
+    node = fdt_path_offset(fdt, "/memory");
+    if (node < 0) {
+        printf(" ! /memory node not found in devtree\n");
+        return node;
+    }
+
+    /* CPU frequency */
+    switch (xenon_get_speed()) {
+        case XENON_SPEED_FULL:
+        case XENON_SPEED_3_2:
+            cpufreq = 3200000000U;
+            break;
+        case XENON_SPEED_1_3:
+            cpufreq = 1300000000U;
+            break;
+        case XENON_SPEED_1_2:
+            cpufreq = 1200000000U;
+            break;
+        default:
+            printf(" ! Weird CPU speed, assuming 3.2GHz\n");
+            cpufreq = 3200000000U;
+            break;
+    }
+
+    node = fdt_path_offset(fdt, "/cpus/Xenon,PPE@0");
+    if (node < 0) {
+        printf(" ! /cpus/Xenon,PPE@0 node not found in devtree\n");
+        return node;
+    }
+
+    res = fdt_setprop(fdt, node, "clock-frequency", &cpufreq, sizeof(cpufreq));
     if (res < 0) {
-      printf("couldn't set chosen.linux,initrd-end property\n");
-      return res;
+        printf(" ! couldn't set /cpus/Xenon,PPE@0.clock-frequency property: %s\n", fdt_strerror(res));
+        return res;
     }
-    res = fdt_add_mem_rsv(ELF_DEVTREE_START, start, initrd_size);
+
+    node = fdt_path_offset(fdt, "/cpus/Xenon,PPE@1");
+    if (node < 0) {
+        printf(" ! /cpus/Xenon,PPE@1 node not found in devtree\n");
+        return node;
+    }
+
+    res = fdt_setprop(fdt, node, "clock-frequency", &cpufreq, sizeof(cpufreq));
     if (res < 0) {
-      printf("couldn't add reservation for the initrd\n");
-      return res;
+        printf(" ! couldn't set /cpus/Xenon,PPE@1.clock-frequency property: %s\n", fdt_strerror(res));
+        return res;
     }
-  }
 
-  node = fdt_path_offset(ELF_DEVTREE_START, "/memory");
-  if (node < 0) {
-    printf(" ! /memory node not found in devtree\n");
-    return node;
-  }
-  /*
-          res = fdt_add_mem_rsv(ELF_DEVTREE_START, (uint64_t)ELF_DEVTREE_START,
-     ELF_DEVTREE_MAX_SIZE); if (res < 0){ printf("couldn't add reservation for
-     the devtree\n"); return;
-          }
-  */
-
-  switch (xenon_get_speed()) {
-    case XENON_SPEED_FULL:
-    case XENON_SPEED_3_2: {
-      cpufreq = 3200000000;
-      break;
+    node = fdt_path_offset(fdt, "/cpus/Xenon,PPE@2");
+    if (node < 0) {
+        printf(" ! /cpus/Xenon,PPE@2 node not found in devtree\n");
+        return node;
     }
-    case XENON_SPEED_1_3: {
-      cpufreq = 1300000000;
-      break;
+
+    res = fdt_setprop(fdt, node, "clock-frequency", &cpufreq, sizeof(cpufreq));
+    if (res < 0) {
+        printf(" ! couldn't set /cpus/Xenon,PPE@2.clock-frequency property: %s\n", fdt_strerror(res));
+        return res;
     }
-    case XENON_SPEED_1_2: {
-      cpufreq = 1200000000;
-      break;
+
+    /* Pack + flush */
+    res = fdt_pack(fdt);
+    if (res < 0) {
+        printf(" ! fdt_pack() failed: %s\n", fdt_strerror(res));
+        return res;
     }
-    default: {
-      printf(" ! Weird CPU speed, assuming 3.2GHz\n");
-      cpufreq = 3200000000;
-      break;
-    }
-  }
 
-  node = fdt_path_offset(ELF_DEVTREE_START, "/cpus/Xenon,PPE@0");
-  if (node < 0) {
-    printf(" ! /cpus/Xenon,PPE@0 node not found in devtree\n");
-    return node;
-  }
+    memdcbst(ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
+    printf(" * Device tree prepared\n");
 
-  res = fdt_setprop(ELF_DEVTREE_START, node, "clock-frequency", &cpufreq,
-                    sizeof(cpufreq));
-  if (res < 0) {
-    printf(" ! couldn't set /cpus/Xenon,PPE@0.clock-frequency property\n");
-    return res;
-  }
-
-  node = fdt_path_offset(ELF_DEVTREE_START, "/cpus/Xenon,PPE@1");
-  if (node < 0) {
-    printf(" ! /cpus/Xenon,PPE@1 node not found in devtree\n");
-    return node;
-  }
-
-  res = fdt_setprop(ELF_DEVTREE_START, node, "clock-frequency", &cpufreq,
-                    sizeof(cpufreq));
-  if (res < 0) {
-    printf(" ! couldn't set /cpus/Xenon,PPE@1.clock-frequency property\n");
-    return res;
-  }
-
-  node = fdt_path_offset(ELF_DEVTREE_START, "/cpus/Xenon,PPE@2");
-  if (node < 0) {
-    printf(" ! /cpus/Xenon,PPE@2 node not found in devtree\n");
-    return node;
-  }
-
-  res = fdt_setprop(ELF_DEVTREE_START, node, "clock-frequency", &cpufreq,
-                    sizeof(cpufreq));
-  if (res < 0) {
-    printf(" ! couldn't set /cpus/Xenon,PPE@2.clock-frequency property\n");
-    return res;
-  }
-
-  res = fdt_pack(ELF_DEVTREE_START);
-  if (res < 0) {
-    printf(" ! fdt_pack() failed\n");
-    return res;
-  }
-
-  memdcbst(ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
-  printf(" * Device tree prepared\n");
-
-  elf_runFromMemory(elf_addr, elf_size);
-
-  return -1; // If this point is reached, elf execution failed
+    elf_runFromMemory(elf_addr, elf_size);
+    return -1; /* If reached, ELF execution failed */
 }
 
 int kernel_prepare_initrd(void *start, size_t size) {

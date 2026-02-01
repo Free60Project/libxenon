@@ -18,7 +18,7 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #include <time/time.h>
 #include <unistd.h>
 #include <xenon_soc/xenon_power.h>
-
+#include <xb360/xb360.h>
 #include "elf.h"
 #include "elf_abi.h"
 #include "xetypes.h"
@@ -453,11 +453,6 @@ int elf_runFromDisk(char *filename) {
 
   return 0;
 }
-unsigned int xenon_get_ram_size()
-{	
-  return __builtin_bswap32(*(unsigned int *)0xE1040000);
-}
-
 
 static int fdt_fixup_memory_reg(void *fdt)
 {

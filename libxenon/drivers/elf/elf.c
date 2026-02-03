@@ -553,178 +553,164 @@ static int fdt_fixup_pci_ranges_ram(void *fdt, uint32_t ram_bytes)
     return 0; /* Not fatal if we didn’t find it */
 }
 
-int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr, int dt_size)
-{
-    int res, node;
-    uint32_t cpufreq;
+int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
+                          int dt_size) {
+  int res, node;
+  uint32_t cpufreq;
 
-    /* Detect RAM once (MMIO), reuse for prints + gating */
-    uint32_t ram_bytes = xenon_get_ram_size();
-    uint32_t ram_mib   = ram_bytes >> 20;
+  if (dt_size > ELF_DEVTREE_MAX_SIZE) {
+    printf("[ELF loader] Device tree too big (> %d bytes) !\n",
+           ELF_DEVTREE_MAX_SIZE);
+    return -1;
+  }
+  memset(ELF_DEVTREE_START, 0, ELF_DEVTREE_MAX_SIZE);
 
-    if (dt_size > ELF_DEVTREE_MAX_SIZE) {
-        printf("[ELF loader] Device tree too big (> %d bytes) !\n", ELF_DEVTREE_MAX_SIZE);
-        return -1;
-    }
+  res = fdt_open_into(dt_addr, ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
+  if (res < 0) {
+    printf(" ! fdt_open_into() failed\n");
+    return res;
+  }
 
-    /* Validate DTB header/magic before touching libfdt */
-    res = fdt_check_header(dt_addr);
+  /* 1GiB fixups */
+  if (xenon_get_ram_size() == 0x40000000) {
+    res = fdt_fixup_memory_reg(ELF_DEVTREE_START);
     if (res < 0) {
-        printf("[ELF loader] Invalid DTB (%s); running ELF without DT\n", fdt_strerror(res));
-        elf_runFromMemory(elf_addr, elf_size);
-        return -1;
+      printf(" ! fdt_fixup_memory_reg() failed\n");
+      /* don't hard-fail boot */
     }
 
-    /* Prepare writable DTB copy */
-    memset(ELF_DEVTREE_START, 0, ELF_DEVTREE_MAX_SIZE);
-
-    res = fdt_open_into(dt_addr, ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
+    res = fdt_fixup_pci_ranges_ram(ELF_DEVTREE_START, 0x40000000);
     if (res < 0) {
-        printf(" ! fdt_open_into() failed: %s\n", fdt_strerror(res));
-        return res;
+      printf(" ! fdt_fixup_pci_ranges_ram() failed\n");
+      /* don't hard-fail boot */
     }
+  }
 
-    /* Now operate only on the expanded DTB copy */
-    void *fdt = (void *)ELF_DEVTREE_START;
+  node = fdt_path_offset(ELF_DEVTREE_START, "/chosen");
+  if (node < 0) {
+    printf(" ! /chosen node not found in devtree\n");
+    return node;
+  }
 
-    /* Apply DT fixups only on 1GiB systems */
-    if (ram_bytes == 0x40000000) {
-        printf(" * Detected RAM size: 0x%x (%u MiB); patching device tree\n",
-               (unsigned int)ram_bytes, (unsigned int)ram_mib);
-
-        res = fdt_fixup_memory_reg(fdt);
-        if (res < 0) {
-            printf(" ! fdt_fixup_memory_reg() failed: %s\n", fdt_strerror(res));
-            /* continue: do not hard-fail boot */
-        }
-
-        res = fdt_fixup_pci_ranges_ram(fdt, ram_bytes);
-        if (res < 0) {
-            printf(" ! fdt_fixup_pci_ranges_ram() failed: %s\n", fdt_strerror(res));
-            /* continue */
-        }
-    } else {
-        /* 512MiB is default DTB; leave unchanged */
-        printf(" * Detected RAM size: 0x%x (%u MiB); leaving device tree unchanged\n",
-               (unsigned int)ram_bytes, (unsigned int)ram_mib);
-    }
-
-    /* /chosen node */
-    node = fdt_path_offset(fdt, "/chosen");
-    if (node < 0) {
-        printf(" ! /chosen node not found in devtree\n");
-        return node;
-    }
-
-    if (bootargs[0]) {
-        res = fdt_setprop(fdt, node, "bootargs", bootargs, strlen(bootargs) + 1);
-        if (res < 0) {
-            printf(" ! couldn't set chosen.bootargs property: %s\n", fdt_strerror(res));
-            return res;
-        }
-    }
-
-    /* initrd */
-    if (initrd_start && initrd_size) {
-        kernel_relocate_initrd(initrd_start, initrd_size);
-
-        u64 start, end;
-        start = (u32)PHYSADDR((u32)initrd_start);
-
-        res = fdt_setprop(fdt, node, "linux,initrd-start", &start, sizeof(start));
-        if (res < 0) {
-            printf("couldn't set chosen.linux,initrd-start property: %s\n", fdt_strerror(res));
-            return res;
-        }
-
-        end = (u32)PHYSADDR(((u32)initrd_start + (u32)initrd_size));
-
-        res = fdt_setprop(fdt, node, "linux,initrd-end", &end, sizeof(end));
-        if (res < 0) {
-            printf("couldn't set chosen.linux,initrd-end property: %s\n", fdt_strerror(res));
-            return res;
-        }
-
-        res = fdt_add_mem_rsv(fdt, start, initrd_size);
-        if (res < 0) {
-            printf("couldn't add reservation for the initrd: %s\n", fdt_strerror(res));
-            return res;
-        }
-    }
-
-    /* Ensure /memory exists (kept from original) */
-    node = fdt_path_offset(fdt, "/memory");
-    if (node < 0) {
-        printf(" ! /memory node not found in devtree\n");
-        return node;
-    }
-
-    /* CPU frequency */
-    switch (xenon_get_speed()) {
-        case XENON_SPEED_FULL:
-        case XENON_SPEED_3_2:
-            cpufreq = 3200000000U;
-            break;
-        case XENON_SPEED_1_3:
-            cpufreq = 1300000000U;
-            break;
-        case XENON_SPEED_1_2:
-            cpufreq = 1200000000U;
-            break;
-        default:
-            printf(" ! Weird CPU speed, assuming 3.2GHz\n");
-            cpufreq = 3200000000U;
-            break;
-    }
-
-    node = fdt_path_offset(fdt, "/cpus/Xenon,PPE@0");
-    if (node < 0) {
-        printf(" ! /cpus/Xenon,PPE@0 node not found in devtree\n");
-        return node;
-    }
-
-    res = fdt_setprop(fdt, node, "clock-frequency", &cpufreq, sizeof(cpufreq));
+  if (bootargs[0]) {
+    res = fdt_setprop(ELF_DEVTREE_START, node, "bootargs", bootargs,
+                      strlen(bootargs) + 1);
     if (res < 0) {
-        printf(" ! couldn't set /cpus/Xenon,PPE@0.clock-frequency property: %s\n", fdt_strerror(res));
-        return res;
+      printf(" ! couldn't set chosen.bootargs property\n");
+      return res;
     }
+  }
 
-    node = fdt_path_offset(fdt, "/cpus/Xenon,PPE@1");
-    if (node < 0) {
-        printf(" ! /cpus/Xenon,PPE@1 node not found in devtree\n");
-        return node;
-    }
+  if (initrd_start && initrd_size) {
+    kernel_relocate_initrd(initrd_start, initrd_size);
 
-    res = fdt_setprop(fdt, node, "clock-frequency", &cpufreq, sizeof(cpufreq));
+    u64 start, end;
+    start = (u32)PHYSADDR((u32)initrd_start);
+    res = fdt_setprop(ELF_DEVTREE_START, node, "linux,initrd-start", &start,
+                      sizeof(start));
     if (res < 0) {
-        printf(" ! couldn't set /cpus/Xenon,PPE@1.clock-frequency property: %s\n", fdt_strerror(res));
-        return res;
+      printf("couldn't set chosen.linux,initrd-start property\n");
+      return res;
     }
 
-    node = fdt_path_offset(fdt, "/cpus/Xenon,PPE@2");
-    if (node < 0) {
-        printf(" ! /cpus/Xenon,PPE@2 node not found in devtree\n");
-        return node;
-    }
-
-    res = fdt_setprop(fdt, node, "clock-frequency", &cpufreq, sizeof(cpufreq));
+    end = (u32)PHYSADDR(((u32)initrd_start + (u32)initrd_size));
+    res = fdt_setprop(ELF_DEVTREE_START, node, "linux,initrd-end", &end,
+                      sizeof(end));
     if (res < 0) {
-        printf(" ! couldn't set /cpus/Xenon,PPE@2.clock-frequency property: %s\n", fdt_strerror(res));
-        return res;
+      printf("couldn't set chosen.linux,initrd-end property\n");
+      return res;
     }
-
-    /* Pack + flush */
-    res = fdt_pack(fdt);
+    res = fdt_add_mem_rsv(ELF_DEVTREE_START, start, initrd_size);
     if (res < 0) {
-        printf(" ! fdt_pack() failed: %s\n", fdt_strerror(res));
-        return res;
+      printf("couldn't add reservation for the initrd\n");
+      return res;
     }
+  }
 
-    memdcbst(ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
-    printf(" * Device tree prepared\n");
+  node = fdt_path_offset(ELF_DEVTREE_START, "/memory");
+  if (node < 0) {
+    printf(" ! /memory node not found in devtree\n");
+    return node;
+  }
+  /*
+          res = fdt_add_mem_rsv(ELF_DEVTREE_START, (uint64_t)ELF_DEVTREE_START,
+     ELF_DEVTREE_MAX_SIZE); if (res < 0){ printf("couldn't add reservation for
+     the devtree\n"); return;
+          }
+  */
 
-    elf_runFromMemory(elf_addr, elf_size);
-    return -1; /* If reached, ELF execution failed */
+  switch (xenon_get_speed()) {
+    case XENON_SPEED_FULL:
+    case XENON_SPEED_3_2: {
+      cpufreq = 3200000000;
+      break;
+    }
+    case XENON_SPEED_1_3: {
+      cpufreq = 1300000000;
+      break;
+    }
+    case XENON_SPEED_1_2: {
+      cpufreq = 1200000000;
+      break;
+    }
+    default: {
+      printf(" ! Weird CPU speed, assuming 3.2GHz\n");
+      cpufreq = 3200000000;
+      break;
+    }
+  }
+
+  node = fdt_path_offset(ELF_DEVTREE_START, "/cpus/Xenon,PPE@0");
+  if (node < 0) {
+    printf(" ! /cpus/Xenon,PPE@0 node not found in devtree\n");
+    return node;
+  }
+
+  res = fdt_setprop(ELF_DEVTREE_START, node, "clock-frequency", &cpufreq,
+                    sizeof(cpufreq));
+  if (res < 0) {
+    printf(" ! couldn't set /cpus/Xenon,PPE@0.clock-frequency property\n");
+    return res;
+  }
+
+  node = fdt_path_offset(ELF_DEVTREE_START, "/cpus/Xenon,PPE@1");
+  if (node < 0) {
+    printf(" ! /cpus/Xenon,PPE@1 node not found in devtree\n");
+    return node;
+  }
+
+  res = fdt_setprop(ELF_DEVTREE_START, node, "clock-frequency", &cpufreq,
+                    sizeof(cpufreq));
+  if (res < 0) {
+    printf(" ! couldn't set /cpus/Xenon,PPE@1.clock-frequency property\n");
+    return res;
+  }
+
+  node = fdt_path_offset(ELF_DEVTREE_START, "/cpus/Xenon,PPE@2");
+  if (node < 0) {
+    printf(" ! /cpus/Xenon,PPE@2 node not found in devtree\n");
+    return node;
+  }
+
+  res = fdt_setprop(ELF_DEVTREE_START, node, "clock-frequency", &cpufreq,
+                    sizeof(cpufreq));
+  if (res < 0) {
+    printf(" ! couldn't set /cpus/Xenon,PPE@2.clock-frequency property\n");
+    return res;
+  }
+
+  res = fdt_pack(ELF_DEVTREE_START);
+  if (res < 0) {
+    printf(" ! fdt_pack() failed\n");
+    return res;
+  }
+
+  memdcbst(ELF_DEVTREE_START, ELF_DEVTREE_MAX_SIZE);
+  printf(" * Device tree prepared\n");
+
+  elf_runFromMemory(elf_addr, elf_size);
+
+  return -1; // If this point is reached, elf execution failed
 }
 
 int kernel_prepare_initrd(void *start, size_t size) {

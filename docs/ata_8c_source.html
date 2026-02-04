@@ -635,267 +635,271 @@ $(function() {
 <div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>    readcmd.lba = start_sector;</div>
 <div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>    readcmd.length = sector_size;</div>
 <div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>    </div>
-<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span><span class="preprocessor">#ifndef USE_DMA</span></div>
-<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> sect = 0;</div>
-<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>    <span class="keywordtype">void</span> * bufpos = buf;</div>
-<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>retry:</div>
-<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>    xenon_atapi_packet(dev, (<span class="keywordtype">char</span> *) &amp;readcmd, 0);</div>
-<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>    xenon_ata_wait_ready(dev);</div>
-<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>    <span class="keywordflow">for</span> (sect = 0; sect &lt; sector_size; sect++) {</div>
-<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>        <span class="keywordflow">if</span> (xenon_ata_pio_read(dev, bufpos, <a class="code hl_define" href="ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd">XENON_CDROM_SECTOR_SIZE</a>)) {</div>
-<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>            <span class="keywordtype">int</span> sense = <a class="code hl_function" href="ata_8c.html#ad75ba64cdb5e1b0fbbe3f8feb978c5b1">xenon_atapi_request_sense</a>(dev);</div>
-<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span> </div>
-<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>            <span class="comment">// no media</span></div>
-<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>            <span class="keywordflow">if</span> (<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x3a) {</div>
-<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>                <span class="keywordflow">return</span> <a class="code hl_define" href="disc__io_8h.html#a5d88d22bbe296cdbcc5aec7cb3805d99">DISKIO_ERROR_NO_MEDIA</a>;</div>
-<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>            }</div>
-<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span> </div>
-<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>            <span class="comment">// becoming ready</span></div>
-<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>            <span class="keywordflow">if</span> ((<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x4) || <a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x6) {</div>
-<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>                <span class="keywordflow">if</span> (!maxretries) <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>                <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(500);</div>
-<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>                maxretries--;</div>
-<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>                <span class="keywordflow">goto</span> retry;</div>
-<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>            }</div>
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span> </div>
-<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>            printf(<span class="stringliteral">&quot;ATAPI read error\n&quot;</span>);</div>
-<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span>            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>        }</div>
-<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>        bufpos += <a class="code hl_define" href="ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd">XENON_CDROM_SECTOR_SIZE</a>;</div>
-<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>    }</div>
-<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span><span class="preprocessor">#else</span></div>
-<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>retry:</div>
-<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>    xenon_atapi_packet(dev, (<span class="keywordtype">char</span> *) &amp;readcmd, 1);</div>
-<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>    xenon_ata_wait_ready(dev);</div>
-<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span> </div>
-<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>    <span class="keywordflow">if</span> (xenon_ata_dma_read(dev, buf, sector_size * <a class="code hl_define" href="ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd">XENON_CDROM_SECTOR_SIZE</a>)) {</div>
-<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>        <span class="keywordtype">int</span> sense = <a class="code hl_function" href="ata_8c.html#ad75ba64cdb5e1b0fbbe3f8feb978c5b1">xenon_atapi_request_sense</a>(dev);</div>
-<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span> </div>
-<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>        <span class="comment">// no media</span></div>
-<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>        <span class="keywordflow">if</span> (<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x3a) {</div>
-<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="disc__io_8h.html#a5d88d22bbe296cdbcc5aec7cb3805d99">DISKIO_ERROR_NO_MEDIA</a>;</div>
-<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>        }</div>
-<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span> </div>
-<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>        <span class="comment">// becoming ready</span></div>
-<div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>        <span class="keywordflow">if</span> ((<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x4) || <a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x6) {</div>
-<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>            <span class="keywordflow">if</span> (!maxretries) <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>            <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(500);</div>
-<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>            maxretries--;</div>
-<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>            <span class="keywordflow">goto</span> retry;</div>
-<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>        }</div>
-<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span> </div>
-<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>        printf(<span class="stringliteral">&quot;ATAPI DMA read error\n&quot;</span>);</div>
-<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>    }</div>
-<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span> </div>
-<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>    <span class="keywordflow">return</span> sector_size;</div>
-<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>}</div>
-<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span> </div>
-<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span><span class="keyword">static</span> <span class="keywordtype">int</span></div>
-<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>xenon_ata_identify(<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev) {</div>
-<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>    <span class="keywordtype">char</span> info[<a class="code hl_define" href="ata_8h.html#ad0ebaa79f2cbe2f726415ea7db7ff442">XENON_DISK_SECTOR_SIZE</a>];</div>
-<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> *info16 = (<a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> *) info;</div>
-<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>    xenon_ata_wait_busy(dev);</div>
-<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span> </div>
-<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a6112a814e6b4d050b103336d0c474d81">XENON_ATA_REG_DISK</a>, 0xE0);</div>
-<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a226ab475382e85195401d5ef6f3f641f">XENON_ATA_REG_CMD</a>, <a class="code hl_enumvalue" href="ata_8h.html#ad155b99c5f04d623ab8395a275c2799fa26b27900e40eb1e05b771dc5fd17416f">XENON_ATA_CMD_IDENTIFY_DEVICE</a>);</div>
-<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>    xenon_ata_wait_ready(dev);</div>
+<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>    <span class="comment">// Wait for the drive to become ready before we attempt to read sectors</span></div>
+<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>    <span class="comment">// Hitachi 3120L and DL10N drives are picky and hang if we don&#39;t wait</span></div>
+<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>    xenon_ata_wait_ready(dev);</div>
+<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span> </div>
+<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span><span class="preprocessor">#ifndef USE_DMA</span></div>
+<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> sect = 0;</div>
+<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>    <span class="keywordtype">void</span> * bufpos = buf;</div>
+<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>retry:</div>
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>    xenon_atapi_packet(dev, (<span class="keywordtype">char</span> *) &amp;readcmd, 0);</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>    xenon_ata_wait_ready(dev);</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>    <span class="keywordflow">for</span> (sect = 0; sect &lt; sector_size; sect++) {</div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>        <span class="keywordflow">if</span> (xenon_ata_pio_read(dev, bufpos, <a class="code hl_define" href="ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd">XENON_CDROM_SECTOR_SIZE</a>)) {</div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>            <span class="keywordtype">int</span> sense = <a class="code hl_function" href="ata_8c.html#ad75ba64cdb5e1b0fbbe3f8feb978c5b1">xenon_atapi_request_sense</a>(dev);</div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span> </div>
+<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>            <span class="comment">// no media</span></div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>            <span class="keywordflow">if</span> (<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x3a) {</div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>                <span class="keywordflow">return</span> <a class="code hl_define" href="disc__io_8h.html#a5d88d22bbe296cdbcc5aec7cb3805d99">DISKIO_ERROR_NO_MEDIA</a>;</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>            }</div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span> </div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>            <span class="comment">// becoming ready</span></div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>            <span class="keywordflow">if</span> ((<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x4) || <a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x6) {</div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>                <span class="keywordflow">if</span> (!maxretries) <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>                <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(500);</div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>                maxretries--;</div>
+<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span>                <span class="keywordflow">goto</span> retry;</div>
+<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>            }</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span> </div>
+<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>            printf(<span class="stringliteral">&quot;ATAPI read error\n&quot;</span>);</div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>        }</div>
+<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>        bufpos += <a class="code hl_define" href="ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd">XENON_CDROM_SECTOR_SIZE</a>;</div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>    }</div>
+<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span><span class="preprocessor">#else</span></div>
+<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>retry:</div>
+<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>    xenon_atapi_packet(dev, (<span class="keywordtype">char</span> *) &amp;readcmd, 1);</div>
+<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>    xenon_ata_wait_ready(dev);</div>
+<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span> </div>
+<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span>    <span class="keywordflow">if</span> (xenon_ata_dma_read(dev, buf, sector_size * <a class="code hl_define" href="ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd">XENON_CDROM_SECTOR_SIZE</a>)) {</div>
+<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>        <span class="keywordtype">int</span> sense = <a class="code hl_function" href="ata_8c.html#ad75ba64cdb5e1b0fbbe3f8feb978c5b1">xenon_atapi_request_sense</a>(dev);</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span> </div>
+<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span>        <span class="comment">// no media</span></div>
+<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>        <span class="keywordflow">if</span> (<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x3a) {</div>
+<div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="disc__io_8h.html#a5d88d22bbe296cdbcc5aec7cb3805d99">DISKIO_ERROR_NO_MEDIA</a>;</div>
+<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>        }</div>
+<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span> </div>
+<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>        <span class="comment">// becoming ready</span></div>
+<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>        <span class="keywordflow">if</span> ((<a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x02 &amp;&amp; <a class="code hl_define" href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a>(sense) == 0x4) || <a class="code hl_define" href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a>(sense) == 0x6) {</div>
+<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>            <span class="keywordflow">if</span> (!maxretries) <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>            <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(500);</div>
+<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>            maxretries--;</div>
+<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>            <span class="keywordflow">goto</span> retry;</div>
+<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>        }</div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span> </div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>        printf(<span class="stringliteral">&quot;ATAPI DMA read error\n&quot;</span>);</div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>        <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>    }</div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span> </div>
+<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>    <span class="keywordflow">return</span> sector_size;</div>
+<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>}</div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span> </div>
+<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span><span class="keyword">static</span> <span class="keywordtype">int</span></div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>xenon_ata_identify(<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev) {</div>
+<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>    <span class="keywordtype">char</span> info[<a class="code hl_define" href="ata_8h.html#ad0ebaa79f2cbe2f726415ea7db7ff442">XENON_DISK_SECTOR_SIZE</a>];</div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> *info16 = (<a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> *) info;</div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>    xenon_ata_wait_busy(dev);</div>
 <div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span> </div>
-<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> = xenon_ata_pio_read(dev, info, <a class="code hl_define" href="ata_8h.html#ad0ebaa79f2cbe2f726415ea7db7ff442">XENON_DISK_SECTOR_SIZE</a>);</div>
-<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &amp; 4)</div>
-<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>        <span class="keywordflow">return</span> xenon_atapi_inquiry_model(dev);</div>
-<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a>)</div>
-<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span> </div>
-<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>    <span class="comment">/* Now it is certain that this is not an ATAPI device.  */</span></div>
-<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6da804a44c64f75a4ee5374f235609b3">atapi</a> = 0;</div>
-<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span> </div>
-<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span>    <span class="comment">/* CHS is always supported.  */</span></div>
-<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> = <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba070744f5e3d2c9372b138d5b4e94a2e3">XENON_ATA_CHS</a>;</div>
-<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>    <span class="comment">/* Check if LBA is supported.  */</span></div>
-<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>    <span class="keywordflow">if</span> (bswap_16(info16[49]) &amp; (1 &lt;&lt; 9)) {</div>
-<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span>        <span class="comment">/* Check if LBA48 is supported.  */</span></div>
-<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>        <span class="keywordflow">if</span> (bswap_16(info16[83]) &amp; (1 &lt;&lt; 10))</div>
-<div class="line"><a id="l00641" name="l00641"></a><span class="lineno">  641</span>            dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> = <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba21ffb4047ec273c7cc54aac650e47961">XENON_ATA_LBA48</a>;</div>
-<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span>            dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> = <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba08d3240c835974dc0e2df194a7b00da3">XENON_ATA_LBA</a>;</div>
-<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>    }</div>
-<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span> </div>
-<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>    <span class="comment">/* Determine the amount of sectors.  */</span></div>
-<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>    <span class="keywordflow">if</span> (dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> != <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba21ffb4047ec273c7cc54aac650e47961">XENON_ATA_LBA48</a>)</div>
-<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span>        dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a> = __builtin_bswap32(*((<a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> *) &amp; info16[60]));</div>
-<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>        dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a> = __builtin_bswap32(*((<a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> *) &amp; info16[100]));</div>
-<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span> </div>
-<div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span>    <span class="comment">/* Read CHS information.  */</span></div>
-<div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#aee20445303cbcf27a6220393476be559">cylinders</a> = bswap_16(info16[1]);</div>
-<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#adffeb0d1fbbac529d13e1c0436c57af8">heads</a> = bswap_16(info16[3]);</div>
-<div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a8637c5ba93f70d3dfc3520576b451aeb">sectors_per_track</a> = bswap_16(info16[6]);</div>
-<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span> </div>
-<div class="line"><a id="l00657" name="l00657"></a><span class="lineno">  657</span>    xenon_ata_dumpinfo(dev, info);</div>
-<div class="line"><a id="l00658" name="l00658"></a><span class="lineno">  658</span> </div>
-<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span>}</div>
-<div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span> </div>
-<div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span><span class="keywordtype">int</span></div>
-<div class="line"><a id="l00663" name="l00663"></a><span class="lineno"><a class="line" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">  663</a></span><a class="code hl_function" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev, <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> ioaddress, <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> ioaddress2) {</div>
-<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span> </div>
-<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>    memset(dev, 0, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a>));</div>
-<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a3161ba4ccce6aa7ddd4fd842151c33c4">ioaddress</a> = ioaddress;</div>
-<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#af162c324f87e37c890b7593321a25b80">ioaddress2</a> = ioaddress2;</div>
+<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a6112a814e6b4d050b103336d0c474d81">XENON_ATA_REG_DISK</a>, 0xE0);</div>
+<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a226ab475382e85195401d5ef6f3f641f">XENON_ATA_REG_CMD</a>, <a class="code hl_enumvalue" href="ata_8h.html#ad155b99c5f04d623ab8395a275c2799fa26b27900e40eb1e05b771dc5fd17416f">XENON_ATA_CMD_IDENTIFY_DEVICE</a>);</div>
+<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>    xenon_ata_wait_ready(dev);</div>
+<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span> </div>
+<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> = xenon_ata_pio_read(dev, info, <a class="code hl_define" href="ata_8h.html#ad0ebaa79f2cbe2f726415ea7db7ff442">XENON_DISK_SECTOR_SIZE</a>);</div>
+<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a> &amp; 4)</div>
+<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>        <span class="keywordflow">return</span> xenon_atapi_inquiry_model(dev);</div>
+<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span> (<a class="code hl_variable" href="io_8h.html#a66c6adb17a64370b8e95c4413da0c1b1">val</a>)</div>
+<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>        <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span> </div>
+<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>    <span class="comment">/* Now it is certain that this is not an ATAPI device.  */</span></div>
+<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6da804a44c64f75a4ee5374f235609b3">atapi</a> = 0;</div>
+<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span> </div>
+<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span>    <span class="comment">/* CHS is always supported.  */</span></div>
+<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> = <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba070744f5e3d2c9372b138d5b4e94a2e3">XENON_ATA_CHS</a>;</div>
+<div class="line"><a id="l00641" name="l00641"></a><span class="lineno">  641</span>    <span class="comment">/* Check if LBA is supported.  */</span></div>
+<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>    <span class="keywordflow">if</span> (bswap_16(info16[49]) &amp; (1 &lt;&lt; 9)) {</div>
+<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span>        <span class="comment">/* Check if LBA48 is supported.  */</span></div>
+<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>        <span class="keywordflow">if</span> (bswap_16(info16[83]) &amp; (1 &lt;&lt; 10))</div>
+<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span>            dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> = <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba21ffb4047ec273c7cc54aac650e47961">XENON_ATA_LBA48</a>;</div>
+<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>            dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> = <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba08d3240c835974dc0e2df194a7b00da3">XENON_ATA_LBA</a>;</div>
+<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span>    }</div>
+<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span> </div>
+<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>    <span class="comment">/* Determine the amount of sectors.  */</span></div>
+<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span>    <span class="keywordflow">if</span> (dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a48744156f98d1be994b4666e55f0f8cc">addressing_mode</a> != <a class="code hl_enumvalue" href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba21ffb4047ec273c7cc54aac650e47961">XENON_ATA_LBA48</a>)</div>
+<div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span>        dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a> = __builtin_bswap32(*((<a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> *) &amp; info16[60]));</div>
+<div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>        dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a> = __builtin_bswap32(*((<a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> *) &amp; info16[100]));</div>
+<div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span> </div>
+<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span>    <span class="comment">/* Read CHS information.  */</span></div>
+<div class="line"><a id="l00657" name="l00657"></a><span class="lineno">  657</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#aee20445303cbcf27a6220393476be559">cylinders</a> = bswap_16(info16[1]);</div>
+<div class="line"><a id="l00658" name="l00658"></a><span class="lineno">  658</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#adffeb0d1fbbac529d13e1c0436c57af8">heads</a> = bswap_16(info16[3]);</div>
+<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a8637c5ba93f70d3dfc3520576b451aeb">sectors_per_track</a> = bswap_16(info16[6]);</div>
+<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span> </div>
+<div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span>    xenon_ata_dumpinfo(dev, info);</div>
+<div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span> </div>
+<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span>}</div>
+<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span> </div>
+<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span><span class="keywordtype">int</span></div>
+<div class="line"><a id="l00667" name="l00667"></a><span class="lineno"><a class="line" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">  667</a></span><a class="code hl_function" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev, <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> ioaddress, <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> ioaddress2) {</div>
 <div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span> </div>
-<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#ac7771deb4babc5672ba344c33c44703e">prds</a> = memalign(0x10000, <a class="code hl_define" href="ata_8h.html#a19528b9cc20612142005c9a2f4d33e37">MAX_PRDS</a> * <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__dma__prd.html">xenon_ata_dma_prd</a>));</div>
-<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>    </div>
-<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>    xenon_ata_identify(dev);</div>
-<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>    </div>
-<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    <span class="comment">/* Try to detect if the port is in use by writing to it,</span></div>
-<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span><span class="comment">       waiting for a while and reading it again.  If the value</span></div>
-<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span><span class="comment">       was preserved, there is a device connected.  */</span></div>
-<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a6112a814e6b4d050b103336d0c474d81">XENON_ATA_REG_DISK</a>, 0);</div>
-<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>    xenon_ata_wait();</div>
-<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a9672fb56a056f84bb8160fbaa5631cd4">XENON_ATA_REG_LBALOW</a>, 0x5A);</div>
-<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>    xenon_ata_wait();</div>
-<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>    <span class="keywordflow">if</span> (xenon_ata_regget(dev, <a class="code hl_define" href="ata_8h.html#a9672fb56a056f84bb8160fbaa5631cd4">XENON_ATA_REG_LBALOW</a>) != 0x5A) {</div>
-<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>        printf(<span class="stringliteral">&quot;no ata device connected.\n&quot;</span>);</div>
-<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>    }</div>
-<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span> </div>
-<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>    <span class="comment">/* Issue a reset.  */</span></div>
-<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>    xenon_ata_regset2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>, 6);</div>
-<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>    xenon_ata_wait();</div>
-<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>    xenon_ata_regset2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>, 2);</div>
-<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span> </div>
-<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a6112a814e6b4d050b103336d0c474d81">XENON_ATA_REG_DISK</a>, 0);</div>
+<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>    memset(dev, 0, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a>));</div>
+<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a3161ba4ccce6aa7ddd4fd842151c33c4">ioaddress</a> = ioaddress;</div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#af162c324f87e37c890b7593321a25b80">ioaddress2</a> = ioaddress2;</div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span> </div>
+<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#ac7771deb4babc5672ba344c33c44703e">prds</a> = memalign(0x10000, <a class="code hl_define" href="ata_8h.html#a19528b9cc20612142005c9a2f4d33e37">MAX_PRDS</a> * <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__dma__prd.html">xenon_ata_dma_prd</a>));</div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>    </div>
+<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>    xenon_ata_identify(dev);</div>
+<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>    </div>
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>    <span class="comment">/* Try to detect if the port is in use by writing to it,</span></div>
+<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span><span class="comment">       waiting for a while and reading it again.  If the value</span></div>
+<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span><span class="comment">       was preserved, there is a device connected.  */</span></div>
+<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a6112a814e6b4d050b103336d0c474d81">XENON_ATA_REG_DISK</a>, 0);</div>
+<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>    xenon_ata_wait();</div>
+<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a9672fb56a056f84bb8160fbaa5631cd4">XENON_ATA_REG_LBALOW</a>, 0x5A);</div>
+<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>    xenon_ata_wait();</div>
+<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>    <span class="keywordflow">if</span> (xenon_ata_regget(dev, <a class="code hl_define" href="ata_8h.html#a9672fb56a056f84bb8160fbaa5631cd4">XENON_ATA_REG_LBALOW</a>) != 0x5A) {</div>
+<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>        printf(<span class="stringliteral">&quot;no ata device connected.\n&quot;</span>);</div>
+<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>        <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>    }</div>
+<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span> </div>
+<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>    <span class="comment">/* Issue a reset.  */</span></div>
+<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>    xenon_ata_regset2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>, 6);</div>
+<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>    xenon_ata_wait();</div>
+<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>    xenon_ata_regset2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>, 2);</div>
+<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
+<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
 <div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
 <div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
-<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span> </div>
-<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>    printf(<span class="stringliteral">&quot;SATA device at %08lx\n&quot;</span>, dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a3161ba4ccce6aa7ddd4fd842151c33c4">ioaddress</a>);</div>
-<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span> </div>
-<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>}</div>
-<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span> </div>
-<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span><span class="keyword">static</span> <span class="keywordtype">int</span> ata_ready = 0;</div>
-<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span><span class="keyword">static</span> <span class="keywordtype">int</span> atapi_ready = 0;</div>
-<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span> </div>
-<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span><span class="keyword">static</span> <span class="keywordtype">bool</span> atapi_inserted() {</div>
-<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>    <span class="keywordflow">return</span> atapi_ready;</div>
-<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>}</div>
+<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span> </div>
+<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>    xenon_ata_regset(dev, <a class="code hl_define" href="ata_8h.html#a6112a814e6b4d050b103336d0c474d81">XENON_ATA_REG_DISK</a>, 0);</div>
+<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
+<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
+<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
+<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>    xenon_ata_regget2(dev, <a class="code hl_define" href="ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e">XENON_ATA_REG2_CONTROL</a>);</div>
+<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span> </div>
+<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>    printf(<span class="stringliteral">&quot;SATA device at %08lx\n&quot;</span>, dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a3161ba4ccce6aa7ddd4fd842151c33c4">ioaddress</a>);</div>
+<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span> </div>
+<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>}</div>
+<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span> </div>
+<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span><span class="keyword">static</span> <span class="keywordtype">int</span> ata_ready = 0;</div>
+<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span><span class="keyword">static</span> <span class="keywordtype">int</span> atapi_ready = 0;</div>
 <div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span> </div>
-<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_startup(<span class="keywordtype">void</span>){</div>
-<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span><span class="keyword">static</span> <span class="keywordtype">bool</span> atapi_inserted() {</div>
+<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>    <span class="keywordflow">return</span> atapi_ready;</div>
 <div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span>}</div>
-<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_inserted(<span class="keywordtype">void</span>) {</div>
-<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>    <span class="keywordflow">return</span> ata_ready;</div>
-<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span>}</div>
-<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_readsectors(<a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> sector, <a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> numSectors, <span class="keywordtype">void</span>* buffer) {</div>
-<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>    <span class="keywordflow">if</span>(xenon_ata_read_sectors(sector,numSectors,buffer))</div>
-<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span>}</div>
-<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span><span class="keyword">static</span> <span class="keywordtype">bool</span> atapi_readsectors(<a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> sector, <a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> numSectors, <span class="keywordtype">void</span>* buffer) {</div>
-<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>    <span class="keywordflow">if</span>(xenon_atapi_read_sectors(sector,numSectors,buffer))</div>
-<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span>}</div>
-<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_writesectors(<a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> sector, <a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> numSectors, <span class="keyword">const</span> <span class="keywordtype">void</span>* buffer){</div>
-<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>    <span class="keywordflow">if</span>(xenon_ata_write_sectors(sector,numSectors,buffer))</div>
-<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>}</div>
-<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_clearstatus(<span class="keywordtype">void</span>){</div>
-<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span> </div>
+<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_startup(<span class="keywordtype">void</span>){</div>
+<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno">  718</span>}</div>
+<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_inserted(<span class="keywordtype">void</span>) {</div>
+<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>    <span class="keywordflow">return</span> ata_ready;</div>
+<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>}</div>
+<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_readsectors(<a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> sector, <a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> numSectors, <span class="keywordtype">void</span>* buffer) {</div>
+<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>    <span class="keywordflow">if</span>(xenon_ata_read_sectors(sector,numSectors,buffer))</div>
+<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span>}</div>
+<div class="line"><a id="l00727" name="l00727"></a><span class="lineno">  727</span><span class="keyword">static</span> <span class="keywordtype">bool</span> atapi_readsectors(<a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> sector, <a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> numSectors, <span class="keywordtype">void</span>* buffer) {</div>
+<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>    <span class="keywordflow">if</span>(xenon_atapi_read_sectors(sector,numSectors,buffer))</div>
+<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>    <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>}</div>
+<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_writesectors(<a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> sector, <a class="code hl_typedef" href="disc__io_8h.html#ad281f82edfecdff75433932f218c47d7">sec_t</a> numSectors, <span class="keyword">const</span> <span class="keywordtype">void</span>* buffer){</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>    <span class="keywordflow">if</span>(xenon_ata_write_sectors(sector,numSectors,buffer))</div>
+<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00736" name="l00736"></a><span class="lineno">  736</span>        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>}</div>
-<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_shutdown(<span class="keywordtype">void</span>){</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_clearstatus(<span class="keywordtype">void</span>){</div>
 <div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>}</div>
-<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span> </div>
-<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span><span class="keyword">static</span> <a class="code hl_typedef" href="xetypes_8h.html#ae9b1af5c037e57a98884758875d3a7c4">s32</a> ata_sectors(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>{</div>
-<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#a1a576bfc6d45d3344ef1e43526eb1414">ata</a>;</div>
-<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span>    <span class="keywordflow">return</span> dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a>;</div>
-<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span>}</div>
-<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span> </div>
-<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span><span class="keyword">static</span> <a class="code hl_typedef" href="xetypes_8h.html#ae9b1af5c037e57a98884758875d3a7c4">s32</a> atapi_sectors(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>{</div>
-<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#aa4bf929dc075080615fb6b23c02d7d18">atapi</a>;</div>
-<div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span>    <span class="keywordflow">return</span> dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a>;</div>
-<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>}</div>
-<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span> </div>
-<div class="line"><a id="l00755" name="l00755"></a><span class="lineno"><a class="line" href="ata_8c.html#a23a3e2f2ef3ce0a8cd39df615635c005">  755</a></span><a class="code hl_struct" href="structDISC__INTERFACE__STRUCT.html">DISC_INTERFACE</a> <a class="code hl_variable" href="ata_8c.html#a23a3e2f2ef3ce0a8cd39df615635c005">xenon_ata_ops</a> = {</div>
-<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>    .<a class="code hl_variable" href="structDISC__INTERFACE__STRUCT.html#ad0f676fcbfeba6816e98be01b49f12bc">sectors</a> = (<a class="code hl_typedef" href="disc__io_8h.html#a516f442de7302600e9b72c8d1bda8351">FN_MEDIUM_DEVSECTORS</a>) &amp; ata_sectors,</div>
-<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>    .readSectors = (<a class="code hl_typedef" href="disc__io_8h.html#ac1f4cd2cc19dd0c976aaff846ccbcc2e">FN_MEDIUM_READSECTORS</a>) &amp; ata_readsectors,</div>
-<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>    .writeSectors = (<a class="code hl_typedef" href="disc__io_8h.html#ac5ec2db96eadd242f865e3a7dc2df5b1">FN_MEDIUM_WRITESECTORS</a>) &amp; ata_writesectors,</div>
-<div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span>    .clearStatus = (<a class="code hl_typedef" href="disc__io_8h.html#a290552c7b286d229826e02556077b355">FN_MEDIUM_CLEARSTATUS</a>) &amp; ata_clearstatus,</div>
-<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>    .shutdown = (<a class="code hl_typedef" href="disc__io_8h.html#a52794abadfa630d3aebdfd95a627b08c">FN_MEDIUM_SHUTDOWN</a>) &amp; ata_shutdown,</div>
-<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>    .isInserted = (<a class="code hl_typedef" href="disc__io_8h.html#af5645de1594e1fe2862e9d12208dde63">FN_MEDIUM_ISINSERTED</a>) &amp; ata_inserted,</div>
-<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>    .startup = (<a class="code hl_typedef" href="disc__io_8h.html#a04da3881863f2749efd79c53e3ed4494">FN_MEDIUM_STARTUP</a>) &amp; ata_startup,</div>
-<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>    .ioType = <a class="code hl_define" href="disc__io_8h.html#a00d0cc60c12240069e461c9463b08728">FEATURE_XENON_ATA</a>,</div>
-<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>    .<a class="code hl_variable" href="xenos__edid_8h.html#a0b92fb712559f8a49a79cfab4ac51ad5">features</a> = <a class="code hl_define" href="disc__io_8h.html#a2f4756599b10f168b60006121e69524a">FEATURE_MEDIUM_CANREAD</a> | <a class="code hl_define" href="disc__io_8h.html#ad04e14819e9a483a5c2967dc6815049f">FEATURE_MEDIUM_CANWRITE</a> | <a class="code hl_define" href="disc__io_8h.html#a00d0cc60c12240069e461c9463b08728">FEATURE_XENON_ATA</a>,</div>
-<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>};</div>
-<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span> </div>
-<div class="line"><a id="l00767" name="l00767"></a><span class="lineno"><a class="line" href="ata_8c.html#a91eea9d01ab37880c9751c21de42c0c7">  767</a></span><a class="code hl_struct" href="structDISC__INTERFACE__STRUCT.html">DISC_INTERFACE</a> <a class="code hl_variable" href="ata_8c.html#a91eea9d01ab37880c9751c21de42c0c7">xenon_atapi_ops</a> = {</div>
-<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>    .<a class="code hl_variable" href="structDISC__INTERFACE__STRUCT.html#ad0f676fcbfeba6816e98be01b49f12bc">sectors</a> = (<a class="code hl_typedef" href="disc__io_8h.html#a516f442de7302600e9b72c8d1bda8351">FN_MEDIUM_DEVSECTORS</a>) &amp; atapi_sectors,</div>
-<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>    .readSectors = (<a class="code hl_typedef" href="disc__io_8h.html#ac1f4cd2cc19dd0c976aaff846ccbcc2e">FN_MEDIUM_READSECTORS</a>) &amp; atapi_readsectors,</div>
-<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>    .clearStatus = (<a class="code hl_typedef" href="disc__io_8h.html#a290552c7b286d229826e02556077b355">FN_MEDIUM_CLEARSTATUS</a>) &amp; ata_clearstatus,</div>
-<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>    .shutdown = (<a class="code hl_typedef" href="disc__io_8h.html#a52794abadfa630d3aebdfd95a627b08c">FN_MEDIUM_SHUTDOWN</a>) &amp; ata_shutdown,</div>
-<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>    .isInserted = (<a class="code hl_typedef" href="disc__io_8h.html#af5645de1594e1fe2862e9d12208dde63">FN_MEDIUM_ISINSERTED</a>) &amp; atapi_inserted,</div>
-<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>    .startup = (<a class="code hl_typedef" href="disc__io_8h.html#a04da3881863f2749efd79c53e3ed4494">FN_MEDIUM_STARTUP</a>) &amp; ata_startup,</div>
-<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>    .ioType = <a class="code hl_define" href="disc__io_8h.html#a9525ec83b349d0212a9a599bfe51f63a">FEATURE_XENON_ATAPI</a>,</div>
-<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>    .features = <a class="code hl_define" href="disc__io_8h.html#a2f4756599b10f168b60006121e69524a">FEATURE_MEDIUM_CANREAD</a> | <a class="code hl_define" href="disc__io_8h.html#a9525ec83b349d0212a9a599bfe51f63a">FEATURE_XENON_ATAPI</a>,</div>
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>};</div>
-<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span> </div>
-<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span><span class="keywordtype">int</span></div>
-<div class="line"><a id="l00779" name="l00779"></a><span class="lineno"><a class="line" href="ata_8c.html#ad94d9466521d20d2424c3be7edc9d433">  779</a></span><a class="code hl_function" href="ata_8c.html#ad94d9466521d20d2424c3be7edc9d433">xenon_ata_init</a>() {</div>
-<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>    <span class="comment">//preinit (start from scratch)</span></div>
-<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0110060 = __builtin_bswap32(0x112400);</div>
-<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0110080 = __builtin_bswap32(0x407231BE);</div>
-<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xea001318 &amp;= __builtin_bswap32(0xFFFFFFF0);</div>
-<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>    <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(1000);</div>
-<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span> </div>
-<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#a1a576bfc6d45d3344ef1e43526eb1414">ata</a>;</div>
-<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>    memset(dev, 0, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a>));</div>
-<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>    <span class="keywordtype">int</span> err = <a class="code hl_function" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a>(dev, 0xea001300, 0xea001320);</div>
-<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>    <span class="keywordflow">if</span> (!err)</div>
-<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>        ata_ready = 1;</div>
-<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>    <span class="keywordflow">return</span> err;</div>
-<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>}</div>
-<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span> </div>
-<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span><span class="keywordtype">int</span></div>
-<div class="line"><a id="l00795" name="l00795"></a><span class="lineno"><a class="line" href="ata_8c.html#a1347b7c6e441030e3f1b3f16d3000acb">  795</a></span><a class="code hl_function" href="ata_8c.html#a1347b7c6e441030e3f1b3f16d3000acb">xenon_atapi_init</a>() {</div>
-<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>    <span class="comment">//preinit (start from scratch)</span></div>
-<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0108060 = __builtin_bswap32(0x112400);</div>
-<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0108080 = __builtin_bswap32(0x407231BE);</div>
-<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xea001218 &amp;= __builtin_bswap32(0xFFFFFFF0);</div>
-<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>    <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(200);</div>
-<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span> </div>
-<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#aa4bf929dc075080615fb6b23c02d7d18">atapi</a>;</div>
-<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>    memset(dev, 0, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a>));</div>
-<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>    <span class="keywordtype">int</span> err = <a class="code hl_function" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a>(dev, 0xea001200, 0xea001220);</div>
-<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span>    <span class="keywordflow">if</span> (!err)</div>
-<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>        atapi_ready = 1;</div>
-<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>    <span class="keywordflow">return</span> err;</div>
-<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span>}</div>
-<div class="ttc" id="aata_8c_html_a1347b7c6e441030e3f1b3f16d3000acb"><div class="ttname"><a href="ata_8c.html#a1347b7c6e441030e3f1b3f16d3000acb">xenon_atapi_init</a></div><div class="ttdeci">int xenon_atapi_init()</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00795">ata.c:795</a></div></div>
+<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span><span class="keyword">static</span> <span class="keywordtype">bool</span> ata_shutdown(<span class="keywordtype">void</span>){</div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno">  744</span>    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>}</div>
+<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span> </div>
+<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span><span class="keyword">static</span> <a class="code hl_typedef" href="xetypes_8h.html#ae9b1af5c037e57a98884758875d3a7c4">s32</a> ata_sectors(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span>{</div>
+<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#a1a576bfc6d45d3344ef1e43526eb1414">ata</a>;</div>
+<div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>    <span class="keywordflow">return</span> dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a>;</div>
+<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span>}</div>
+<div class="line"><a id="l00752" name="l00752"></a><span class="lineno">  752</span> </div>
+<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span><span class="keyword">static</span> <a class="code hl_typedef" href="xetypes_8h.html#ae9b1af5c037e57a98884758875d3a7c4">s32</a> atapi_sectors(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>{</div>
+<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#aa4bf929dc075080615fb6b23c02d7d18">atapi</a>;</div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>    <span class="keywordflow">return</span> dev-&gt;<a class="code hl_variable" href="structxenon__ata__device.html#a6dc44d3405aac9070725d20ba51483c7">size</a>;</div>
+<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>}</div>
+<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span> </div>
+<div class="line"><a id="l00759" name="l00759"></a><span class="lineno"><a class="line" href="ata_8c.html#a23a3e2f2ef3ce0a8cd39df615635c005">  759</a></span><a class="code hl_struct" href="structDISC__INTERFACE__STRUCT.html">DISC_INTERFACE</a> <a class="code hl_variable" href="ata_8c.html#a23a3e2f2ef3ce0a8cd39df615635c005">xenon_ata_ops</a> = {</div>
+<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>    .<a class="code hl_variable" href="structDISC__INTERFACE__STRUCT.html#ad0f676fcbfeba6816e98be01b49f12bc">sectors</a> = (<a class="code hl_typedef" href="disc__io_8h.html#a516f442de7302600e9b72c8d1bda8351">FN_MEDIUM_DEVSECTORS</a>) &amp; ata_sectors,</div>
+<div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>    .readSectors = (<a class="code hl_typedef" href="disc__io_8h.html#ac1f4cd2cc19dd0c976aaff846ccbcc2e">FN_MEDIUM_READSECTORS</a>) &amp; ata_readsectors,</div>
+<div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>    .writeSectors = (<a class="code hl_typedef" href="disc__io_8h.html#ac5ec2db96eadd242f865e3a7dc2df5b1">FN_MEDIUM_WRITESECTORS</a>) &amp; ata_writesectors,</div>
+<div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>    .clearStatus = (<a class="code hl_typedef" href="disc__io_8h.html#a290552c7b286d229826e02556077b355">FN_MEDIUM_CLEARSTATUS</a>) &amp; ata_clearstatus,</div>
+<div class="line"><a id="l00764" name="l00764"></a><span class="lineno">  764</span>    .shutdown = (<a class="code hl_typedef" href="disc__io_8h.html#a52794abadfa630d3aebdfd95a627b08c">FN_MEDIUM_SHUTDOWN</a>) &amp; ata_shutdown,</div>
+<div class="line"><a id="l00765" name="l00765"></a><span class="lineno">  765</span>    .isInserted = (<a class="code hl_typedef" href="disc__io_8h.html#af5645de1594e1fe2862e9d12208dde63">FN_MEDIUM_ISINSERTED</a>) &amp; ata_inserted,</div>
+<div class="line"><a id="l00766" name="l00766"></a><span class="lineno">  766</span>    .startup = (<a class="code hl_typedef" href="disc__io_8h.html#a04da3881863f2749efd79c53e3ed4494">FN_MEDIUM_STARTUP</a>) &amp; ata_startup,</div>
+<div class="line"><a id="l00767" name="l00767"></a><span class="lineno">  767</span>    .ioType = <a class="code hl_define" href="disc__io_8h.html#a00d0cc60c12240069e461c9463b08728">FEATURE_XENON_ATA</a>,</div>
+<div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>    .<a class="code hl_variable" href="xenos__edid_8h.html#a0b92fb712559f8a49a79cfab4ac51ad5">features</a> = <a class="code hl_define" href="disc__io_8h.html#a2f4756599b10f168b60006121e69524a">FEATURE_MEDIUM_CANREAD</a> | <a class="code hl_define" href="disc__io_8h.html#ad04e14819e9a483a5c2967dc6815049f">FEATURE_MEDIUM_CANWRITE</a> | <a class="code hl_define" href="disc__io_8h.html#a00d0cc60c12240069e461c9463b08728">FEATURE_XENON_ATA</a>,</div>
+<div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>};</div>
+<div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span> </div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno"><a class="line" href="ata_8c.html#a91eea9d01ab37880c9751c21de42c0c7">  771</a></span><a class="code hl_struct" href="structDISC__INTERFACE__STRUCT.html">DISC_INTERFACE</a> <a class="code hl_variable" href="ata_8c.html#a91eea9d01ab37880c9751c21de42c0c7">xenon_atapi_ops</a> = {</div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>    .<a class="code hl_variable" href="structDISC__INTERFACE__STRUCT.html#ad0f676fcbfeba6816e98be01b49f12bc">sectors</a> = (<a class="code hl_typedef" href="disc__io_8h.html#a516f442de7302600e9b72c8d1bda8351">FN_MEDIUM_DEVSECTORS</a>) &amp; atapi_sectors,</div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>    .readSectors = (<a class="code hl_typedef" href="disc__io_8h.html#ac1f4cd2cc19dd0c976aaff846ccbcc2e">FN_MEDIUM_READSECTORS</a>) &amp; atapi_readsectors,</div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>    .clearStatus = (<a class="code hl_typedef" href="disc__io_8h.html#a290552c7b286d229826e02556077b355">FN_MEDIUM_CLEARSTATUS</a>) &amp; ata_clearstatus,</div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>    .shutdown = (<a class="code hl_typedef" href="disc__io_8h.html#a52794abadfa630d3aebdfd95a627b08c">FN_MEDIUM_SHUTDOWN</a>) &amp; ata_shutdown,</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>    .isInserted = (<a class="code hl_typedef" href="disc__io_8h.html#af5645de1594e1fe2862e9d12208dde63">FN_MEDIUM_ISINSERTED</a>) &amp; atapi_inserted,</div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>    .startup = (<a class="code hl_typedef" href="disc__io_8h.html#a04da3881863f2749efd79c53e3ed4494">FN_MEDIUM_STARTUP</a>) &amp; ata_startup,</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>    .ioType = <a class="code hl_define" href="disc__io_8h.html#a9525ec83b349d0212a9a599bfe51f63a">FEATURE_XENON_ATAPI</a>,</div>
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>    .features = <a class="code hl_define" href="disc__io_8h.html#a2f4756599b10f168b60006121e69524a">FEATURE_MEDIUM_CANREAD</a> | <a class="code hl_define" href="disc__io_8h.html#a9525ec83b349d0212a9a599bfe51f63a">FEATURE_XENON_ATAPI</a>,</div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>};</div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span> </div>
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span><span class="keywordtype">int</span></div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno"><a class="line" href="ata_8c.html#ad94d9466521d20d2424c3be7edc9d433">  783</a></span><a class="code hl_function" href="ata_8c.html#ad94d9466521d20d2424c3be7edc9d433">xenon_ata_init</a>() {</div>
+<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>    <span class="comment">//preinit (start from scratch)</span></div>
+<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0110060 = __builtin_bswap32(0x112400);</div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0110080 = __builtin_bswap32(0x407231BE);</div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xea001318 &amp;= __builtin_bswap32(0xFFFFFFF0);</div>
+<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>    <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(1000);</div>
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span> </div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#a1a576bfc6d45d3344ef1e43526eb1414">ata</a>;</div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>    memset(dev, 0, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a>));</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>    <span class="keywordtype">int</span> err = <a class="code hl_function" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a>(dev, 0xea001300, 0xea001320);</div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>    <span class="keywordflow">if</span> (!err)</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>        ata_ready = 1;</div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>    <span class="keywordflow">return</span> err;</div>
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>}</div>
+<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span> </div>
+<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span><span class="keywordtype">int</span></div>
+<div class="line"><a id="l00799" name="l00799"></a><span class="lineno"><a class="line" href="ata_8c.html#a1347b7c6e441030e3f1b3f16d3000acb">  799</a></span><a class="code hl_function" href="ata_8c.html#a1347b7c6e441030e3f1b3f16d3000acb">xenon_atapi_init</a>() {</div>
+<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>    <span class="comment">//preinit (start from scratch)</span></div>
+<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0108060 = __builtin_bswap32(0x112400);</div>
+<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xd0108080 = __builtin_bswap32(0x407231BE);</div>
+<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>    *(<span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a>*)0xea001218 &amp;= __builtin_bswap32(0xFFFFFFF0);</div>
+<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>    <a class="code hl_function" href="time_8c.html#a2b6e40e0262eb9da6191564bd733389a">mdelay</a>(200);</div>
+<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span> </div>
+<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a> *dev = &amp;<a class="code hl_variable" href="ata_8c.html#aa4bf929dc075080615fb6b23c02d7d18">atapi</a>;</div>
+<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>    memset(dev, 0, <span class="keyword">sizeof</span> (<span class="keyword">struct</span> <a class="code hl_struct" href="structxenon__ata__device.html">xenon_ata_device</a>));</div>
+<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span>    <span class="keywordtype">int</span> err = <a class="code hl_function" href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a>(dev, 0xea001200, 0xea001220);</div>
+<div class="line"><a id="l00809" name="l00809"></a><span class="lineno">  809</span>    <span class="keywordflow">if</span> (!err)</div>
+<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>        atapi_ready = 1;</div>
+<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>    <span class="keywordflow">return</span> err;</div>
+<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>}</div>
+<div class="ttc" id="aata_8c_html_a1347b7c6e441030e3f1b3f16d3000acb"><div class="ttname"><a href="ata_8c.html#a1347b7c6e441030e3f1b3f16d3000acb">xenon_atapi_init</a></div><div class="ttdeci">int xenon_atapi_init()</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00799">ata.c:799</a></div></div>
 <div class="ttc" id="aata_8c_html_a187d9ce0506f9d734eae275e6f9c92ee"><div class="ttname"><a href="ata_8c.html#a187d9ce0506f9d734eae275e6f9c92ee">SK</a></div><div class="ttdeci">#define SK(sense)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00420">ata.c:420</a></div></div>
 <div class="ttc" id="aata_8c_html_a1a576bfc6d45d3344ef1e43526eb1414"><div class="ttname"><a href="ata_8c.html#a1a576bfc6d45d3344ef1e43526eb1414">ata</a></div><div class="ttdeci">struct xenon_ata_device ata</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00042">ata.c:42</a></div></div>
-<div class="ttc" id="aata_8c_html_a23a3e2f2ef3ce0a8cd39df615635c005"><div class="ttname"><a href="ata_8c.html#a23a3e2f2ef3ce0a8cd39df615635c005">xenon_ata_ops</a></div><div class="ttdeci">DISC_INTERFACE xenon_ata_ops</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00755">ata.c:755</a></div></div>
-<div class="ttc" id="aata_8c_html_a32d6173c6953e69bf771014435f74718"><div class="ttname"><a href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a></div><div class="ttdeci">int xenon_ata_init1(struct xenon_ata_device *dev, uint32_t ioaddress, uint32_t ioaddress2)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00663">ata.c:663</a></div></div>
+<div class="ttc" id="aata_8c_html_a23a3e2f2ef3ce0a8cd39df615635c005"><div class="ttname"><a href="ata_8c.html#a23a3e2f2ef3ce0a8cd39df615635c005">xenon_ata_ops</a></div><div class="ttdeci">DISC_INTERFACE xenon_ata_ops</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00759">ata.c:759</a></div></div>
+<div class="ttc" id="aata_8c_html_a32d6173c6953e69bf771014435f74718"><div class="ttname"><a href="ata_8c.html#a32d6173c6953e69bf771014435f74718">xenon_ata_init1</a></div><div class="ttdeci">int xenon_ata_init1(struct xenon_ata_device *dev, uint32_t ioaddress, uint32_t ioaddress2)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00667">ata.c:667</a></div></div>
 <div class="ttc" id="aata_8c_html_a3acffbd305ee72dcd4593c0d8af64a4f"><div class="ttname"><a href="ata_8c.html#a3acffbd305ee72dcd4593c0d8af64a4f">MIN</a></div><div class="ttdeci">#define MIN(a, b)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00035">ata.c:35</a></div></div>
 <div class="ttc" id="aata_8c_html_a70e5b9ab57809320e2155904ae8c32eb"><div class="ttname"><a href="ata_8c.html#a70e5b9ab57809320e2155904ae8c32eb">ASC</a></div><div class="ttdeci">#define ASC(sense)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00421">ata.c:421</a></div></div>
 <div class="ttc" id="aata_8c_html_a755e9cff951e02ae42f7c620a51f1c50"><div class="ttname"><a href="ata_8c.html#a755e9cff951e02ae42f7c620a51f1c50">xenon_atapi_set_modeb</a></div><div class="ttdeci">void xenon_atapi_set_modeb(void)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00465">ata.c:465</a></div></div>
-<div class="ttc" id="aata_8c_html_a91eea9d01ab37880c9751c21de42c0c7"><div class="ttname"><a href="ata_8c.html#a91eea9d01ab37880c9751c21de42c0c7">xenon_atapi_ops</a></div><div class="ttdeci">DISC_INTERFACE xenon_atapi_ops</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00767">ata.c:767</a></div></div>
+<div class="ttc" id="aata_8c_html_a91eea9d01ab37880c9751c21de42c0c7"><div class="ttname"><a href="ata_8c.html#a91eea9d01ab37880c9751c21de42c0c7">xenon_atapi_ops</a></div><div class="ttdeci">DISC_INTERFACE xenon_atapi_ops</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00771">ata.c:771</a></div></div>
 <div class="ttc" id="aata_8c_html_aa0acbf67197a9a27bd2092db70e0ed1d"><div class="ttname"><a href="ata_8c.html#aa0acbf67197a9a27bd2092db70e0ed1d">xenon_atapi_set_dvd_key</a></div><div class="ttdeci">int xenon_atapi_set_dvd_key(unsigned char *dvdkey)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00505">ata.c:505</a></div></div>
 <div class="ttc" id="aata_8c_html_aa4bf929dc075080615fb6b23c02d7d18"><div class="ttname"><a href="ata_8c.html#aa4bf929dc075080615fb6b23c02d7d18">atapi</a></div><div class="ttdeci">struct xenon_ata_device atapi</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00043">ata.c:43</a></div></div>
 <div class="ttc" id="aata_8c_html_ad75ba64cdb5e1b0fbbe3f8feb978c5b1"><div class="ttname"><a href="ata_8c.html#ad75ba64cdb5e1b0fbbe3f8feb978c5b1">xenon_atapi_request_sense</a></div><div class="ttdeci">int xenon_atapi_request_sense(struct xenon_ata_device *dev)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00425">ata.c:425</a></div></div>
-<div class="ttc" id="aata_8c_html_ad94d9466521d20d2424c3be7edc9d433"><div class="ttname"><a href="ata_8c.html#ad94d9466521d20d2424c3be7edc9d433">xenon_ata_init</a></div><div class="ttdeci">int xenon_ata_init()</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00779">ata.c:779</a></div></div>
+<div class="ttc" id="aata_8c_html_ad94d9466521d20d2424c3be7edc9d433"><div class="ttname"><a href="ata_8c.html#ad94d9466521d20d2424c3be7edc9d433">xenon_ata_init</a></div><div class="ttdeci">int xenon_ata_init()</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00783">ata.c:783</a></div></div>
 <div class="ttc" id="aata_8c_html_af80fe114c4a3a4968b6a91060b39a65c"><div class="ttname"><a href="ata_8c.html#af80fe114c4a3a4968b6a91060b39a65c">xenon_atapi_get_dvd_key_tsh943a</a></div><div class="ttdeci">int xenon_atapi_get_dvd_key_tsh943a(unsigned char *dvdkey)</div><div class="ttdef"><b>Definition:</b> <a href="ata_8c_source.html#l00482">ata.c:482</a></div></div>
 <div class="ttc" id="aata_8h_html"><div class="ttname"><a href="ata_8h.html">ata.h</a></div></div>
 <div class="ttc" id="aata_8h_html_a06fc87d81c62e9abb8790b6e5713c55ba070744f5e3d2c9372b138d5b4e94a2e3"><div class="ttname"><a href="ata_8h.html#a06fc87d81c62e9abb8790b6e5713c55ba070744f5e3d2c9372b138d5b4e94a2e3">XENON_ATA_CHS</a></div><div class="ttdeci">@ XENON_ATA_CHS</div><div class="ttdef"><b>Definition:</b> <a href="ata_8h_source.html#l00041">ata.h:41</a></div></div>

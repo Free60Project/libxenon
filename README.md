@@ -27,7 +27,7 @@ Dependencies for Linux distributions using the `dnf` or `apt` package managers w
 
 - flex
 - bison
-- gcc-multilib
+- gcc-multilib (if on x86\_64)
 - libgmp3-dev
 - libmpfr-dev
 - libmpc-dev

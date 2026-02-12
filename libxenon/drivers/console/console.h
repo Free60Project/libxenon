@@ -41,11 +41,16 @@ void console_get_dimensions(unsigned int * width,unsigned int * height);
 void console_putch(const char c);
 void console_clrscr();
 void console_clrline();
+void console_clear_to_eol(int start_pos);
+
 void console_init(void);
 void console_open(void);
 void console_close(void);
 void console_pset(int x, int y, unsigned char r, unsigned char g, unsigned char b);
 void console_pset_right(int x, int y, unsigned char r, unsigned char g, unsigned char b);
+
+int console_get_cursor_x(void);
+int console_get_cursor_y(void);
 
 #ifdef __cplusplus
 };

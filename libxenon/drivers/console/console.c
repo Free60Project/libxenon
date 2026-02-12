@@ -223,6 +223,23 @@ int console_get_cursor_y(void)
    return cursor_y;
 }
 
+int console_get_cursor_max_x(void)
+{
+   return max_x;
+}
+
+int console_get_cursor_max_y(void)
+{
+   return max_y;
+}
+
+
+void console_set_cursor(int x, int y)
+{
+	cursor_x = x;
+	cursor_y = y;
+}
+
 void console_open(void)
 {
 	stdout_hook = console_stdout_hook;

@@ -51,6 +51,9 @@ void console_pset_right(int x, int y, unsigned char r, unsigned char g, unsigned
 
 int console_get_cursor_x(void);
 int console_get_cursor_y(void);
+int console_get_cursor_max_x(void);
+int console_get_cursor_max_y(void);
+void console_set_cursor(int x, int y);
 
 #ifdef __cplusplus
 };

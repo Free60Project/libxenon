@@ -39,7 +39,6 @@
 
 #define NO_SYS                  1
 #define NO_SYS_NO_TIMERS        0
-#define LWIP_NO_STDINT_H        1
 #define SYS_LIGHTWEIGHT_PROT    0
 #define ETHARP_TRUST_IP_MAC     1
 

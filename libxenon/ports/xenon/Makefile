@@ -159,11 +159,9 @@ install: libxenon.a
 	mkdir -p $(DEVKITXENON)/$(CROSS)/lib/
 	cp -r ../../drivers/* $(DEVKITXENON)/usr/include/
 	cp -r ../../include/* $(DEVKITXENON)/usr/include/
-	(cd ../../drivers/lwip/include/lwip && find . -type d -exec mkdir -p $(DEVKITXENON)/usr/include/lwip/{} \;)
 	(cd ../../drivers/lwip/include/lwip && find . -type f -name "*.h" -exec install -m 0664 {} $(DEVKITXENON)/usr/include/lwip/{} \;)
-	(cd ../../drivers/lwip/include/netif && find . -type d -exec mkdir -p $(DEVKITXENON)/usr/include/netif/{} \;)
 	(cd ../../drivers/lwip/include/netif && find . -type f -name "*.h" -exec install -m 0664 {} $(DEVKITXENON)/usr/include/netif/{} \;)
-	find ../../drivers/lwip/xenon/include/arch -maxdepth 1 -type f -name "*.h" -exec install -m 0664 {} $(DEVKITXENON)/usr/include/arch/ \;
+	install -m 0664 ../../drivers/lwip/xenon/include/arch/* $(DEVKITXENON)/usr/include/arch/
 	install -m 0664 ../../../devkitxenon/app.lds $(DEVKITXENON)/
 	install -m 0664 ../../startup/xenon/crt1.o $(DEVKITXENON)/$(CROSS)/lib/
 	install -m 0664 crti.o $(DEVKITXENON)/$(CROSS)/lib/

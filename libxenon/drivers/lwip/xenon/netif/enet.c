@@ -5,7 +5,6 @@
 #include "lwip/pbuf.h"
 #include "lwip/sys.h"
 #include "lwip/stats.h"
-#include "lwip/timers.h"
 #include "netif/etharp.h"
 
 #include <time/time.h>
@@ -179,7 +178,7 @@ err_t enet_init(struct netif *netif)
 
 	netif->hwaddr_len = 6;
 	netif->mtu = 1500;
-	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
+	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
 
 #if LWIP_NETIF_HOSTNAME
     netif->hostname = "XeLL";
@@ -197,6 +196,7 @@ err_t enet_init(struct netif *netif)
 static int enet_open(struct netif *netif)
 {
 	int tries=10;
+	int is_link_up = 0;
 	struct enet_context *context = (struct enet_context *) netif->state;
 
 	//printf("NIC reset\n");
@@ -273,10 +273,13 @@ static int enet_open(struct netif *netif)
 		};
 	}
 
-	if (phy_read(1) & 4)
+	if (phy_read(1) & 4) {
+		is_link_up = 1;
 		printf("link up!\n");
-	else
+	} else {
+		is_link_up = 0;
 		printf("link still down.\n");
+	}
 #endif
 
 
@@ -284,6 +287,10 @@ static int enet_open(struct netif *netif)
 	write32n(0xea001428, 0x01005508);
 	write32n(0xea001410, __builtin_bswap32(0x00101c11));	// enable RX
 	write32n(0xea001400, __builtin_bswap32(0x00001c01));	// enable TX
+	if (is_link_up)
+		netif_set_link_up(netif);
+	else
+		netif_set_link_down(netif);
 
 	return 0;
 }

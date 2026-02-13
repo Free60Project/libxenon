@@ -35,6 +35,9 @@
 #ifndef __ARCH_CC_H__
 #define __ARCH_CC_H__
 
+/* Xenon port provides lwIP base integer typedefs directly. */
+#define LWIP_NO_STDINT_H 1
+
 typedef unsigned   char    u8_t;
 typedef signed     char    s8_t;
 typedef unsigned   short   u16_t;

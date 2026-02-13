@@ -35,16 +35,16 @@
 
 #include "lwip/sys.h"
 #include "lwip/def.h"
-#include "lwip/timers.h"
-#include "ppc/time.h"
+#include "lwip/timeouts.h"
+#include "ppc/timebase.h"
 
-static tb_t startTime;
+static uint64_t startTime;
 //struct sys_timeouts timeouts;
 struct sys_timeo timeouts;
 
 /*-----------------------------------------------------------------------------------*/
 void
-sys_arch_block(u16_t time)
+sys_arch_block(u32_t time)
 {
 	int i;
 	for (i=0; i< time*1000; ++i) ;
@@ -68,17 +68,20 @@ sys_arch_block(u16_t time)
 //  return;
 //}
 /*-----------------------------------------------------------------------------------*/
-u16_t
-sys_arch_mbox_fetch(sys_mbox_t mbox, void **data, u16_t timeout)
+u32_t
+sys_arch_mbox_fetch(sys_mbox_t *mbox, void **data, u32_t timeout)
 {
+  LWIP_UNUSED_ARG(mbox);
+  LWIP_UNUSED_ARG(data);
   sys_arch_block(timeout);
   return 0;
 }
 /*-----------------------------------------------------------------------------------*/
-u16_t
-sys_arch_mbox_tryfetch(sys_mbox_t mbox, void **data, u16_t timeout)
+u32_t
+sys_arch_mbox_tryfetch(sys_mbox_t *mbox, void **data)
 {
-  sys_arch_block(timeout);
+  LWIP_UNUSED_ARG(mbox);
+  LWIP_UNUSED_ARG(data);
   return 0;
 }
 ///*-----------------------------------------------------------------------------------*/
@@ -112,7 +115,7 @@ void
 sys_init(void)
 {
 	timeouts.next = NULL;
-	mftb(&startTime);
+	startTime = mftb();
 	return;
 }
 /*-----------------------------------------------------------------------------------*/
@@ -126,9 +129,8 @@ sys_arch_timeouts(void)
  * may be the same as sys_jiffies or at least based on it. */
 u32_t sys_now(void)
 {
-	tb_t now;
-	mftb(&now);
-	return (u32_t) tb_diff_msec(&now, &startTime);
+	uint64_t now = mftb();
+	return (u32_t) tb_diff_msec(now, startTime);
 }
 
 u32_t sys_jiffies(void) /* since power up. */

@@ -38,7 +38,8 @@
 #include <stdio.h>
 
 #define NO_SYS                  1
-#define NO_SYS_NO_TIMERS		1
+#define NO_SYS_NO_TIMERS		0
+#define SYS_LIGHTWEIGHT_PROT    0
 #define ETHARP_TRUST_IP_MAC		1
 
 #define LWIP_CALLBACK_API       1

@@ -98,10 +98,17 @@ void console_clrscr() {
 }
 
 void console_clrline() {
-	char sp[max_x];
-	memset(sp,' ', max_x);
-	sp[max_x-1]='\0';
-	printf("\r%s\r",sp);
+   console_clear_to_eol(0);
+}
+
+void console_clear_to_eol(int startpos) {
+	char sp[max_x - startpos];
+	memset(sp,' ', max_x - startpos);
+	sp[max_x - startpos - 1]='\0';
+
+	cursor_x = startpos;
+	printf("%s",sp);
+	cursor_x = startpos;
 }
 
 static void console_scroll32(const unsigned int lines) {
@@ -204,6 +211,33 @@ void console_set_colors(unsigned int background, unsigned int foreground){
 void console_get_dimensions(unsigned int * width,unsigned int * height){
 	if (width) *width=max_x;
 	if (height) *height=max_y;
+}
+
+int console_get_cursor_x(void)
+{
+   return cursor_x;
+}
+
+int console_get_cursor_y(void)
+{
+   return cursor_y;
+}
+
+int console_get_cursor_max_x(void)
+{
+   return max_x;
+}
+
+int console_get_cursor_max_y(void)
+{
+   return max_y;
+}
+
+
+void console_set_cursor(int x, int y)
+{
+	cursor_x = x;
+	cursor_y = y;
 }
 
 void console_open(void)

@@ -23,7 +23,7 @@ struct netif netif;
 ip4_addr_t ipaddr, netmask, gateway;
 static uint64_t now2, dhcp_wait;
 
-#define NTOA(ip) (int)ip4_addr1_16(&(ip)), (int)ip4_addr2_16(&(ip)), (int)ip4_addr3_16(&(ip)), (int)ip4_addr4_16(&(ip))
+#define NTOA(ip) (int)((ip.addr>>24)&0xff), (int)((ip.addr>>16)&0xff), (int)((ip.addr>>8)&0xff), (int)(ip.addr&0xff)
 
 extern void enet_poll(struct netif *netif);
 extern err_t enet_init(struct netif *netif);
@@ -61,7 +61,7 @@ int network_init()
 
 	dhcp_wait=mftb();
 	int i = 0;
-	while (ip4_addr_isany_val(*netif_ip4_addr(&netif)) && i < 60) {
+	while (netif.ip_addr.addr==0 && i < 60) {
 		network_poll();
 		now2=mftb();
 		if (tb_diff_msec(now2, dhcp_wait) >= 250){
@@ -72,7 +72,7 @@ int network_init()
 		}
 	}
 
-	if (!ip4_addr_isany_val(*netif_ip4_addr(&netif))) {
+	if (netif.ip_addr.addr) {
 		printf("success\n");
 	} else {
 		printf("failed\n");
@@ -98,7 +98,7 @@ void network_poll()
 void network_print_config()
 {
 	printf(" * network config: %d.%d.%d.%d / %d.%d.%d.%d\n",
-		NTOA(*netif_ip4_addr(&netif)), NTOA(*netif_ip4_netmask(&netif)));
+		NTOA(netif.ip_addr), NTOA(netif.netmask));
 	printf("              MAC: %02X%02X%02X%02X%02X%02X\n\n",
 			netif.hwaddr[0], netif.hwaddr[1], netif.hwaddr[2],
 			netif.hwaddr[3], netif.hwaddr[4], netif.hwaddr[5]);

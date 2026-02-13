@@ -196,7 +196,6 @@ err_t enet_init(struct netif *netif)
 static int enet_open(struct netif *netif)
 {
 	int tries=10;
-	int is_link_up = 0;
 	struct enet_context *context = (struct enet_context *) netif->state;
 
 	//printf("NIC reset\n");
@@ -273,13 +272,10 @@ static int enet_open(struct netif *netif)
 		};
 	}
 
-	if (phy_read(1) & 4) {
-		is_link_up = 1;
+	if (phy_read(1) & 4)
 		printf("link up!\n");
-	} else {
-		is_link_up = 0;
+	else
 		printf("link still down.\n");
-	}
 #endif
 
 
@@ -287,10 +283,8 @@ static int enet_open(struct netif *netif)
 	write32n(0xea001428, 0x01005508);
 	write32n(0xea001410, __builtin_bswap32(0x00101c11));	// enable RX
 	write32n(0xea001400, __builtin_bswap32(0x00001c01));	// enable TX
-	if (is_link_up)
-		netif_set_link_up(netif);
-	else
-		netif_set_link_down(netif);
+
+	netif_set_link_up(netif);
 
 	return 0;
 }

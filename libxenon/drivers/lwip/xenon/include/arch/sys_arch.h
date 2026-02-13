@@ -37,7 +37,6 @@
 
 #define SYS_MBOX_NULL 0
 #define SYS_SEM_NULL  0
-#define SYS_MBOX_EMPTY 0xFFFFFFFFUL
 
 typedef int sys_sem_t;
 typedef int sys_mbox_t;

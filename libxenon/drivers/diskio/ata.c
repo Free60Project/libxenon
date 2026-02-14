@@ -556,6 +556,10 @@ xenon_atapi_read_sectors(sec_t start_sector, sec_t sector_size, void *buf) {
 	readcmd.lba = start_sector;
 	readcmd.length = sector_size;
 	
+	// Wait for the drive to become ready before we attempt to read sectors
+	// Hitachi 3120L and DL10N drives are picky and hang if we don't wait
+	xenon_ata_wait_ready(dev);
+
 #ifndef USE_DMA
 	unsigned int sect = 0;
 	void * bufpos = buf;

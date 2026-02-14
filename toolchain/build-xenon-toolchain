@@ -5,7 +5,7 @@
 
 TARGET=xenon
 PREFIX="${PREFIX:-/usr/local/xenon}" # Install location of your final toolchain.
-PARALLEL=
+PARALLEL=${PARALLEL:--j$(nproc --all)}
 
 BINUTILS_DL="https://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.gz"
 GCC_DL="https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz"
@@ -56,8 +56,7 @@ check_priv()
 
         if [ ! -f "$PREFIX"/check_priv ]; then
             echo "For your selected prefix (\"$PREFIX\"), root privileges are required for this feature:"
-            sudo "$@"
-            rm -f "$PREFIX"/check_priv
+            sudo PREFIX="$PREFIX" "$@"
             exit 0
         fi
 

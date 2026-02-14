@@ -93,6 +93,15 @@ void print_key(char *name, unsigned char *data)
 	printf("\n");
 }
 
+void print_cserial(char *name, unsigned char *data)
+{
+	int i = 0;
+	printf("%s: ", name);
+	for (i = 0; i < 12; i++)
+		printf("%c", data[i]);
+	printf("\n");
+}
+
 int cpu_get_key(unsigned char *data)
 {
 	*(unsigned long long*)&data[0] = xenon_secotp_read_line(3) | xenon_secotp_read_line(4);
@@ -104,37 +113,80 @@ int get_virtual_cpukey(unsigned char *data)
 {
    unsigned char buffer[VFUSES_SIZE];
 
+   uint32_t patchSlotOffset = 0;
+   uint32_t patchSlotSize = 0;
+   uint16_t patchSlotCount = 0;
+
+   const unsigned char fuseline0[0x8] = { 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+
+   // JTAG virtual fuses must be checked manually, since they're not stored
+   // at the beginning of either of the patch slots like Glitch/DevGL images
    if (xenon_get_logical_nand_data(&buffer, VFUSES_OFFSET, VFUSES_SIZE) == -1)
    {
-         return 2; //Unable to read NAND data...
+      // Error reading NAND data
+      return 2;
    }
 
-   //if we got here then it was at least able to read from nand
-   //now we need to verify the data somehow
-   if(buffer[0]==0xC0 && buffer[1]==0xFF && buffer[2]==0xFF && buffer[3]==0xFF)
+   // Data was read from NAND, verify that it looks like a virtual fuse set
+   // by comparing it with what is expected for fuseline 0.
+   if( 0 == memcmp(buffer, fuseline0, sizeof(fuseline0)) )
    {
       memcpy(data,&buffer[0x20],0x10);
       return 0;
    }
-   else
+
+   // If virtual fuses were not found at the JTAG offset, check the beginning of each patch slot.
+   // Patch slot offset, count, and size are stored at the beginning of NAND
+
+   // Patch slot offset = DWORD at 0x64
+   if (xenon_get_logical_nand_data(&patchSlotOffset, 0x64, sizeof(patchSlotOffset)) == -1)
    {
-      // No Virtual Fuses were found at 0x95000, check again at 0xC0000 (Zero fuse DevGL consoles)
-      if (xenon_get_logical_nand_data(&buffer, ZFUSES_OFFSET, VFUSES_SIZE) == -1)
+      return 2;
+   }
+
+   // Patch slot count  = WORD at 0x68
+   if (xenon_get_logical_nand_data(&patchSlotCount, 0x68, sizeof(patchSlotCount)) == -1)
+   {
+      return 2;
+   }
+   
+   // Patch slot size = DWORD at 0x70
+   if (xenon_get_logical_nand_data(&patchSlotSize, 0x70, sizeof(patchSlotSize)) == -1)
+   {
+      return 2;
+   }
+
+   // XeBuild has a bug where the patch slot size is set to zero for
+   // Falcon/Zephyr/Xenon DevGL and Glitch2m images. In this case, use
+   // the expected patch slot size of 0x10000 bytes.
+   if( 0 == patchSlotSize )
+   {
+      patchSlotSize = 0x10000;
+   }
+
+   // Check the beginning of each patch slot for a virtual fuse set
+   for(int i = 0; i < patchSlotCount; i++)
+   {
+      uint32_t patchSlotAddress = patchSlotOffset + (i * patchSlotSize);
+
+      // Read the virtual fuse set from NAND
+      if (xenon_get_logical_nand_data(&buffer, patchSlotAddress, VFUSES_SIZE) == -1)
       {
-         return 2; //Unable to read NAND data...
+         return 2;
       }
 
-      //if we got here then it was at least able to read from nand
-      //now we need to verify the data somehow
-      if(buffer[0]==0xC0 && buffer[1]==0xFF && buffer[2]==0xFF && buffer[3]==0xFF)
+      // Data was read from NAND, verify that it looks like a virtual fuse set
+      // by comparing it with what is expected for fuseline 0. If it doesn't
+      // match, the next patch slot will be checked.
+      if( 0 == memcmp(buffer, fuseline0, sizeof(fuseline0)) )
       {
          memcpy(data,&buffer[0x20],0x10);
          return 0;
       }
-
-      // No virtual fuses at 0x95000 or 0xC0000
-      return 1;
    }
+
+   // No virtual fuses found 
+   return 1;
 }
 
 
@@ -222,26 +274,43 @@ int kv_read(unsigned char *data, int virtualcpukey)
 	return 0;
 }
 
+void kv_print_hash_failure()
+{
+	unsigned int kvOffset = xenon_get_kv_offset();
+	unsigned int kvSize = xenon_get_kv_size();
+
+	// Physical KV offset = page number * physical page size + offset in page
+	kvOffset = ((kvOffset / sfc.page_sz) * sfc.page_sz_phys) + (kvOffset % sfc.page_sz);
+
+	// Physical KV size = page count * physical page size (KV is a multiple of page size)
+	kvSize = (kvSize / sfc.page_sz) * sfc.page_sz_phys;
+
+	printf(" !   the hash check failed probably as a result of decryption failure\n");
+	printf(" !   make sure that the CORRECT key vault for this console is in flash\n");
+	printf(" !   the key vault should be at offset 0x%x for a length of 0x%x\n", kvOffset, kvSize);
+	printf(" !   in the 'raw' flash binary from THIS console\n");
+
+	return;
+}
+
 int kv_get_dvd_key(unsigned char *dvd_key)
 {
 	if (KV_FLASH_SIZE == 0)
 		return -1; //It's bad data!
-	unsigned char buffer[KV_FLASH_SIZE], tmp[0x10];
+	unsigned char buffer[KV_FLASH_SIZE], cpukeyTmp[0x10];
 	int result = 0;
 	int keylen = 0x10;
 
 	result = kv_read(buffer, 0);
-        if (result == 2 && get_virtual_cpukey(tmp) == 0){
-            printf("! Attempting to decrypt DVDKey with Virtual CPU Key !\n");
-            result = kv_read(buffer, 1);
-        }
+	if (result == 2 && get_virtual_cpukey(cpukeyTmp) == 0){
+		result = kv_read(buffer, 1);
+	}
+
 	if (result != 0){
 		printf(" ! kv_get_dvd_key Failure: kv_read\n");
-		if (result == 2){ //Hash failure
-			printf(" !   the hash check failed probably as a result of decryption failure\n");
-			printf(" !   make sure that the CORRECT key vault for this console is in flash\n");
-			printf(" !   the key vault should be at offset 0x4200 for a length of 0x4200\n");
-			printf(" !   in the 'raw' flash binary from THIS console\n");
+		// Hash failure
+		if (result == 2){
+			kv_print_hash_failure();
 		}
 		return 1;
 	}
@@ -252,32 +321,79 @@ int kv_get_dvd_key(unsigned char *dvd_key)
 		return result;
 	}
 
-	//print_key("dvd key", dvd_key);
 	return 0;
+}
 
+int kv_get_cserial(unsigned char *serial)
+{
+	if (KV_FLASH_SIZE == 0)
+		return -1; //It's bad data!
+	unsigned char buffer[KV_FLASH_SIZE], cpukeyTmp[0x10];
+	int result = 0;
+	int serialLen = 0xC;
+
+	result = kv_read(buffer, 0);
+	if (result == 2 && get_virtual_cpukey(cpukeyTmp) == 0){
+		result = kv_read(buffer, 1);
+	}
+
+	if (result != 0){
+		printf(" ! kv_get_cserial Failure: kv_read\n");
+		// Hash failure
+		if (result == 2){
+			kv_print_hash_failure();
+		}
+		return 1;
+	}
+
+	result = kv_get_key(XEKEY_CONSOLE_SERIAL_NUMBER, serial, &serialLen, buffer);
+	if (result != 0){
+		printf(" ! kv_get_cserial Failure: kv_get_key %d\n", result);
+		return result;
+	}
+
+	return 0;
 }
 
 void print_cpu_dvd_keys(void)
 {
 	unsigned char key[0x10];
+	unsigned char cserial[0xC];
 
 	printf("\n");
 
 	memset(key, '\0', sizeof(key));
+
 	if (cpu_get_key(key)==0)
-		print_key(" * your cpu key", key);
-	if (xenon_logical_nand_data_ok() == 0)
+	{
+		print_key(" * CPU key", key);
+	}
+
+	if (xenon_logical_nand_data_ok() != 0)
+	{
+		printf(" ! Unable to read Keyvault data from NAND\n");
+		printf(" ! xenon_logical_nand_data_ok error\n");
+	}
+	else if(KV_FLASH_OFFSET == 0 || KV_FLASH_SIZE == 0)
+	{
+		printf(" ! Unable to read Keyvault data from NAND\n");
+		printf(" ! Keyvault size or offset is zero\n");
+	}
+	else
 	{
 		memset(key, '\0',sizeof(key));
 		if (get_virtual_cpukey(key)==0)
-			print_key(" * your virtual cpu key", key);
+			print_key(" * Virtual CPU key", key);
 
 		memset(key, '\0', sizeof(key));
 		if (kv_get_dvd_key(key)==0)
-			print_key(" * your dvd key", key);
+			print_key(" * DVD key", key);
+
+		memset(cserial, '\0', sizeof(cserial));
+		if (kv_get_cserial(cserial)==0)
+			print_cserial(" * Serial", cserial);
 	}
-	else
-		printf(" ! Unable to read Keyvault data from NAND\n");
+		
 	printf("\n");
 }
 
@@ -505,26 +621,37 @@ unsigned int xenon_get_XenosID()
 
 int xenon_get_console_type()
 {
-    unsigned int PVR, PCIBridgeRevisionID, consoleVersion, DVEversion;
-    
-    PCIBridgeRevisionID = xenon_get_PCIBridgeRevisionID();
-    consoleVersion = xenon_get_XenosID();
-    DVEversion = xenon_get_DVE();
-    PVR = xenon_get_CPU_PVR();
-	if(PVR == 0x710200 || PVR == 0x710300) //TODO: Add XenosID check also!
-		return REV_ZEPHYR;
-    if(consoleVersion < 0x5821)
-		return REV_XENON;
-	else if(consoleVersion >= 0x5821 && consoleVersion < 0x5831)
+	unsigned int PVR, PCIBridgeRevisionID, DVEversion;
+	 
+	PCIBridgeRevisionID = xenon_get_PCIBridgeRevisionID();
+	DVEversion = xenon_get_DVE();
+	PVR = xenon_get_CPU_PVR();
+
+	if(PVR <= 0x710300) // DD3 or older CPU, must be a Xenon or Zephyr
 	{
-		return REV_FALCON;
+		if(DVEversion >= 0x11) // We've got HANA, this must be a zephyr
+		{
+			return REV_ZEPHYR;
+		}
+		else
+		{
+			return REV_XENON;
+		}
 	}
-	else if(consoleVersion >= 0x5831 && consoleVersion < 0x5841)
-		return REV_JASPER;
-	else if(consoleVersion >= 0x5841 && consoleVersion < 0x5851)
+	else if(PVR <= 0x710500) // Loki CPU, must be a Falcon or Jasper
 	{
-		//TODO: If PVR is always the same for trinity, move it to the if statement above...
-		if (DVEversion >= 0x20 && PVR == 0x710800)
+		if(PCIBridgeRevisionID >= 0x60)
+		{
+			return REV_JASPER;
+		}
+		else
+		{
+			return REV_FALCON;
+		}
+	}
+	else if(PVR <= 0x710800) // Vejle CPU, must be Trinity or Corona
+	{
+		if (DVEversion >= 0x20)
 		{
 			if (PCIBridgeRevisionID >= 0x70 && sfcx_readreg(SFCX_PHISON) != 0)
 				return REV_CORONA_PHISON;
@@ -533,13 +660,14 @@ int xenon_get_console_type()
 		else
 			return REV_TRINITY;
 	}
-	else if(consoleVersion >= 0x5851)
+	else if(PVR <= 0x710A00) // Oban CPU, must be Winchester
 	{
 		if (PCIBridgeRevisionID >= 0x70 && sfcx_readreg(SFCX_PHISON) != 0)
 			return REV_WINCHESTER_MMC;
 		return REV_WINCHESTER;
 	}
-    return REV_UNKNOWN;
+
+	return REV_UNKNOWN;
 }
 
 int xenon_logical_nand_data_ok()
@@ -574,4 +702,12 @@ unsigned int xenon_get_kv_offset()
 	if (xenon_get_logical_nand_data(&ret, 0x6C, 4) == 0)
 		return ret;
 	return 0;
+}
+
+unsigned int xenon_get_ram_size()
+{
+   // 0xE1040000 is the host bridge register where HWINIT stores a little endian uint32
+   // representing the amount of memory (in bytes) installed on the system. CB_B looks
+   // here to determine whether or not to throw panic 0xAF (UNSUPPORTED_RAM_SIZE)
+	return __builtin_bswap32(*(unsigned int *)0xE1040000);
 }

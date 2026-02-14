@@ -61,6 +61,8 @@ int network_init()
 
 	dhcp_wait=mftb();
 	int i = 0;
+	int console_x = console_get_cursor_x();
+
 	while (netif.ip_addr.addr==0 && i < 60) {
 		network_poll();
 		now2=mftb();
@@ -69,6 +71,8 @@ int network_init()
 			i++;
 			if (i % 2)
 				printf(".");
+			else
+				console_clear_to_eol(console_x);
 		}
 	}
 

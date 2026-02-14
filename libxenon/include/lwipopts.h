@@ -69,8 +69,11 @@
 #define ARP_QUEUEING            1
 #define IP_FORWARD              0
 #define IP_OPTIONS              1
-#define DHCP_DOES_ARP_CHECK     1
 
+// Note: IP address conflict detection in LWIP 2.2.1 takes
+// way longer than the ARP check that 1.4.1 does. Disable
+// this to make the DHCP bind effectively instant
+#define LWIP_DHCP_DOES_ACD_CHECK 1
 
 //#define LWIP_DEBUG 					1
 //#define DHCP_DEBUG                    LWIP_DBG_ON

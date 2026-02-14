@@ -5,6 +5,7 @@
 #include <fcntl.h>
 #include <time/time.h>
 #include <xb360/xb360.h>
+#include <string.h>
 #include "xenon_sfcx.h"
 
 struct sfc sfc = {0};

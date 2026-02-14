@@ -18,6 +18,7 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #include <time/time.h>
 #include <unistd.h>
 #include <xenon_soc/xenon_power.h>
+#include <console/console.h>
 
 #include "elf.h"
 #include "elf_abi.h"

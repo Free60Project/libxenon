@@ -39,7 +39,7 @@ static int session_states = TELNET_DISCONNECTED;
 
 static struct tcp_pcb *tel_pcb;
 
-extern void (*stdout_hook)(const char *buf, int len);
+extern void (*stdout_hook)(char *buf, int len);
 
 /**==========================================================================*/
 /* Forward Declarations                                                      */
@@ -82,7 +82,7 @@ void telnet_console_close(void) {
 }
 
 /*===========================================================================*/
-void telnet_console_tx_print(const char *buf, int bc) {
+void telnet_console_tx_print(char *buf, int bc) {
     TEL_TXST *st;
 
     if (session_states != TELNET_CONNECTED) {
@@ -140,13 +140,12 @@ static void telnet_send(struct tcp_pcb *pcb, TEL_TXST *st) {
 }
 
 //recv buffer ...
-int recv_len;
-unsigned char recv_buf[512];
+int telnet_recv_len;
+unsigned char telnet_recv_buf[512];
 
 /*===========================================================================*/
 static err_t telnet_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t err) {
 
-#if 0
     if (err == ERR_OK && p != NULL) {
         unsigned char * payload = (unsigned char*) p->payload;
 
@@ -154,22 +153,26 @@ static err_t telnet_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t e
 
         //caractere par caractere
         if (p->tot_len == 1) {
-            recv_buf[recv_len] = payload[0];
-            recv_len++;
+            telnet_recv_buf[telnet_recv_len] = payload[0];
+            telnet_recv_len++;
         }//par block
         else {
-            memcpy(recv_buf + recv_len, payload, p->tot_len);
-            recv_len += p->tot_len;
+            memcpy(telnet_recv_buf + telnet_recv_len, payload, p->tot_len);
+            telnet_recv_len += p->tot_len;
         }
 
-        if (recv_len > 2) {
-            if ((recv_buf[recv_len - 2] == '\r')&(recv_buf[recv_len - 1] == '\n')) {
-                ParseArgs(recv_buf, recv_len);
-                //DebugBreak();
-                //tel_tx_str(recv_buf, recv_len);
-                //efface
-                recv_len = 0;
-                memset(recv_buf, 0, 512);
+        if (telnet_recv_len > 2) {
+            if ((telnet_recv_buf[telnet_recv_len - 2] == '\r')&(telnet_recv_buf[telnet_recv_len - 1] == '\n')) {
+                // ParseArgs(telnet_recv_buf, telnet_recv_len);
+                // DebugBreak();
+                // tel_tx_str(telnet_recv_buf, telnet_recv_len);
+                // efface
+
+                // Echo char - optional feedback for the user. All receive buffers will be echoed on a new line.
+                // telnet_console_tx_print(telnet_recv_buf, telnet_recv_len);
+                
+                telnet_recv_len = 0;
+                memset(telnet_recv_buf, 0, 512);
             }
         }
     }
@@ -178,7 +181,6 @@ static err_t telnet_recv(void *arg, struct tcp_pcb *pcb, struct pbuf *p, err_t e
     if (err == ERR_OK && p == NULL) {
         telnet_close(pcb);
     }
-#endif
 
     return ERR_OK;
 }

@@ -241,7 +241,6 @@ xenon_ata_dumpinfo(struct xenon_ata_device *dev, char *info) {
 	printf("  * Firmware: %s\n", text);
 	strncpy(text, data + 54, 40);
 	text[40] = 0;
-
 	strncpy(dev->model, text, sizeof(dev->model));
 	printf("  * Model: %s\n", dev->model);
 
@@ -458,7 +457,6 @@ xenon_atapi_inquiry_model(struct xenon_ata_device *dev) {
 	};
 
 	buf[8 + 24] = '\0';
-
 	strncpy(dev->model, &buf[8], sizeof(dev->model));
 	printf("ATAPI inquiry model: %s %d\n", dev->model);
 

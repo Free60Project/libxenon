@@ -15,8 +15,8 @@ var searchData=
   ['maxnakloops_12',['maxnakloops',['../structfsm.html#ada4482525ceed53e0e1379ccbf1ba039',1,'fsm']]],
   ['maxpacket_13',['maxpacket',['../structehci__urb.html#aa3e6c1a467e2d9671571c31b75f09c17',1,'ehci_urb']]],
   ['maxpower_14',['MaxPower',['../structusb__config__descr__s.html#a01d33970636c176c86075dc7c710ff3a',1,'usb_config_descr_s']]],
-  ['maxslotindex_15',['maxSlotIndex',['../structvjcompress.html#a62f5f3680edaceb76f477360e5c10db5',1,'vjcompress']]],
-  ['maxslotindex_16',['maxslotindex',['../structipcp__options.html#aa9f88f16f4e5fcb73075417b5692801b',1,'ipcp_options']]],
+  ['maxslotindex_15',['maxslotindex',['../structipcp__options.html#aa9f88f16f4e5fcb73075417b5692801b',1,'ipcp_options']]],
+  ['maxslotindex_16',['maxSlotIndex',['../structvjcompress.html#a62f5f3680edaceb76f477360e5c10db5',1,'vjcompress']]],
   ['maxtermtransmits_17',['maxtermtransmits',['../structfsm.html#ab3cd5e2bf84d72a04cb78308d4a3de81',1,'fsm']]],
   ['mcount_5fcount_18',['mcount_count',['../structgmonparam.html#a643b76b07f1488a26f3fe85cbed5b9cb',1,'gmonparam']]],
   ['mcount_5foverhead_19',['mcount_overhead',['../structgmonparam.html#a10b632d7c1f23f8dbe5762b423c43b68',1,'gmonparam']]],
@@ -45,10 +45,11 @@ var searchData=
   ['misc_42',['misc',['../xenos__edid_8h.html#a80d8f411f06975911f234ab917b7d9d4',1,'misc():&#160;xenos_edid.h'],['../structdetailed__pixel__timing.html#a32fd553d181faa8724a6f8e476b124e4',1,'detailed_pixel_timing::misc()']]],
   ['mkdir_5fr_43',['mkdir_r',['../structdevoptab__t.html#aa9915f3b8c0347e01eef6c03de2917d4',1,'devoptab_t']]],
   ['mode_44',['mode',['../structdes3__context.html#a609e7e53195aded2a1fd72201322becf',1,'des3_context::mode()'],['../structdes__context.html#ad74deaba449f48518e3610d89bc04bbd',1,'des_context::mode()']]],
-  ['mount_5fusb_5fdevice_45',['mount_usb_device',['../usbstorage_8c.html#a32924906e52f75b7f38da96b723dc396',1,'usbstorage.c']]],
-  ['mru_46',['mru',['../structlcp__options.html#a9def2be8fea49c66d12af1a60dbd09dd',1,'lcp_options']]],
-  ['msaa_5fsamples_47',['msaa_samples',['../structXenosDevice.html#a6f6dd7151b4f1fee6ab2260d8a19abc0',1,'XenosDevice']]],
-  ['msg_48',['msg',['../structtcpip__msg.html#a7b7bee673439bc3cd4d398341b28c127',1,'tcpip_msg']]],
-  ['mtu_49',['mtu',['../structnetif.html#aca7d56b4e0f822b0ced2885f222b8d48',1,'netif']]],
-  ['mudflap_5fmode_50',['mudflap_mode',['../struct____mf__options.html#a498aa50d2b0f4e1324ba5f5d312b04b5',1,'__mf_options']]]
+  ['model_45',['model',['../structxenon__ata__device.html#a4f4347396bea1d72444cfd0f9c2b98c6',1,'xenon_ata_device']]],
+  ['mount_5fusb_5fdevice_46',['mount_usb_device',['../usbstorage_8c.html#a32924906e52f75b7f38da96b723dc396',1,'usbstorage.c']]],
+  ['mru_47',['mru',['../structlcp__options.html#a9def2be8fea49c66d12af1a60dbd09dd',1,'lcp_options']]],
+  ['msaa_5fsamples_48',['msaa_samples',['../structXenosDevice.html#a6f6dd7151b4f1fee6ab2260d8a19abc0',1,'XenosDevice']]],
+  ['msg_49',['msg',['../structtcpip__msg.html#a7b7bee673439bc3cd4d398341b28c127',1,'tcpip_msg']]],
+  ['mtu_50',['mtu',['../structnetif.html#aca7d56b4e0f822b0ced2885f222b8d48',1,'netif']]],
+  ['mudflap_5fmode_51',['mudflap_mode',['../struct____mf__options.html#a498aa50d2b0f4e1324ba5f5d312b04b5',1,'__mf_options']]]
 ];

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # originally written by Uwe Hermann <uwe@hermann-uwe.de>, released as public domain.
 # changed for xenon by Felix Domke <tmbinc@elitedvb.net>, still public domain
@@ -7,14 +7,27 @@ TARGET=xenon
 PREFIX="${PREFIX:-/usr/local/xenon}" # Install location of your final toolchain.
 PARALLEL=${PARALLEL:--j$(nproc --all)}
 
-BINUTILS_DL="https://ftp.gnu.org/gnu/binutils/binutils-2.32.tar.gz"
-GCC_DL="https://ftp.gnu.org/gnu/gcc/gcc-9.2.0/gcc-9.2.0.tar.gz"
-NEWLIB_DL="https://sourceware.org/pub/newlib/newlib-3.1.0.tar.gz"
+# Update the below definitions whenever any component of the toolchain is updated
+CURRENT_REV=2 # 0-indexed
+REV=${REV:-$CURRENT_REV}
 
-ZLIB_DL="https://zlib.net/fossils/zlib-1.2.11.tar.gz"
-LIBPNG_DL="https://download.sourceforge.net/libpng/libpng-1.5.10.tar.xz"
-BZIP2_DL="https://sourceware.org/pub/bzip2/bzip2-1.0.6.tar.gz"
-FREETYPE_DL="https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz"
+declare -a BINUTILS_VERS=("2.22" "2.28" "2.32")
+declare -a GCC_VERS=("4.7.1" "6.3.0" "9.2.0")
+declare -a NEWLIB_VERS=("1.20.0" "2.5.0" "3.1.0")
+
+declare -a ZLIB_VERS=("1.2.8" "1.2.11" "1.2.11")
+declare -a LIBPNG_VERS=("1.5.10" "1.5.10" "1.5.10")
+declare -a BZIP2_VERS=("1.0.6" "1.0.6" "1.0.6")
+declare -a FREETYPE_VERS=("2.4.9" "2.4.9" "2.10.4")
+
+BINUTILS_DL="https://ftp.gnu.org/gnu/binutils/binutils-${BINUTILS_VERS[$REV]:-${BINUTILS_VERS[$CURRENT_REV]}}.tar.gz"
+GCC_DL="https://ftp.gnu.org/gnu/gcc/gcc-${GCC_VERS[$REV]:-${GCC_VERS[$CURRENT_REV]}}/gcc-${GCC_VERS[$REV]:-${GCC_VERS[$CURRENT_REV]}}.tar.gz"
+NEWLIB_DL="https://sourceware.org/pub/newlib/newlib-${NEWLIB_VERS[$REV]:-${NEWLIB_VERS[$CURRENT_REV]}}.tar.gz"
+
+ZLIB_DL="https://zlib.net/fossils/zlib-${ZLIB_VERS[$REV]:-${ZLIB_VERS[$CURRENT_REV]}}.tar.gz"
+LIBPNG_DL="https://download.sourceforge.net/libpng/libpng-${LIBPNG_VERS[$REV]:-${LIBPNG_VERS[$CURRENT_REV]}}.tar.xz"
+BZIP2_DL="https://sourceware.org/pub/bzip2/bzip2-${BZIP2_VERS[$REV]:-${BZIP2_VERS[$CURRENT_REV]}}.tar.gz"
+FREETYPE_DL="https://download.savannah.gnu.org/releases/freetype/freetype-${FREETYPE_VERS[$REV]:-${FREETYPE_VERS[$CURRENT_REV]}}.tar.gz"
 
 BINUTILS=$(basename $BINUTILS_DL .tar.gz)
 GCC=$(basename $GCC_DL .tar.gz)
@@ -38,7 +51,6 @@ if type "pv" &> /dev/null; then
 fi
 
 cd "$(dirname "$0")"
-#FSBRANCH=Swizzy
 
 # path to the logfile
 LOGFILE=build.log

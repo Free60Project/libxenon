@@ -241,7 +241,11 @@ xenon_ata_dumpinfo(struct xenon_ata_device *dev, char *info) {
 	printf("  * Firmware: %s\n", text);
 	strncpy(text, data + 54, 40);
 	text[40] = 0;
-	printf("  * Model: %s\n", text);
+
+	strncpy(dev->model, text, sizeof(dev->model));
+	(dev->model)[sizeof(dev->model) - 1] = '\0';
+
+	printf("  * Model: %s\n", dev->model);
 
 	if (!dev->atapi) {
 		printf("  * Addressing mode: %d\n", dev->addressing_mode);
@@ -456,7 +460,11 @@ xenon_atapi_inquiry_model(struct xenon_ata_device *dev) {
 	};
 
 	buf[8 + 24] = '\0';
-	printf("ATAPI inquiry model: %s\n", &buf[8]);
+
+	strncpy(dev->model, &buf[8], sizeof(dev->model));
+	(dev->model)[sizeof(dev->model) - 1] = '\0';
+
+	printf("ATAPI inquiry model: %s %d\n", dev->model);
 
 	return 0;
 }

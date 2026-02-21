@@ -209,8 +209,8 @@ return_to_xell:
 
 	1:	lwz     %r8,0(%r5)		//Memcopy
 		stw     %r8,0(%r6)
-		dcbst   %r0,%r6		//Flush cache to ram
-		icbi	%r0,%r6
+		dcbst   0,%r6		//Flush cache to ram
+		icbi	0,%r6
 		sync	0
 		isync
 		addi    %r6,%r6,4

@@ -37,7 +37,7 @@ int network_init()
 #ifdef STATS
 	stats_init();
 #endif /* STATS */
-	printf(" * initializing lwip 2.2.1...\n");
+	printf(" * Initializing lwIP 2.2.1...\n");
 
 	//printf(" * configuring device for DHCP...\r\n");
 	/* Start Network with DHCP */
@@ -47,7 +47,7 @@ int network_init()
 
 	lwip_init();
 
-	printf(" * initializing NIC\n");
+	printf(" * Initializing NIC\n");
 	if (!netif_add(&netif, &ipaddr, &netmask, &gateway, NULL, enet_init, ip_input)){
 		printf(" ! netif_add failed!\n");
 		return NETWORK_INIT_FAILURE;
@@ -55,7 +55,7 @@ int network_init()
 	netif_set_default(&netif);
 	netif_set_up(&netif);
 
-	printf(" * requesting dhcp...");
+	printf(" * Requesting dhcp...");
 	//dhcp_set_struct(&netif, &netif_dhcp);
 	dhcp_start(&netif);
 
@@ -80,7 +80,7 @@ int network_init()
 		printf("success\n");
 	} else {
 		printf("failed\n");
-		printf(" * now assigning a static ip\n");
+		printf(" * Now assigning a static ip\n");
 
 		IP4_ADDR(&ipaddr, 192, 168, 1, 99);
 		IP4_ADDR(&gateway, 192, 168, 1, 1);
@@ -101,9 +101,9 @@ void network_poll()
 
 void network_print_config()
 {
-	printf(" * network config: %d.%d.%d.%d / %d.%d.%d.%d\n",
+	printf(" * Network config: %d.%d.%d.%d / %d.%d.%d.%d\n",
 		NTOA(netif.ip_addr), NTOA(netif.netmask));
-	printf("              MAC: %02X%02X%02X%02X%02X%02X\n\n",
+	printf("              MAC: %02X:%02X:%02X:%02X:%02X:%02X\n\n",
 			netif.hwaddr[0], netif.hwaddr[1], netif.hwaddr[2],
 			netif.hwaddr[3], netif.hwaddr[4], netif.hwaddr[5]);
 }

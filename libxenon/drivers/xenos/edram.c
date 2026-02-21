@@ -476,7 +476,7 @@ int edram_p2(int r3, int r4, int r5, int r6, int r7, int r8, int r9, int r10)
 			udelay(5000);
 			if (xenos_read32(0x3c94) & 0x80000000)
 			{
-				printf("ping test: %08lx\n", xenos_read32(0x3c94));
+				printf("ping test: %08x\n", xenos_read32(0x3c94));
 				break;
 			}
 		}

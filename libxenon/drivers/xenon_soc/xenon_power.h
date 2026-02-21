@@ -18,6 +18,7 @@ int  xenon_run_thread_task(int thread, void *stack, void *task);
 int xenon_is_thread_task_running(int thread);
 void xenon_sleep_thread(int thread);
 void xenon_set_single_thread_mode();
+int xenon_get_speed();
 
 #ifdef __cplusplus
 };

@@ -5,6 +5,13 @@ Copyright (C) 2010-2011  Hector Martin "marcan" <hector@marcansoft.com>
 This code is licensed to you under the terms of the GNU GPL, version 2;
 see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wint-conversion"
+#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
 #include <fcntl.h>
 #include <libfdt/libfdt.h>
@@ -18,6 +25,7 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #include <time/time.h>
 #include <unistd.h>
 #include <xenon_soc/xenon_power.h>
+#include <console/console.h>
 
 #include "elf.h"
 #include "elf_abi.h"
@@ -355,7 +363,7 @@ static int elf_VerifyHeaders(void *addr, int size) {
   for (int i = 0; i < ehdr->e_phnum; i++) {
     phdr = (Elf32_Phdr *)(addr + ehdr->e_phoff + (i * sizeof(Elf32_Phdr)));
     if (phdr->p_offset + phdr->p_filesz > size) {
-      printf("ELF: Program header %d exceeds file size! (0x%.8X > 0x%.8X)\n",
+      printf("ELF: Program header exceeds file size! (0x%.8X > 0x%.8X)\n",
              phdr->p_offset + phdr->p_filesz, size);
       return -1;
     }
@@ -371,7 +379,7 @@ int elf_runFromMemory(void *addr, int size) {
   int i;
 
   if (elf_VerifyHeaders(addr, size) != 0) {
-    printf(" * Elf headers invalid, abort!\n", addr);
+    printf(" * Elf headers invalid, abort!\n");
     return -1;
   }
 
@@ -386,7 +394,7 @@ int elf_runFromMemory(void *addr, int size) {
     return -1;
   }
 
-  printf(" * Executing @ 0x%.8X size 0x%.8X...\n", addr, size);
+  printf(" * Executing @ %p size 0x%.8X...\n", addr, size);
   shutdown_drivers();
 
   // relocate our code
@@ -625,7 +633,7 @@ void kernel_relocate_initrd(void *start, size_t size) {
   initrd_start = INITRD_RELOC_START;
   initrd_size = size;
 
-  printf("Initrd at %p/0x%lx: %ld bytes (%ldKiB)\n", initrd_start,
+  printf("Initrd at %p/0x%x: %d bytes (%dKiB)\n", initrd_start,
          (u32)PHYSADDR((u32)initrd_start), initrd_size, initrd_size / 1024);
 }
 
@@ -651,3 +659,5 @@ void kernel_build_cmdline(const char *parameters, const char *root) {
 
   printf("Kernel command line: '%s'\n", bootargs);
 }
+
+#pragma GCC diagnostic pop

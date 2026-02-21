@@ -175,9 +175,8 @@ _mcleanup()
 	if (p->state == GMON_PROF_ERROR)
 		ERR("_mcleanup: tos overflow\n");
 
-	size_t size = sizeof(clockinfo);
-	
 #if 0	
+	size_t size = sizeof(clockinfo);
 	mib[0] = CTL_KERN;
 	mib[1] = KERN_CLOCKRATE;
 	if (sysctl(mib, 2, &clockinfo, &size, NULL, 0) < 0) {

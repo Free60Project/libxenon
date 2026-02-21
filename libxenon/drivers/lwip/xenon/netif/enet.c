@@ -386,7 +386,6 @@ static void
 enet_input(struct netif *netif)
 {
 	struct enet_context *context = (struct enet_context *) netif->state;
-	struct eth_hdr *ethhdr;
 	struct pbuf *p;
 
 	p = enet_linkinput(context);
@@ -397,8 +396,6 @@ enet_input(struct netif *netif)
 #if LINK_STATS
 	lwip_stats.link.recv++;
 #endif /* LINK_STATS */
-
-	ethhdr = p->payload;
 
 	/* pass to network layer */
 	if (ethernet_input(p, netif) != ERR_OK) {

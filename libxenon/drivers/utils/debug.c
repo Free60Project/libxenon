@@ -28,7 +28,7 @@ static int seems_valid(unsigned int p){
 	return p>=0x80000000 && p<(unsigned int)elfldr_start;
 }
 
-#define DO_RA(x) if(seems_valid(addr) && x<max_depth){ addr=(unsigned int)__builtin_return_address(x); printf("%x; ",addr); }
+#define DO_RA(x) if(seems_valid(addr) && x<max_depth){ addr=(unsigned int)__builtin_return_address(x); printf("0x%x; ",addr); }
 
 void stack_trace(int max_depth)
 {

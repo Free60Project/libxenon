@@ -55,7 +55,7 @@ static void _cpu_print_stack(void *pc,void *lr,void *r1)
 				sprintf(text,"%s%p",text,(void*)l);
 				break;
 			default:
-				if(p && p->up) sprintf(text,"%s%x",text,(u32)(p->up->lr));
+				if(p && p->up) sprintf(text,"%s0x%x",text,(u32)(p->up->lr));
 				break;
 		}
 	}
@@ -82,7 +82,7 @@ void crashdump(u32 exception,u64 * context)
 	console_clrscr();
 	
 	if (exception){
-		sprintf(text,"\nException vector! (%x)\n\n",exception);
+		sprintf(text,"\nException vector! (0x%x)\n\n",exception);
 	}else{
 		strcpy(text,"\nSegmentation fault!\n\n");
 	}

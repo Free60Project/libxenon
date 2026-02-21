@@ -55,7 +55,7 @@ static void _cpu_print_stack(void *pc,void *lr,void *r1)
 				sprintf(text,"%s%p",text,(void*)l);
 				break;
 			default:
-				if(p && p->up) sprintf(text,"%s%p",text,(p->up->lr));
+				if(p && p->up) sprintf(text,"%s%x",text,(u32)(p->up->lr));
 				break;
 		}
 	}

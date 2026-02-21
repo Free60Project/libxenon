@@ -45,7 +45,7 @@ static void xenos_ana_write(int addr, uint32_t reg)
 		cycle++;
 	}
 	if (cycle == 1000)
-		printf("\nxenos_ana_write - addr: 0x%X reg: 0x%X - FAILED!\n");
+		printf("\nxenos_ana_write - addr: 0x%X reg: 0x%X - FAILED!\n", addr, reg);
 }
 
 static int isCoronaOrWinchester()

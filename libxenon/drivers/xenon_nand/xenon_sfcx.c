@@ -595,7 +595,7 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
 		size = RAW_NAND_64;
 	else if((size != 0x1080000)&& (size != RAW_NAND_64)) // 16 M size
 	{
-		printf("error: %s - size %d is not valid image size!\n", filename, size);
+		printf("error: %s - size %ld is not valid image size!\n", filename, size);
 		close(f);
 		return -1;
 	}
@@ -629,7 +629,7 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
 	if (f < 0)	
 		return f; //Can't open file!
         
-	printf("%s opened OK, attempting to write 0x%x bytes to flash...\n",filename, size);
+	printf("%s opened OK, attempting to write 0x%lx bytes to flash...\n",filename, size);
 	if(rawflash_writeImage(size, f) == 1)
 		printf("image written, shut down now!\n");
 	else

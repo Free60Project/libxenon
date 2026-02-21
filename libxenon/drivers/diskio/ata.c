@@ -458,7 +458,7 @@ xenon_atapi_inquiry_model(struct xenon_ata_device *dev) {
 
 	buf[8 + 24] = '\0';
 	strncpy(dev->model, &buf[8], sizeof(dev->model));
-	printf("ATAPI inquiry model: %s %d\n", dev->model);
+	printf("ATAPI inquiry model: %s\n", dev->model);
 
 	return 0;
 }
@@ -703,7 +703,7 @@ xenon_ata_init1(struct xenon_ata_device *dev, uint32_t ioaddress, uint32_t ioadd
 	xenon_ata_regget2(dev, XENON_ATA_REG2_CONTROL);
 	xenon_ata_regget2(dev, XENON_ATA_REG2_CONTROL);
 
-	printf("SATA device at %08lx\n", dev->ioaddress);
+	printf("SATA device at %08x\n", dev->ioaddress);
 
 	return 0;
 }

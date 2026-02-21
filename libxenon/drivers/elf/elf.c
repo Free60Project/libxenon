@@ -363,7 +363,7 @@ static int elf_VerifyHeaders(void *addr, int size) {
   for (int i = 0; i < ehdr->e_phnum; i++) {
     phdr = (Elf32_Phdr *)(addr + ehdr->e_phoff + (i * sizeof(Elf32_Phdr)));
     if (phdr->p_offset + phdr->p_filesz > size) {
-      printf("ELF: Program header %d exceeds file size! (0x%.8X > 0x%.8X)\n",
+      printf("ELF: Program header exceeds file size! (0x%.8X > 0x%.8X)\n",
              phdr->p_offset + phdr->p_filesz, size);
       return -1;
     }
@@ -379,7 +379,7 @@ int elf_runFromMemory(void *addr, int size) {
   int i;
 
   if (elf_VerifyHeaders(addr, size) != 0) {
-    printf(" * Elf headers invalid, abort!\n", addr);
+    printf(" * Elf headers invalid, abort!\n");
     return -1;
   }
 
@@ -394,7 +394,7 @@ int elf_runFromMemory(void *addr, int size) {
     return -1;
   }
 
-  printf(" * Executing @ 0x%.8X size 0x%.8X...\n", addr, size);
+  printf(" * Executing @ 0x%p size 0x%.8X...\n", addr, size);
   shutdown_drivers();
 
   // relocate our code
@@ -633,7 +633,7 @@ void kernel_relocate_initrd(void *start, size_t size) {
   initrd_start = INITRD_RELOC_START;
   initrd_size = size;
 
-  printf("Initrd at %p/0x%lx: %ld bytes (%ldKiB)\n", initrd_start,
+  printf("Initrd at %p/0x%x: %d bytes (%dKiB)\n", initrd_start,
          (u32)PHYSADDR((u32)initrd_start), initrd_size, initrd_size / 1024);
 }
 

@@ -76,7 +76,7 @@ static s32 EHCI_do_one(u32 idx,u32 addr)
 	ehci->caps = (void *)addr;
 	ehci->regs = (void *)(addr + HC_LENGTH(ehci_readl(&ehci->caps->hc_capbase)));	
 	
-	printf("Initialising EHCI bus %d at %p\n",idx,addr);
+	printf("Initialising EHCI bus %d at %x\n",idx,addr);
 	
 	/* Setup EHCI */
 	ehci->hcs_params = ehci_readl(&ehci->caps->hcs_params);

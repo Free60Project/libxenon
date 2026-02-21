@@ -10,12 +10,9 @@ ifeq ($(strip $(DEVKITXENON)),)
 $(error "please set DEVKITXENON")
 endif
 
-# ipv4 or ipv6
-LWIP_MODE = ipv4
-
 INCLUDES = -I ../../drivers -I ../../include \
 	-I ../../drivers/nocfe \
-	-I ../../drivers/lwip/include/ -I ../../drivers/lwip/xenon/include/ -I ../../drivers/lwip/include/$(LWIP_MODE)/
+	-I ../../drivers/lwip/include/ -I ../../drivers/lwip/xenon/include/
 
 CFLAGS = -g -mcpu=cell -mtune=cell -Os \
 	-maltivec \
@@ -85,8 +82,7 @@ LIBOBJS = crti.o crtn.o \
 	../../drivers/xenos/xenos_edid.o \
 	../../drivers/lwip/core/init.o \
 	../../drivers/lwip/core/tcp_in.o \
-	../../drivers/lwip/core/ipv4/inet_chksum.o \
-	../../drivers/lwip/core/ipv4/inet.o \
+	../../drivers/lwip/core/inet_chksum.o \
 	../../drivers/lwip/core/mem.o \
 	../../drivers/lwip/core/dns.o \
 	../../drivers/lwip/core/memp.o \
@@ -95,19 +91,22 @@ LIBOBJS = crti.o crtn.o \
 	../../drivers/lwip/core/stats.o \
 	../../drivers/lwip/core/sys.o \
 	../../drivers/lwip/core/tcp.o \
-	../../drivers/lwip/core/ipv4/ip_addr.o \
+	../../drivers/lwip/core/ipv4/ip4_addr.o \
 	../../drivers/lwip/core/ipv4/icmp.o \
-	../../drivers/lwip/core/ipv4/ip.o \
-	../../drivers/lwip/core/ipv4/ip_frag.o \
+	../../drivers/lwip/core/ip.o \
+	../../drivers/lwip/core/ipv4/ip4.o \
+	../../drivers/lwip/core/ipv4/ip4_frag.o \
 	../../drivers/lwip/core/tcp_out.o \
 	../../drivers/lwip/core/udp.o \
-	../../drivers/lwip/netif/etharp.o \
-	../../drivers/lwip/netif/loopif.o \
-	../../drivers/lwip/core/dhcp.o \
+	../../drivers/lwip/core/ipv4/etharp.o \
+	../../drivers/lwip/core/ipv4/dhcp.o \
+	../../drivers/lwip/core/ipv4/acd.o \
 	../../drivers/lwip/core/raw.o \
 	../../drivers/lwip/core/def.o \
-	../../drivers/lwip/core/timers.o \
+	../../drivers/lwip/core/timeouts.o \
+	../../drivers/lwip/netif/ethernet.o \
 	../../drivers/lwip/xenon/src/lib.o \
+	../../drivers/lwip/xenon/src/sys_arch.o \
 	../../drivers/lwip/xenon/netif/enet.o \
 	../../drivers/network/network.o\
 	../../drivers/elf/elf.o \
@@ -160,9 +159,10 @@ install: libxenon.a
 	mkdir -p $(DEVKITXENON)/$(CROSS)/lib/
 	cp -r ../../drivers/* $(DEVKITXENON)/usr/include/
 	cp -r ../../include/* $(DEVKITXENON)/usr/include/
-	install -m 0664 ../../drivers/lwip/include/lwip/* $(DEVKITXENON)/usr/include/lwip/
-	install -m 0664 ../../drivers/lwip/include/$(LWIP_MODE)/lwip/* $(DEVKITXENON)/usr/include/lwip/
-	install -m 0664 ../../drivers/lwip/include/netif/* $(DEVKITXENON)/usr/include/netif/
+	(cd ../../drivers/lwip/include/lwip && find . -type d -exec install -d $(DEVKITXENON)/usr/include/lwip/{} \;)
+	(cd ../../drivers/lwip/include/lwip && find . -type f -name "*.h" -exec install -m 0664 {} $(DEVKITXENON)/usr/include/lwip/{} \;)
+	(cd ../../drivers/lwip/include/netif && find . -type d -exec install -d $(DEVKITXENON)/usr/include/netif/{} \;)
+	(cd ../../drivers/lwip/include/netif && find . -type f -name "*.h" -exec install -m 0664 {} $(DEVKITXENON)/usr/include/netif/{} \;)
 	install -m 0664 ../../drivers/lwip/xenon/include/arch/* $(DEVKITXENON)/usr/include/arch/
 	install -m 0664 ../../../devkitxenon/app.lds $(DEVKITXENON)/
 	install -m 0664 ../../startup/xenon/crt1.o $(DEVKITXENON)/$(CROSS)/lib/

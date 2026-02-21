@@ -5,7 +5,6 @@
 #include "lwip/pbuf.h"
 #include "lwip/sys.h"
 #include "lwip/stats.h"
-#include "lwip/timers.h"
 #include "netif/etharp.h"
 
 #include <time/time.h>
@@ -13,6 +12,7 @@
 #include <ppc/cache.h>
 #include <pci/io.h>
 #include <xenon_smc/xenon_gpio.h>
+#include <malloc.h>
 
 #define TX_DESCRIPTOR_NUM 0x10
 #define RX_DESCRIPTOR_NUM 0x10
@@ -179,7 +179,7 @@ err_t enet_init(struct netif *netif)
 
 	netif->hwaddr_len = 6;
 	netif->mtu = 1500;
-	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP;
+	netif->flags = NETIF_FLAG_BROADCAST | NETIF_FLAG_ETHARP | NETIF_FLAG_ETHERNET;
 
 #if LWIP_NETIF_HOSTNAME
     netif->hostname = "XeLL";
@@ -285,6 +285,8 @@ static int enet_open(struct netif *netif)
 	write32n(0xea001410, __builtin_bswap32(0x00101c11));	// enable RX
 	write32n(0xea001400, __builtin_bswap32(0x00001c01));	// enable TX
 
+	netif_set_link_up(netif);
+
 	return 0;
 }
 
@@ -385,7 +387,6 @@ static void
 enet_input(struct netif *netif)
 {
 	struct enet_context *context = (struct enet_context *) netif->state;
-	struct eth_hdr *ethhdr;
 	struct pbuf *p;
 
 	p = enet_linkinput(context);
@@ -396,8 +397,6 @@ enet_input(struct netif *netif)
 #if LINK_STATS
 	lwip_stats.link.recv++;
 #endif /* LINK_STATS */
-
-	ethhdr = p->payload;
 
 	/* pass to network layer */
 	if (ethernet_input(p, netif) != ERR_OK) {

@@ -394,7 +394,7 @@ int elf_runFromMemory(void *addr, int size) {
     return -1;
   }
 
-  printf(" * Executing @ 0x%p size 0x%.8X...\n", addr, size);
+  printf(" * Executing @ %p size 0x%.8X...\n", addr, size);
   shutdown_drivers();
 
   // relocate our code

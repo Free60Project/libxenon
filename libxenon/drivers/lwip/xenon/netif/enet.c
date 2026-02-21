@@ -13,6 +13,7 @@
 #include <ppc/cache.h>
 #include <pci/io.h>
 #include <xenon_smc/xenon_gpio.h>
+#include <malloc.h>
 
 #define TX_DESCRIPTOR_NUM 0x10
 #define RX_DESCRIPTOR_NUM 0x10

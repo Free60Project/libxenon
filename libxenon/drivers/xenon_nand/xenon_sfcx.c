@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <string.h>
 #include <time/time.h>
 #include <xb360/xb360.h>
 #include "xenon_sfcx.h"

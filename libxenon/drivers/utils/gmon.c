@@ -47,6 +47,7 @@ static char sccsid[] = "@(#)gmon.c	8.1 (Berkeley) 6/4/93";
 #include <fcntl.h>
 #include <unistd.h>
 #include <debug.h>
+#include <stdlib.h>
 
 char *minbrk;
 

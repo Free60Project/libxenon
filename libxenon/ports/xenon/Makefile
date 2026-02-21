@@ -23,6 +23,7 @@ CFLAGS = -g -mcpu=cell -mtune=cell -Os \
 	-Wall -Wno-format -Wno-attributes -I. -DBYTE_ORDER=BIG_ENDIAN \
 	-m32 -fno-pic -mpowerpc64 \
 	-D_CFE_=1 -DENDIAN_BIG=1 \
+	-Werror-implicit-function-declaration \
 	$(INCLUDES)
 
 # we need to fix the toolchain to work with multilib here.

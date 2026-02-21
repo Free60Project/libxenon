@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+
 #include <console/console.h>
 #include <ppc/cache.h>
 #include <ppc/register.h>
@@ -119,3 +122,5 @@ void crashdump(u32 exception,u64 * context)
 		}
 	}
 }
+
+#pragma GCC diagnostic pop

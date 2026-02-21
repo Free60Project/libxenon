@@ -26,6 +26,9 @@
  */
 
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Waddress-of-packed-member"
+#pragma GCC diagnostic ignored "-Wunused-function"
 
 /* magic numbers that can affect system performance */
 #define	EHCI_TUNE_CERR		0	/* 0-3 qtd retries; 0 == don't stop */ /* by  Hermes: i have replaced 3 by 0 and now it donÃ¯Â¿Â½t hang when i extract the device*/
@@ -1065,3 +1068,5 @@ int ehci_get_device_list(struct ehci_hcd * ehci, u8 maxdev, u8 b0, u8*num, u16*b
 
 #include "usb2.c"
 #include "usbstorage.c"
+
+#pragma GCC diagnostic pop

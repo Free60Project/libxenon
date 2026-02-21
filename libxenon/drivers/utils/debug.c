@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wframe-address"
+
 #include <stdlib.h>
 #include <debug.h>
 #include <ppc/register.h>
@@ -72,3 +75,5 @@ void data_breakpoint(void * address, int on_read, int on_write)
     
     mtspr(dabr,db);
 }
+
+#pragma GCC diagnostic pop

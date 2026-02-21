@@ -5,6 +5,13 @@ Copyright (C) 2010-2011  Hector Martin "marcan" <hector@marcansoft.com>
 This code is licensed to you under the terms of the GNU GPL, version 2;
 see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 */
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpointer-to-int-cast"
+#pragma GCC diagnostic ignored "-Wincompatible-pointer-types"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wint-conversion"
+#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
+#pragma GCC diagnostic ignored "-Wunused-variable"
 
 #include <fcntl.h>
 #include <libfdt/libfdt.h>
@@ -652,3 +659,5 @@ void kernel_build_cmdline(const char *parameters, const char *root) {
 
   printf("Kernel command line: '%s'\n", bootargs);
 }
+
+#pragma GCC diagnostic pop

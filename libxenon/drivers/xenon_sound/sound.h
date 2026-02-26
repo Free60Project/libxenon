@@ -12,6 +12,14 @@ void xenon_sound_submit(void *data, int len);
 int xenon_sound_get_free(void);
 int xenon_sound_get_unplayed(void);
 
+#define XENON_TONE_AMPLITUDE_100 12000
+#define XENON_TONE_AMPLITUDE_50  6000
+#define XENON_TONE_AMPLITUDE_25  3000
+
+void xenon_tone(uint32_t frequency, uint32_t duration, int16_t amplitude);
+
+#define xenon_post_beep() xenon_tone(950, 250, XENON_TONE_AMPLITUDE_25)
+
 #ifdef __cplusplus
 };
 #endif

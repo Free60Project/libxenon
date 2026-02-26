@@ -129,8 +129,8 @@ void xenon_tone(uint32_t frequency, uint32_t duration, int16_t amplitude)
 {
    uint8_t pcm_data[1024];
 
+   // xenon assumes a 48kHz sample rate for submitted audio data
    const uint32_t sample_rate = 48000;
-   //const int16_t amplitude = 12000;
 
 	uint32_t phase = 0;
 	uint32_t phase_step = (uint32_t)(((uint64_t)frequency << 32) / sample_rate);
@@ -165,7 +165,7 @@ void xenon_tone(uint32_t frequency, uint32_t duration, int16_t amplitude)
 
 		while (xenon_sound_get_unplayed() >= 32768);
 
-		xenon_sound_submit(pcm_data, sizeof(pcm_data));//chunk_frames * bytes_per_frame);
+		xenon_sound_submit(pcm_data, sizeof(pcm_data));
 		frames_remaining -= chunk_frames;
 	}
 }

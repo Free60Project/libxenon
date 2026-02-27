@@ -1,4 +1,5 @@
 #include <pci/io.h>
+#include <stdint.h>
 #include <string.h>
 #include <xenon_smc/xenon_smc.h>
 #include <xenon_smc/xenon_gpio.h>
@@ -122,4 +123,49 @@ int xenon_sound_get_unplayed(void)
 	l += cur_len;
 	
 	return l;
+}
+
+void xenon_tone(uint32_t frequency, uint32_t duration, int16_t amplitude)
+{
+   uint8_t pcm_data[1024];
+
+   // xenon assumes a 48kHz sample rate for submitted audio data
+   const uint32_t sample_rate = 48000;
+
+	uint32_t phase = 0;
+	uint32_t phase_step = (uint32_t)(((uint64_t)frequency << 32) / sample_rate);
+
+	const uint32_t bytes_per_frame = sizeof(int16_t) * 2;
+	const uint32_t total_frames = (sample_rate * duration) / 1000;
+	uint32_t frames_remaining = total_frames;
+
+	while (frames_remaining)
+	{
+		uint32_t i;
+		uint32_t chunk_frames = sizeof(pcm_data) / bytes_per_frame;
+
+		if (chunk_frames > frames_remaining)
+			chunk_frames = frames_remaining;
+
+		for (i = 0; i < chunk_frames; ++i)
+		{
+			// 50% duty square wave
+			int16_t v = (phase & 0x80000000U) ? -amplitude : amplitude;
+			uint16_t le = (uint16_t)v;
+			uint32_t o = i * bytes_per_frame;
+
+			// Write little-endian 16-bit stereo PCM
+			pcm_data[o + 0] = le & 0xFF;
+			pcm_data[o + 1] = (le >> 8) & 0xFF;
+			pcm_data[o + 2] = le & 0xFF;
+			pcm_data[o + 3] = (le >> 8) & 0xFF;
+
+			phase += phase_step;
+		}
+
+		while (xenon_sound_get_unplayed() >= 32768);
+
+		xenon_sound_submit(pcm_data, sizeof(pcm_data));
+		frames_remaining -= chunk_frames;
+	}
 }

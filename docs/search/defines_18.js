@@ -164,7 +164,7 @@ var searchData=
   ['xekey_5fxeika_5fprivate_5fkey_161',['XEKEY_XEIKA_PRIVATE_KEY',['../xb360_8h.html#a7d4c124ac4b23fd0dacc9a65ff8a3332',1,'xb360.h']]],
   ['xell_5ffooter_162',['XELL_FOOTER',['../xenon__syscalls_8c.html#a659d1c82d28c27fd2d014883ffda276e',1,'XELL_FOOTER():&#160;xenon_syscalls.c'],['../xb360_8h.html#a659d1c82d28c27fd2d014883ffda276e',1,'XELL_FOOTER():&#160;xb360.h']]],
   ['xell_5ffooter_5flength_163',['XELL_FOOTER_LENGTH',['../xenon__syscalls_8c.html#a70a97d7374f8fc310109ba170176cfb4',1,'XELL_FOOTER_LENGTH():&#160;xenon_syscalls.c'],['../xb360_8h.html#a70a97d7374f8fc310109ba170176cfb4',1,'XELL_FOOTER_LENGTH():&#160;xb360.h']]],
-  ['xell_5ffooter_5foffset_164',['XELL_FOOTER_OFFSET',['../xb360_8h.html#ae640a4e8d66e1088de2159ed0e6b7d79',1,'XELL_FOOTER_OFFSET():&#160;xb360.h'],['../xenon__syscalls_8c.html#ae640a4e8d66e1088de2159ed0e6b7d79',1,'XELL_FOOTER_OFFSET():&#160;xenon_syscalls.c']]],
+  ['xell_5ffooter_5foffset_164',['XELL_FOOTER_OFFSET',['../xenon__syscalls_8c.html#ae640a4e8d66e1088de2159ed0e6b7d79',1,'XELL_FOOTER_OFFSET():&#160;xenon_syscalls.c'],['../xb360_8h.html#ae640a4e8d66e1088de2159ed0e6b7d79',1,'XELL_FOOTER_OFFSET():&#160;xb360.h']]],
   ['xell_5foffset_5fcount_165',['XELL_OFFSET_COUNT',['../xb360_8h.html#a5f71eb0be557b6608c0459ff1b0fde23',1,'xb360.h']]],
   ['xell_5fsize_166',['XELL_SIZE',['../xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305',1,'xb360.h']]],
   ['xenon_5fata_5freg2_5fcontrol_167',['XENON_ATA_REG2_CONTROL',['../ata_8h.html#aae96c8a457915d8daf12038dfa65ce1e',1,'ata.h']]],
@@ -183,9 +183,13 @@ var searchData=
   ['xenon_5fata_5freg_5fstatus_180',['XENON_ATA_REG_STATUS',['../ata_8h.html#a5d70748d2da66b6e3144b7b1c9811df9',1,'ata.h']]],
   ['xenon_5fcdrom_5fsector_5fsize_181',['XENON_CDROM_SECTOR_SIZE',['../ata_8h.html#a7b8e867a6f17729a5658638c733ad3fd',1,'ata.h']]],
   ['xenon_5fdisk_5fsector_5fsize_182',['XENON_DISK_SECTOR_SIZE',['../ata_8h.html#ad0ebaa79f2cbe2f726415ea7db7ff442',1,'ata.h']]],
-  ['xenon_5fspeed_5f1_5f2_183',['XENON_SPEED_1_2',['../xenon__power_8h.html#a3298c83e750e5cc34bfda8371757d7e6',1,'xenon_power.h']]],
-  ['xenon_5fspeed_5f1_5f3_184',['XENON_SPEED_1_3',['../xenon__power_8h.html#a1213ea6c0ec690e42159c86c9f65b298',1,'xenon_power.h']]],
-  ['xenon_5fspeed_5f3_5f2_185',['XENON_SPEED_3_2',['../xenon__power_8h.html#a536f78201e6617a1f558613a3a20f1f8',1,'xenon_power.h']]],
-  ['xenon_5fspeed_5ffull_186',['XENON_SPEED_FULL',['../xenon__power_8h.html#a8f0cacc54a77bd3b7d9c73124c6fcf22',1,'xenon_power.h']]],
-  ['xyssl_5fdes_5fc_187',['XYSSL_DES_C',['../des_8c.html#ae0298ca3b4627fe4cf9f8727da86d4b1',1,'des.c']]]
+  ['xenon_5fpost_5fbeep_183',['xenon_post_beep',['../sound_8h.html#a4c03ba20a20285301620b94b4089cf50',1,'sound.h']]],
+  ['xenon_5fspeed_5f1_5f2_184',['XENON_SPEED_1_2',['../xenon__power_8h.html#a3298c83e750e5cc34bfda8371757d7e6',1,'xenon_power.h']]],
+  ['xenon_5fspeed_5f1_5f3_185',['XENON_SPEED_1_3',['../xenon__power_8h.html#a1213ea6c0ec690e42159c86c9f65b298',1,'xenon_power.h']]],
+  ['xenon_5fspeed_5f3_5f2_186',['XENON_SPEED_3_2',['../xenon__power_8h.html#a536f78201e6617a1f558613a3a20f1f8',1,'xenon_power.h']]],
+  ['xenon_5fspeed_5ffull_187',['XENON_SPEED_FULL',['../xenon__power_8h.html#a8f0cacc54a77bd3b7d9c73124c6fcf22',1,'xenon_power.h']]],
+  ['xenon_5ftone_5famplitude_5f100_188',['XENON_TONE_AMPLITUDE_100',['../sound_8h.html#ac96d03b8baa3e04bfebe1238187eb382',1,'sound.h']]],
+  ['xenon_5ftone_5famplitude_5f25_189',['XENON_TONE_AMPLITUDE_25',['../sound_8h.html#a3a8abaee48b4e0ee31b754cbf505c063',1,'sound.h']]],
+  ['xenon_5ftone_5famplitude_5f50_190',['XENON_TONE_AMPLITUDE_50',['../sound_8h.html#a001eb6f1c177ab500cd9a42a15a36565',1,'sound.h']]],
+  ['xyssl_5fdes_5fc_191',['XYSSL_DES_C',['../des_8c.html#ae0298ca3b4627fe4cf9f8727da86d4b1',1,'des.c']]]
 ];

@@ -18,7 +18,7 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 #include <time/time.h>
 #include <unistd.h>
 #include <xenon_soc/xenon_power.h>
-
+#include <xb360/xb360.h>
 #include "elf.h"
 #include "elf_abi.h"
 #include "xetypes.h"
@@ -454,6 +454,105 @@ int elf_runFromDisk(char *filename) {
   return 0;
 }
 
+static int fdt_fixup_memory_reg(void *fdt)
+{
+    int mem = fdt_path_offset(fdt, "/memory");
+    if (mem < 0) return mem;
+
+    uint32_t ram_bytes = xenon_get_ram_size();
+
+    /* Only patch DT on 1GiB systems; 512MiB DTB is the default */
+    if (ram_bytes != 0x40000000)
+        return 0;
+
+    /* Split map (480MiB low + 512MiB high) */
+    uint32_t reg_992[] = {
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x1e000000),
+        cpu_to_fdt32(0x00000000), cpu_to_fdt32(0x20000000), cpu_to_fdt32(0x20000000),
+    };
+
+    return fdt_setprop(fdt, mem, "reg", reg_992, sizeof(reg_992));
+}
+
+static int fdt_fixup_pci_ranges_ram(void *fdt, uint32_t ram_bytes)
+{
+    /* Only patch on 1GiB systems */
+    if (ram_bytes != 0x40000000)
+        return 0;
+
+    int off = -1;
+    int depth = 0;
+
+    for (off = fdt_next_node(fdt, -1, &depth);
+         off >= 0;
+         off = fdt_next_node(fdt, off, &depth))
+    {
+        /* Identify PCI host node */
+        int len = 0;
+        const char *dtype = fdt_getprop(fdt, off, "device_type", &len);
+        int is_pci = (dtype && len >= 3 && !memcmp(dtype, "pci", 3));
+
+        if (!is_pci) {
+            const char *compat = fdt_getprop(fdt, off, "compatible", &len);
+            if (compat && len > 0) {
+                /* crude but effective: scan compat strings for "pci" */
+                for (int i = 0; i < len - 2; i++) {
+                    if (compat[i] == 'p' && compat[i+1] == 'c' && compat[i+2] == 'i') {
+                        is_pci = 1;
+                        break;
+                    }
+                }
+            }
+        }
+        if (!is_pci)
+            continue;
+
+        /* Fetch and patch ranges */
+        const uint32_t *ranges = fdt_getprop(fdt, off, "ranges", &len);
+        if (!ranges || (len % 4) || len < (6 * 2 * 4))
+            continue;
+
+        int cells = len / 4;
+        /* Your DT shows 2 entries * 6 cells = 12 cells */
+        if (cells < 12)
+            continue;
+
+        /* Copy to writable buffer */
+        uint32_t tmp[64];
+        if (cells > (int)(sizeof(tmp)/sizeof(tmp[0])))
+            continue;
+
+        for (int i = 0; i < cells; i++)
+            tmp[i] = ranges[i];
+
+        /*
+         * Look for the “RAM is 1:1 mapped” entry:
+         * 0x02000000 0 0  0 0  0x20000000
+         * Change last cell to 0x40000000.
+         */
+        int patched = 0;
+        for (int i = 0; i + 5 < cells; i += 6) {
+            uint32_t c0 = fdt32_to_cpu(tmp[i + 0]);
+            uint32_t b1 = fdt32_to_cpu(tmp[i + 1]);
+            uint32_t b2 = fdt32_to_cpu(tmp[i + 2]);
+            uint32_t p1 = fdt32_to_cpu(tmp[i + 3]);
+            uint32_t p2 = fdt32_to_cpu(tmp[i + 4]);
+            uint32_t sz = fdt32_to_cpu(tmp[i + 5]);
+
+            if (c0 == 0x02000000 && b1 == 0 && b2 == 0 && p1 == 0 && p2 == 0 && sz == 0x20000000) {
+                tmp[i + 5] = cpu_to_fdt32(0x40000000);
+                patched = 1;
+                break;
+            }
+        }
+
+        if (patched)
+            return fdt_setprop(fdt, off, "ranges", tmp, len);
+    }
+
+    return 0; /* Not fatal if we didn’t find it */
+}
+
 int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
                           int dt_size) {
   int res, node;
@@ -470,6 +569,21 @@ int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
   if (res < 0) {
     printf(" ! fdt_open_into() failed\n");
     return res;
+  }
+
+  /* 1GiB fixups */
+  if (xenon_get_ram_size() == 0x40000000) {
+    res = fdt_fixup_memory_reg(ELF_DEVTREE_START);
+    if (res < 0) {
+      printf(" ! fdt_fixup_memory_reg() failed\n");
+      /* don't hard-fail boot */
+    }
+
+    res = fdt_fixup_pci_ranges_ram(ELF_DEVTREE_START, 0x40000000);
+    if (res < 0) {
+      printf(" ! fdt_fixup_pci_ranges_ram() failed\n");
+      /* don't hard-fail boot */
+    }
   }
 
   node = fdt_path_offset(ELF_DEVTREE_START, "/chosen");

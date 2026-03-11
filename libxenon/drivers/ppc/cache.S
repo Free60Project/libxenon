@@ -11,7 +11,7 @@ memdcbt:
 	add %r4, %r4, %r3
 
 1:
-	dcbt %r0, %r5
+	dcbt 0, %r5
 	addic %r5, %r5, CACHELINE_SIZE /* also clears carry */
 	subic. %r4, %r4, CACHELINE_SIZE
 	bge 1b
@@ -28,7 +28,7 @@ memdcbst:
 	add %r4, %r4, %r3
 
 1:
-	dcbst %r0, %r5
+	dcbst 0, %r5
 	addic %r5, %r5, CACHELINE_SIZE /* also clears carry */
 	subic. %r4, %r4, CACHELINE_SIZE
 	bge 1b
@@ -45,7 +45,7 @@ memdcbf:
 	add %r4, %r4, %r3
 
 1:
-	dcbf %r0, %r5
+	dcbf 0, %r5
 	addic %r5, %r5, CACHELINE_SIZE /* also clears carry */
 	subic. %r4, %r4, CACHELINE_SIZE
 	bge 1b
@@ -62,8 +62,8 @@ memicbi:
 	add %r4, %r4, %r3
 
 1:
-	dcbst %r0, %r5
-	icbi %r0, %r5
+	dcbst 0, %r5
+	icbi 0, %r5
 	addic %r5, %r5, CACHELINE_SIZE /* also clears carry */
 	subic. %r4, %r4, CACHELINE_SIZE
 	bge 1b

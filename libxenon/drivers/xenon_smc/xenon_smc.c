@@ -13,7 +13,7 @@ void uprintf(const char* format, ...) {
     va_start(args, format);
     char tmp[2048];
 	vsprintf(tmp, format, args);
-	uart_puts(tmp);
+	uart_puts((unsigned char *)tmp);
     va_end(args);
 }
 

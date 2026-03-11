@@ -1,3 +1,6 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wframe-address"
+
 #include <stdlib.h>
 #include <debug.h>
 #include <ppc/register.h>
@@ -25,7 +28,7 @@ static int seems_valid(unsigned int p){
 	return p>=0x80000000 && p<(unsigned int)elfldr_start;
 }
 
-#define DO_RA(x) if(seems_valid(addr) && x<max_depth){ addr=(unsigned int)__builtin_return_address(x); printf("%p; ",addr); }
+#define DO_RA(x) if(seems_valid(addr) && x<max_depth){ addr=(unsigned int)__builtin_return_address(x); printf("0x%x; ",addr); }
 
 void stack_trace(int max_depth)
 {
@@ -72,3 +75,5 @@ void data_breakpoint(void * address, int on_read, int on_write)
     
     mtspr(dabr,db);
 }
+
+#pragma GCC diagnostic pop

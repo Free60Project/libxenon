@@ -1,4 +1,7 @@
 #include "xetypes.h"
+#include <stdlib.h>
+
+extern int main(int argc, char **argv);
 
 void call_ctors(void)
 {

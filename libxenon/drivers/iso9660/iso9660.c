@@ -29,6 +29,11 @@ ISO9660 systems, as these were used as references as well.
 
 */
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wbool-compare"
+#pragma GCC diagnostic ignored "-Wdiscarded-qualifiers"
+
 #include <iso9660/iso9660.h>
 #include <xetypes.h>
 #include <ppc/atomic.h>
@@ -1224,3 +1229,5 @@ const char *ISO9660_GetVolumeLabel(const char *name)
 		return NULL;
 	return name;
 }
+
+#pragma GCC diagnostic pop

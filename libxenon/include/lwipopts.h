@@ -38,8 +38,9 @@
 #include <stdio.h>
 
 #define NO_SYS                  1
-#define NO_SYS_NO_TIMERS		1
-#define ETHARP_TRUST_IP_MAC		1
+#define NO_SYS_NO_TIMERS        0
+#define SYS_LIGHTWEIGHT_PROT    0
+#define ETHARP_TRUST_IP_MAC     1
 
 #define LWIP_CALLBACK_API       1
 #define LWIP_TCP                1
@@ -68,8 +69,11 @@
 #define ARP_QUEUEING            1
 #define IP_FORWARD              0
 #define IP_OPTIONS              1
-#define DHCP_DOES_ARP_CHECK     1
 
+// Note: IP address conflict detection in LWIP 2.2.1 takes
+// way longer than the ARP check that 1.4.1 does. Disable
+// this to make the DHCP bind effectively instant
+#define LWIP_DHCP_DOES_ACD_CHECK 1
 
 //#define LWIP_DEBUG 					1
 //#define DHCP_DEBUG                    LWIP_DBG_ON

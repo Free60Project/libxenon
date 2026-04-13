@@ -1,0 +1,31 @@
+name: Test LibXenon
+
+on:
+  push:
+    paths-ignore: 
+      - README.md
+  pull_request:
+    paths-ignore: 
+      - README.md
+
+jobs:
+  test_libxenon:
+    runs-on: ubuntu-latest
+    container: free60/toolchain:latest
+    steps:
+      - name: Check Out Repo 
+        uses: actions/checkout@v6
+
+      - name: Compile and install libxenon
+        working-directory: toolchain/
+        run: ./build-xenon-toolchain libxenon
+
+      - name: Add toolchain to PATH
+        run: echo "/usr/local/xenon/bin" >> $GITHUB_PATH
+
+      - name: Build cube sample
+        working-directory: devkitxenon/examples/xenon/graphics/cube
+        env:
+          DEVKITXENON: /usr/local/xenon
+        run: |
+          make

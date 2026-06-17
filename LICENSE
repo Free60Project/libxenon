@@ -1,0 +1,110 @@
+LibXenon — Licensing
+====================
+
+LibXenon is a bare-metal homebrew library for the Xbox 360.
+
+The library's own source code is licensed under the 3-clause BSD license
+(Copyright (c) 2009 free60.org). This is the license that applies to the
+project as a whole and to any file that does not state otherwise.
+
+This repository also bundles a number of third-party components. Each of
+those keeps the license declared in its own source files; the BSD license
+does not override them. The full text of every license used in this
+repository is provided in the LICENSES/ directory.
+
+If you redistribute LibXenon, in source or binary form, you must satisfy
+the conditions of every license that covers the parts you ship. Pay
+particular attention to the GPL- and LGPL-licensed components: linking
+them into your program can place copyleft obligations on the result.
+
+Where this file and a source-file header disagree, the header wins.
+
+
+Licenses used in this repository
+--------------------------------
+
+Each license below has its full text in LICENSES/.
+
+  SPDX identifier        Full text
+  ---------------------  -------------------------------------------
+  BSD-3-Clause           LICENSES/BSD-3-Clause.txt
+  MIT                    LICENSES/MIT.txt
+  GPL-2.0                LICENSES/GPL-2.0.txt
+  GPL-3.0                LICENSES/GPL-3.0.txt
+  LGPL-2.1               LICENSES/LGPL-2.1.txt
+  LicenseRef-Broadcom-CFE   LICENSES/LicenseRef-Broadcom-CFE.txt
+  LicenseRef-Public-Domain  LICENSES/LicenseRef-Public-Domain.txt
+
+
+Component breakdown
+-------------------
+
+3-clause BSD (BSD-3-Clause)
+  * All original LibXenon code that carries no other header.
+        Copyright (c) 2009 free60.org
+  * libxenon/drivers/console/console.c     — Copyright (c) 2009 Georg Lukas
+  * libxenon/drivers/crypt/hmac_sha1.{c,h} — Copyright (c) 1998,2000 Aaron D. Gifford
+  * libxenon/drivers/diskio/disc_io.h      — Copyright (c) 2006 Michael "Chishm" Chisholm
+  * libxenon/drivers/elf/elf_abi.h         — Copyright (c) 1995-2002 Erik Theisen
+  * libxenon/drivers/iso9660/*             — KallistiOS; Copyright (c) Dan Potter et al.
+  * libxenon/drivers/lwip/*                — lwIP; Copyright (c) Swedish Institute
+                                             of Computer Science and contributors
+  * libxenon/drivers/utils/gmon.{c,h}      — Copyright (c) 1983,1992,1993 The Regents
+                                             of the University of California
+  * devkitxenon/examples/*                 — LibXenon example code
+
+MIT
+  * libxenon/drivers/xenos/xenos_edid.{c,h} — Copyright (c) Luc Verhaegen,
+                                              Intel Corp., Dennis Munsie
+  * libxenon/ports/xenon/bin2s.c            — Copyright (c) 2003-2005 Damian Yerrick
+
+LicenseRef-Broadcom-CFE (permissive; from Broadcom's CFE / USB stack)
+  Redistribution in source and binary form is permitted; the copyright
+  notice and conditions must be retained, and the Broadcom name may not
+  be used for endorsement.
+  * libxenon/drivers/nocfe/*                — Copyright (c) 2000-2003 Broadcom Corp.
+  * libxenon/drivers/usb/*  (except tinyehci) — Copyright (c) 2000-2005 Broadcom Corp.,
+                                              with Xbox 360 controller additions by
+                                              Felix Domke and others
+
+LicenseRef-Public-Domain
+  * libxenon/drivers/crypt/sha1.c           — Steve Reid / Aaron D. Gifford
+  * toolchain/build-xenon-toolchain         — Uwe Hermann, Felix Domke
+
+GNU GPL, version 2 (GPL-2.0)
+  * libxenon/drivers/elf/elf.c              — Copyright (c) 2010-2011 Hector Martin
+                                              "marcan" (GPLv2 only)
+  * libxenon/drivers/usb/tinyehci/*         — based on the Linux ehci-hcd driver,
+                                              Copyright (c) 2001 David Brownell
+                                              (GPLv2 or, at your option, later)
+
+GNU GPL, version 3 or later (GPL-3.0)
+  * libxenon/drivers/diskio/ata.c           — from GRUB, Copyright (c) 2007
+                                              Free Software Foundation, Inc.
+
+GNU LGPL, version 2.1 (LGPL-2.1)
+  * libxenon/drivers/crypt/des.c            — Copyright (c) 2006-2007 Christophe Devine
+
+Dual-licensed — GPL-2.0 (or later) OR BSD-3-Clause, at your option
+  * libxenon/drivers/libfdt/*               — Copyright (c) 2006 David Gibson,
+                                              IBM Corporation
+
+
+Build toolchain and auxiliary libraries
+---------------------------------------
+
+  * The Makefile / build glue (devkitxenon/rules and related) derives from
+    devkitPRO and is GPL-licensed.
+  * The patches under toolchain/ (binutils, gcc, newlib) are modifications
+    to the corresponding GNU projects and are covered by those projects'
+    licenses (GPL).
+  * zlib, libpng, bzip2 and FreeType are downloaded and built by
+    toolchain/build-xenon-toolchain. They are NOT stored in this
+    repository and remain under their own upstream licenses (Zlib,
+    libpng, bzip2, and the FreeType License / GPL respectively).
+
+
+This summary is a guide to help you locate the governing terms. It does
+not modify any of the licenses it refers to. The authoritative source for
+any file is that file's own header together with the corresponding full
+license text in LICENSES/.

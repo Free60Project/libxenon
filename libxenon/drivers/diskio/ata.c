@@ -236,12 +236,13 @@ xenon_ata_dumpinfo(struct xenon_ata_device *dev, char *info) {
 	strncpy(text, data + 20, 20);
 	text[20] = 0;
 	printf("  * Serial: %s\n", text);
-	strncpy(text, data + 46, 8);
-	text[8] = 0;
-	printf("  * Firmware: %s\n", text);
-	strncpy(text, data + 54, 40);
-	text[40] = 0;
-	strncpy(dev->model, text, sizeof(dev->model));
+
+	strncpy(dev->rev, data + 46, 8);
+	dev->rev[8] = 0;
+	printf("  * Firmware: %s\n", dev->rev);
+
+	strncpy(dev->model, data + 54, 40);
+	dev->model[40] = 0;
 	printf("  * Model: %s\n", dev->model);
 
 	if (!dev->atapi) {
@@ -456,9 +457,13 @@ xenon_atapi_inquiry_model(struct xenon_ata_device *dev) {
 		return -1;
 	};
 
-	buf[8 + 24] = '\0';
-	strncpy(dev->model, &buf[8], sizeof(dev->model));
-	printf("ATAPI inquiry model: %s %d\n", dev->model);
+	memcpy(dev->model, &buf[8], 24);
+	dev->model[24] = '\0';
+
+	memcpy(dev->rev, &buf[32], 4);
+	dev->rev[4] = '\0';
+
+	printf("ATAPI inquiry model: %s %s\n", dev->model, dev->rev);
 
 	return 0;
 }

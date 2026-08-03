@@ -1,7 +1,7 @@
 var searchData=
 [
   ['debug_2ec_0',['debug.c',['../debug_8c.html',1,'']]],
-  ['debug_2eh_1',['debug.h',['../include_2debug_8h.html',1,'(Global Namespace)'],['../drivers_2lwip_2include_2lwip_2debug_8h.html',1,'(Global Namespace)']]],
+  ['debug_2eh_1',['debug.h',['../drivers_2lwip_2include_2lwip_2debug_8h.html',1,'(Global Namespace)'],['../include_2debug_8h.html',1,'(Global Namespace)']]],
   ['def_2ec_2',['def.c',['../def_8c.html',1,'']]],
   ['def_2eh_3',['def.h',['../def_8h.html',1,'']]],
   ['des_2ec_4',['des.c',['../des_8c.html',1,'']]],

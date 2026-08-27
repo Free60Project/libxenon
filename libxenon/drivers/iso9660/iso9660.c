@@ -52,10 +52,31 @@ ISO9660 systems, as these were used as references as well.
 #define MAX_ISO_FILES 8
 
 static DISC_INTERFACE * iso9660_dev = NULL;
+static bool is_mass = false;
+static bool is_mounted = false;
 
 int iso_reset();
 static int init_percd();
 static int percd_done;
+
+// hack for ISOhybrid support in the XeLL
+static bool read_iso9660_sectors(DISC_INTERFACE * dev, sec_t sector, sec_t numSectors, void* buffer) {
+	if (!is_mass)
+	{
+		// optical discs have a sector size of 2048 bytes
+		return dev->readSectors(sector, numSectors, buffer);
+	}
+	else
+	{
+		// mass storage devices have a sector size of 512 bytes
+		// multiply everything by 4 to get 2048 bytes out of it
+		sec_t trueSector = sector * 4;
+		sec_t trueNumSectors = numSectors * 4;
+		//dbglog(DBG_NOTICE, "sector %d -> %d (0x%x)\n", sector, trueSector, trueSector * 512);
+		//dbglog(DBG_NOTICE, "length %d -> %d (0x%x)\n", numSectors, trueNumSectors, trueNumSectors * 512);
+		return dev->readSectors(trueSector, trueNumSectors, buffer);
+	}
+}
 
 /********************************************************************************/
 /* Low-level Joliet utils */
@@ -259,7 +280,7 @@ static int bread_cache(cache_block_t **cache, u32 sector) {
 	if (i >= NUM_CACHE_BLOCKS) { i = 0; }
 	
 	/* Load the requested block */
-	j = iso9660_dev->readSectors(sector, 1, cache[i]->data);
+	j = read_iso9660_sectors(iso9660_dev, sector, 1, cache[i]->data);
 	if (j < 0) {
 		
 		if (j==DISKIO_ERROR_NO_MEDIA) {
@@ -650,7 +671,7 @@ static ssize_t iso_read(int fd, void *buf, size_t bytes) {
 				thissect);*/
 
 			// Do the read
-			if (iso9660_dev->readSectors(fh[fd].first_extent + fh[fd].ptr/2048, thissect, outbuf) < 0)
+			if (read_iso9660_sectors(iso9660_dev, fh[fd].first_extent + fh[fd].ptr/2048, thissect, outbuf) < 0)
 				return -2; // Something went wrong...
 		} else { 
 			toread = (toread > thissect) ? thissect : toread;
@@ -1120,7 +1141,7 @@ static int verify_iso9660_disc(const DISC_INTERFACE *di)
 	/* Check for joliet extensions */
 	is_joliet = 0;
 	for (i=1; i<=3; i++) {
-		blk = di->readSectors(16, 1, sector_data);
+		blk = read_iso9660_sectors(di, 16, 1, sector_data);
 		if (blk < 0) return blk;
 		if (memcmp(sector_data, "\02CD001", 6) == 0) {
 			is_joliet = isjoliet(sector_data+88);
@@ -1131,7 +1152,7 @@ static int verify_iso9660_disc(const DISC_INTERFACE *di)
 	/* If that failed, go after standard/RockRidge ISO */
 	if (!is_joliet) {
 		/* Grab and check the volume descriptor */	
-		blk = di->readSectors(16, 1, sector_data);
+		blk = read_iso9660_sectors(di, 16, 1, sector_data);
 		if (blk < 0) return i;
 		if (memcmp(sector_data, "\01CD001", 6) != 0) {
 			return -1;
@@ -1147,6 +1168,10 @@ bool ISO9660_Mount(const char* name, const DISC_INTERFACE *disc_interface)
 	devoptab_t *devops = NULL;
 	char devname[10];
 
+	// We already have an ISO9660 drive mounted
+	if (is_mounted)
+		return false;
+
 	if (!name || strlen(name) > 8 || !disc_interface)
 		return false;
 
@@ -1155,6 +1180,9 @@ bool ISO9660_Mount(const char* name, const DISC_INTERFACE *disc_interface)
 
 	if (!disc_interface->isInserted())
 		return false;
+
+	// Check if it's a mass storage device or not
+	is_mass = disc_interface->ioType == FEATURE_XENON_USB || disc_interface->ioType == FEATURE_XENON_ATA;
 	
 	// Verify that it's actually an ISO9660 formatted disc and not another format or not inserted
 	if (verify_iso9660_disc(disc_interface) != 0)
@@ -1184,6 +1212,8 @@ bool ISO9660_Mount(const char* name, const DISC_INTERFACE *disc_interface)
 		return false;
 	}
 
+	is_mounted = true;
+
 	return true;
 }
 
@@ -1211,9 +1241,10 @@ bool ISO9660_Unmount(const char* name)
 	char devname[11];
 	if (! check_dev_name(name, devname, sizeof(devname)))
 		return false;
-	fs_iso9660_shutdown();	
+	fs_iso9660_shutdown();
 	if (RemoveDevice(name) == -1)
 		return false;
+	is_mounted = false;
 	return true;
 }
 

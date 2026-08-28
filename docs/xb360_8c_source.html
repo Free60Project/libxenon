@@ -190,82 +190,82 @@ $(function() {
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
 <div class="line"><a id="l00112" name="l00112"></a><span class="lineno"><a class="line" href="xb360_8c.html#a66932f80e4cd351a9910210b13756302">  112</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a66932f80e4cd351a9910210b13756302">get_virtual_cpukey</a>(<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *<a class="code hl_variable" href="xenos__edid_8h.html#a56acf619bc699e8ba21453eb121d5688">data</a>)</div>
 <div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>{</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>   <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> buffer[<a class="code hl_define" href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a>];</div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> buffer[<a class="code hl_define" href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a>];</div>
 <div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>   <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotOffset = 0;</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>   <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotSize = 0;</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>   <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> patchSlotCount = 0;</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotOffset = 0;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotSize = 0;</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> patchSlotCount = 0;</div>
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>   <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> fuseline0[0x8] = { 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> fuseline0[0x8] = { 0xC0, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };</div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span> </div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>   <span class="comment">// JTAG virtual fuses must be checked manually, since they&#39;re not stored</span></div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>   <span class="comment">// at the beginning of either of the patch slots like Glitch/DevGL images</span></div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>   <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;buffer, <a class="code hl_define" href="xb360_8h.html#a370ca159ab79e8709973f222918a8d12">VFUSES_OFFSET</a>, <a class="code hl_define" href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a>) == -1)</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>   {</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>      <span class="comment">// Error reading NAND data</span></div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>      <span class="keywordflow">return</span> 2;</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>   }</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="comment">// JTAG virtual fuses must be checked manually, since they&#39;re not stored</span></div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="comment">// at the beginning of either of the patch slots like Glitch/DevGL images</span></div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;buffer, <a class="code hl_define" href="xb360_8h.html#a370ca159ab79e8709973f222918a8d12">VFUSES_OFFSET</a>, <a class="code hl_define" href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a>) == -1)</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    {</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="comment">// Error reading NAND data</span></div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>        <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    }</div>
 <div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>   <span class="comment">// Data was read from NAND, verify that it looks like a virtual fuse set</span></div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>   <span class="comment">// by comparing it with what is expected for fuseline 0.</span></div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>   <span class="keywordflow">if</span>( 0 == memcmp(buffer, fuseline0, <span class="keyword">sizeof</span>(fuseline0)) )</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>   {</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>      memcpy(<a class="code hl_variable" href="xenos__edid_8h.html#a56acf619bc699e8ba21453eb121d5688">data</a>,&amp;buffer[0x20],0x10);</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>      <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>   }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="comment">// Data was read from NAND, verify that it looks like a virtual fuse set</span></div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="comment">// by comparing it with what is expected for fuseline 0.</span></div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keywordflow">if</span>( 0 == memcmp(buffer, fuseline0, <span class="keyword">sizeof</span>(fuseline0)) )</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    {</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>        memcpy(<a class="code hl_variable" href="xenos__edid_8h.html#a56acf619bc699e8ba21453eb121d5688">data</a>,&amp;buffer[0x20],0x10);</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    }</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>   <span class="comment">// If virtual fuses were not found at the JTAG offset, check the beginning of each patch slot.</span></div>
-<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>   <span class="comment">// Patch slot offset, count, and size are stored at the beginning of NAND</span></div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    <span class="comment">// If virtual fuses were not found at the JTAG offset, check the beginning of each patch slot.</span></div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="comment">// Patch slot offset, count, and size are stored at the beginning of NAND</span></div>
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
-<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>   <span class="comment">// Patch slot offset = DWORD at 0x64</span></div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>   <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotOffset, 0x64, <span class="keyword">sizeof</span>(patchSlotOffset)) == -1)</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>   {</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>      <span class="keywordflow">return</span> 2;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>   }</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="comment">// Patch slot offset = DWORD at 0x64</span></div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotOffset, 0x64, <span class="keyword">sizeof</span>(patchSlotOffset)) == -1)</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    {</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>    }</div>
 <div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span> </div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>   <span class="comment">// Patch slot count  = WORD at 0x68</span></div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>   <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotCount, 0x68, <span class="keyword">sizeof</span>(patchSlotCount)) == -1)</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>   {</div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>      <span class="keywordflow">return</span> 2;</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>   }</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>   </div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>   <span class="comment">// Patch slot size = DWORD at 0x70</span></div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>   <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotSize, 0x70, <span class="keyword">sizeof</span>(patchSlotSize)) == -1)</div>
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>   {</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>      <span class="keywordflow">return</span> 2;</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>   }</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="comment">// Patch slot count  = WORD at 0x68</span></div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotCount, 0x68, <span class="keyword">sizeof</span>(patchSlotCount)) == -1)</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    {</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>        <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    }</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span> </div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="comment">// Patch slot size = DWORD at 0x70</span></div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotSize, 0x70, <span class="keyword">sizeof</span>(patchSlotSize)) == -1)</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    {</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>        <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>    }</div>
 <div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span> </div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>   <span class="comment">// XeBuild has a bug where the patch slot size is set to zero for</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>   <span class="comment">// Falcon/Zephyr/Xenon DevGL and Glitch2m images. In this case, use</span></div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>   <span class="comment">// the expected patch slot size of 0x10000 bytes.</span></div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>   <span class="keywordflow">if</span>( 0 == patchSlotSize )</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>   {</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>      patchSlotSize = 0x10000;</div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>   }</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <span class="comment">// XeBuild has a bug where the patch slot size is set to zero for</span></div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>    <span class="comment">// Falcon/Zephyr/Xenon DevGL and Glitch2m images. In this case, use</span></div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    <span class="comment">// the expected patch slot size of 0x10000 bytes.</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>    <span class="keywordflow">if</span>( 0 == patchSlotSize )</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    {</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        patchSlotSize = 0x10000;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    }</div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>   <span class="comment">// Check the beginning of each patch slot for a virtual fuse set</span></div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>   <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; patchSlotCount; i++)</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>   {</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>      <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotAddress = patchSlotOffset + (i * patchSlotSize);</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="comment">// Check the beginning of each patch slot for a virtual fuse set</span></div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <span class="keywordflow">for</span>(<span class="keywordtype">int</span> i = 0; i &lt; patchSlotCount; i++)</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    {</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>        <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotAddress = patchSlotOffset + (i * patchSlotSize);</div>
 <div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>      <span class="comment">// Read the virtual fuse set from NAND</span></div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>      <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;buffer, patchSlotAddress, <a class="code hl_define" href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a>) == -1)</div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>      {</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>         <span class="keywordflow">return</span> 2;</div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>      }</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>        <span class="comment">// Read the virtual fuse set from NAND</span></div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;buffer, patchSlotAddress, <a class="code hl_define" href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a>) == -1)</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>        {</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span>            <span class="keywordflow">return</span> 2;</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>        }</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>      <span class="comment">// Data was read from NAND, verify that it looks like a virtual fuse set</span></div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>      <span class="comment">// by comparing it with what is expected for fuseline 0. If it doesn&#39;t</span></div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>      <span class="comment">// match, the next patch slot will be checked.</span></div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>      <span class="keywordflow">if</span>( 0 == memcmp(buffer, fuseline0, <span class="keyword">sizeof</span>(fuseline0)) )</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>      {</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>         memcpy(<a class="code hl_variable" href="xenos__edid_8h.html#a56acf619bc699e8ba21453eb121d5688">data</a>,&amp;buffer[0x20],0x10);</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>         <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>      }</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>   }</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>        <span class="comment">// Data was read from NAND, verify that it looks like a virtual fuse set</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>        <span class="comment">// by comparing it with what is expected for fuseline 0. If it doesn&#39;t</span></div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>        <span class="comment">// match, the next patch slot will be checked.</span></div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        <span class="keywordflow">if</span>( 0 == memcmp(buffer, fuseline0, <span class="keyword">sizeof</span>(fuseline0)) )</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        {</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>            memcpy(<a class="code hl_variable" href="xenos__edid_8h.html#a56acf619bc699e8ba21453eb121d5688">data</a>,&amp;buffer[0x20],0x10);</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        }</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    }</div>
 <div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>   <span class="comment">// No virtual fuses found </span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>   <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="comment">// No virtual fuses found</span></div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keywordflow">return</span> 1;</div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>}</div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
@@ -291,10 +291,10 @@ $(function() {
 <div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        <span class="keywordflow">return</span> -1;</div>
 <div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span> </div>
 <div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> cpu_key[0x10];</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        <span class="keywordflow">if</span> (virtualcpukey)</div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>            <a class="code hl_function" href="xb360_8c.html#a66932f80e4cd351a9910210b13756302">get_virtual_cpukey</a>(cpu_key);</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>            <a class="code hl_function" href="xb360_8c.html#afd56a93a08b55ddcad4b1a6bbe5671b8">cpu_get_key</a>(cpu_key);</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>          <span class="keywordflow">if</span> (virtualcpukey)</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>                <a class="code hl_function" href="xb360_8c.html#a66932f80e4cd351a9910210b13756302">get_virtual_cpukey</a>(cpu_key);</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>          <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>                <a class="code hl_function" href="xb360_8c.html#afd56a93a08b55ddcad4b1a6bbe5671b8">cpu_get_key</a>(cpu_key);</div>
 <div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>    <span class="comment">//print_key(&quot;kv_read: cpu key&quot;, cpu_key);</span></div>
 <div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
 <div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> hmac_key[0x10];</div>
@@ -472,7 +472,7 @@ $(function() {
 <div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>        <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a2d23c02e64cdea15adaf115f161dbcdb">kv_get_cserial</a>(cserial)==0)</div>
 <div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>            <a class="code hl_function" href="xb360_8c.html#af0df5de0fc1916d8d06024d6d18f45c0">print_cserial</a>(<span class="stringliteral">&quot; * Serial&quot;</span>, cserial);</div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>    }</div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>        </div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span> </div>
 <div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    printf(<span class="stringliteral">&quot;\n&quot;</span>);</div>
 <div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span>}</div>
 <div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
@@ -482,23 +482,23 @@ $(function() {
 <div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span><span class="comment">//{</span></div>
 <div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span><span class="comment">//  int i, j, k, startblock, current, offsetinblock, blockcnt;</span></div>
 <div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span><span class="comment">//  unsigned char *user, *spare;</span></div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span><span class="comment">//    </span></div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span><span class="comment">//</span></div>
 <div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span><span class="comment">//    if (sfc.initialized != SFCX_INITIALIZED){</span></div>
 <div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span><span class="comment">//        printf(&quot; ! sfcx is not initialized! Unable to update XeLL in NAND!\n&quot;);</span></div>
 <div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span><span class="comment">//      return -1;</span></div>
 <div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span><span class="comment">//    }</span></div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span><span class="comment">//    </span></div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span><span class="comment">//</span></div>
 <div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span><span class="comment">//    printf(&quot;\n * found XeLL update. press power NOW if you don&#39;t want to update.\n&quot;);</span></div>
 <div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span><span class="comment">//    delay(15);</span></div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span><span class="comment">//    </span></div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span><span class="comment">//</span></div>
 <div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span><span class="comment">//    for (k = 0; k &lt; XELL_OFFSET_COUNT; k++)</span></div>
 <div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span><span class="comment">//    {</span></div>
 <div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span><span class="comment">//      current = xelloffsets[k];</span></div>
 <div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span><span class="comment">//      offsetinblock = current % sfc.block_sz;</span></div>
 <div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span><span class="comment">//      startblock = current/sfc.block_sz;</span></div>
 <div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span><span class="comment">//      blockcnt = offsetinblock ? (XELL_SIZE/sfc.block_sz)+1 : (XELL_SIZE/sfc.block_sz);</span></div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span><span class="comment">//      </span></div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="comment">//    </span></div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span><span class="comment">//</span></div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span><span class="comment">//</span></div>
 <div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span><span class="comment">//      spare = (unsigned char*)malloc(blockcnt*sfc.pages_in_block*sfc.meta_sz);</span></div>
 <div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span><span class="comment">//      if(!spare){</span></div>
 <div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span><span class="comment">//        printf(&quot; ! Error while memallocating filebuffer (spare)\n&quot;);</span></div>
@@ -510,7 +510,7 @@ $(function() {
 <div class="line"><a id="l00431" name="l00431"></a><span class="lineno">  431</span><span class="comment">//        return -1;</span></div>
 <div class="line"><a id="l00432" name="l00432"></a><span class="lineno">  432</span><span class="comment">//      }</span></div>
 <div class="line"><a id="l00433" name="l00433"></a><span class="lineno">  433</span><span class="comment">//      j = 0;</span></div>
-<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span><span class="comment">//      unsigned char pagebuf[MAX_PAGE_SZ]; </span></div>
+<div class="line"><a id="l00434" name="l00434"></a><span class="lineno">  434</span><span class="comment">//      unsigned char pagebuf[MAX_PAGE_SZ];</span></div>
 <div class="line"><a id="l00435" name="l00435"></a><span class="lineno">  435</span><span class="comment">//</span></div>
 <div class="line"><a id="l00436" name="l00436"></a><span class="lineno">  436</span><span class="comment">//      for (i = (startblock*sfc.pages_in_block); i&lt; (startblock+blockcnt)*sfc.pages_in_block; i++)</span></div>
 <div class="line"><a id="l00437" name="l00437"></a><span class="lineno">  437</span><span class="comment">//      {</span></div>
@@ -520,10 +520,10 @@ $(function() {
 <div class="line"><a id="l00441" name="l00441"></a><span class="lineno">  441</span><span class="comment">//      memcpy(&amp;spare[j*sfc.meta_sz],&amp;pagebuf[sfc.page_sz],sfc.meta_sz);</span></div>
 <div class="line"><a id="l00442" name="l00442"></a><span class="lineno">  442</span><span class="comment">//      j++;</span></div>
 <div class="line"><a id="l00443" name="l00443"></a><span class="lineno">  443</span><span class="comment">//      }</span></div>
-<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span><span class="comment">//      </span></div>
+<div class="line"><a id="l00444" name="l00444"></a><span class="lineno">  444</span><span class="comment">//</span></div>
 <div class="line"><a id="l00445" name="l00445"></a><span class="lineno">  445</span><span class="comment">//        if (memcmp(&amp;user[offsetinblock+(XELL_FOOTER_OFFSET)],XELL_FOOTER,XELL_FOOTER_LENGTH) == 0){</span></div>
 <div class="line"><a id="l00446" name="l00446"></a><span class="lineno">  446</span><span class="comment">//            printf(&quot; * XeLL Binary in NAND found @ 0x%08X\n&quot;, (startblock*sfc.block_sz)+offsetinblock);</span></div>
-<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span><span class="comment">//         </span></div>
+<div class="line"><a id="l00447" name="l00447"></a><span class="lineno">  447</span><span class="comment">//</span></div>
 <div class="line"><a id="l00448" name="l00448"></a><span class="lineno">  448</span><span class="comment">//        memcpy(&amp;user[offsetinblock], addr,len); //Copy over updxell.bin</span></div>
 <div class="line"><a id="l00449" name="l00449"></a><span class="lineno">  449</span><span class="comment">//        printf(&quot; * Writing to NAND!\n&quot;);</span></div>
 <div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span><span class="comment">//      j = 0;</span></div>
@@ -546,7 +546,7 @@ $(function() {
 <div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span><span class="comment">//        }</span></div>
 <div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span><span class="comment">//        printf(&quot; * XeLL flashed! Reboot the xbox to enjoy the new build\n&quot;);</span></div>
 <div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span><span class="comment">//      for(;;);</span></div>
-<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span><span class="comment">//  </span></div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span><span class="comment">//</span></div>
 <div class="line"><a id="l00471" name="l00471"></a><span class="lineno">  471</span><span class="comment">//      }</span></div>
 <div class="line"><a id="l00472" name="l00472"></a><span class="lineno">  472</span><span class="comment">//  }</span></div>
 <div class="line"><a id="l00473" name="l00473"></a><span class="lineno">  473</span><span class="comment">//    printf(&quot; ! Couldn&#39;t locate XeLL binary in NAND. Aborting!\n&quot;);</span></div>
@@ -563,21 +563,21 @@ $(function() {
 <div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span>    memset(&amp;s, 0, <span class="keyword">sizeof</span>(<span class="keyword">struct</span> <a class="code hl_function" href="newlib_8c.html#a6267ee98ea4ca67296665534d549132a">stat</a>));</div>
 <div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span>    <a class="code hl_function" href="newlib_8c.html#a6267ee98ea4ca67296665534d549132a">stat</a>(path, &amp;s);</div>
 <div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span>    <span class="keywordtype">long</span> <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a> = s.st_size;</div>
-<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a> &lt;= 0)  </div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>    <span class="keywordflow">if</span> (<a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a> &lt;= 0)</div>
 <div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>        <span class="keywordflow">return</span> -1; <span class="comment">//Invalid Filesize</span></div>
-<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>    </div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span> </div>
 <div class="line"><a id="l00490" name="l00490"></a><span class="lineno">  490</span>    <span class="comment">/* Check if updxell.bin is present */</span></div>
 <div class="line"><a id="l00491" name="l00491"></a><span class="lineno">  491</span>    f = fopen(path, <span class="stringliteral">&quot;rb&quot;</span>);</div>
 <div class="line"><a id="l00492" name="l00492"></a><span class="lineno">  492</span>    <span class="keywordflow">if</span> (!f){</div>
 <div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span>        <span class="keywordflow">return</span> -1; <span class="comment">//Can&#39;t find/open updxell.bin</span></div>
 <div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>    }</div>
-<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>    </div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span> </div>
 <div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>    <span class="keywordflow">if</span> (<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#abb4a4d6035e2056dceec8d04617a3251">initialized</a> != <a class="code hl_define" href="xenon__sfcx_8h.html#a14b71ab36475cd751ad4af55fe4aea5b">SFCX_INITIALIZED</a>){</div>
 <div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>        fclose(f);</div>
 <div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>        printf(<span class="stringliteral">&quot; ! sfcx is not initialized! Unable to update XeLL in NAND!\n&quot;</span>);</div>
-<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>    <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>        <span class="keywordflow">return</span> -1;</div>
 <div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>    }</div>
-<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span>   </div>
+<div class="line"><a id="l00501" name="l00501"></a><span class="lineno">  501</span> </div>
 <div class="line"><a id="l00502" name="l00502"></a><span class="lineno">  502</span>    <span class="comment">/* Check filesize of updxell.bin, only accept full 256kb binaries */</span></div>
 <div class="line"><a id="l00503" name="l00503"></a><span class="lineno">  503</span>    fseek(f, 0, SEEK_END);</div>
 <div class="line"><a id="l00504" name="l00504"></a><span class="lineno">  504</span>    filelength=ftell(f);</div>
@@ -587,209 +587,254 @@ $(function() {
 <div class="line"><a id="l00508" name="l00508"></a><span class="lineno">  508</span>        printf(<span class="stringliteral">&quot; ! %s does not have the correct size of 256kb. Aborting update!\n&quot;</span>, path);</div>
 <div class="line"><a id="l00509" name="l00509"></a><span class="lineno">  509</span>        <span class="keywordflow">return</span> -1;</div>
 <div class="line"><a id="l00510" name="l00510"></a><span class="lineno">  510</span>    }</div>
-<div class="line"><a id="l00511" name="l00511"></a><span class="lineno">  511</span>    </div>
+<div class="line"><a id="l00511" name="l00511"></a><span class="lineno">  511</span> </div>
 <div class="line"><a id="l00512" name="l00512"></a><span class="lineno">  512</span>    printf(<span class="stringliteral">&quot;\n * found XeLL update. press power NOW if you don&#39;t want to update.\n&quot;</span>);</div>
 <div class="line"><a id="l00513" name="l00513"></a><span class="lineno">  513</span>    <a class="code hl_function" href="time_8c.html#aa47a89344c2cc034a7bf33bdff821f75">delay</a>(15);</div>
-<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span>    </div>
+<div class="line"><a id="l00514" name="l00514"></a><span class="lineno">  514</span> </div>
 <div class="line"><a id="l00515" name="l00515"></a><span class="lineno">  515</span>    <span class="keywordflow">for</span> (<a class="code hl_variable" href="xenos__edid_8h.html#adb6f3c87384808b3b79f7d8e3c2345f6">k</a> = 0; <a class="code hl_variable" href="xenos__edid_8h.html#adb6f3c87384808b3b79f7d8e3c2345f6">k</a> &lt; <a class="code hl_define" href="xb360_8h.html#a5f71eb0be557b6608c0459ff1b0fde23">XELL_OFFSET_COUNT</a>; <a class="code hl_variable" href="xenos__edid_8h.html#adb6f3c87384808b3b79f7d8e3c2345f6">k</a>++)</div>
 <div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>    {</div>
-<div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span>      current = xelloffsets[<a class="code hl_variable" href="xenos__edid_8h.html#adb6f3c87384808b3b79f7d8e3c2345f6">k</a>];</div>
-<div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>      offsetinblock = current % <a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>;</div>
-<div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>      startblock = current/<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>;</div>
-<div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span>      blockcnt = offsetinblock ? (<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>/<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>)+1 : (<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>/<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>);</div>
-<div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span>      </div>
-<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>    </div>
-<div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span>      spare = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)malloc(blockcnt*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>);</div>
-<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>      <span class="keywordflow">if</span>(!spare){</div>
-<div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>        printf(<span class="stringliteral">&quot; ! Error while memallocating filebuffer (spare)\n&quot;</span>);</div>
-<div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00527" name="l00527"></a><span class="lineno">  527</span>      }</div>
-<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span>      user = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)malloc(blockcnt*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>);</div>
-<div class="line"><a id="l00529" name="l00529"></a><span class="lineno">  529</span>      <span class="keywordflow">if</span>(!user){</div>
-<div class="line"><a id="l00530" name="l00530"></a><span class="lineno">  530</span>        printf(<span class="stringliteral">&quot; ! Error while memallocating filebuffer (user)\n&quot;</span>);</div>
-<div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00532" name="l00532"></a><span class="lineno">  532</span>      }</div>
-<div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>      <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a> = 0;</div>
-<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>      <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_define" href="xenon__sfcx_8h.html#afb7ac115f5ff7eef4d943131a20e6014">MAX_PAGE_SZ</a>];   </div>
-<div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span> </div>
-<div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span>      <span class="keywordflow">for</span> (i = (startblock*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>); i&lt; (startblock+blockcnt)*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>; i++)</div>
-<div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>      {</div>
-<div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span>         <a class="code hl_function" href="xenon__sfcx_8c.html#a3468446df0bcdfc4e24221bbbad1db8f">sfcx_read_page</a>(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>, (i*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>), 1);</div>
-<div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span>     <span class="comment">//Split rawpage into user &amp; spare</span></div>
-<div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span>     memcpy(&amp;user[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>,<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
-<div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>     memcpy(&amp;spare[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>],&amp;<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>);</div>
-<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>     <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>++;</div>
-<div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>      }</div>
-<div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span>      </div>
-<div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span>        <span class="keywordflow">if</span> (memcmp(&amp;user[offsetinblock+(<a class="code hl_define" href="xenon__syscalls_8c.html#ae640a4e8d66e1088de2159ed0e6b7d79">XELL_FOOTER_OFFSET</a>)],<a class="code hl_define" href="xenon__syscalls_8c.html#a659d1c82d28c27fd2d014883ffda276e">XELL_FOOTER</a>,<a class="code hl_define" href="xenon__syscalls_8c.html#a70a97d7374f8fc310109ba170176cfb4">XELL_FOOTER_LENGTH</a>) == 0){</div>
-<div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>            printf(<span class="stringliteral">&quot; * XeLL Binary in NAND found @ 0x%08X\n&quot;</span>, (startblock*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>)+offsetinblock);</div>
-<div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>        </div>
-<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>         updxell = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)malloc(<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>);</div>
-<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span>         <span class="keywordflow">if</span>(!updxell){</div>
-<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span>           printf(<span class="stringliteral">&quot; ! Error while memallocating filebuffer (updxell)\n&quot;</span>);</div>
-<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>           <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>         }</div>
-<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>        </div>
-<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>         <a class="code hl_variable" href="ehci__defs_8h.html#a088e3e37581e2ecb5079c1d75067923f">status</a> = fread(updxell,1,<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>,f);</div>
-<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>         <span class="keywordflow">if</span> (<a class="code hl_variable" href="ehci__defs_8h.html#a088e3e37581e2ecb5079c1d75067923f">status</a> != <a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>){</div>
-<div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>           fclose(f);</div>
-<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>           printf(<span class="stringliteral">&quot; ! Error reading file from %s\n&quot;</span>, path);</div>
-<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span>           <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>         }</div>
-<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>         </div>
-<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span>         <span class="keywordflow">if</span> (memcmp(&amp;updxell[<a class="code hl_define" href="xenon__syscalls_8c.html#ae640a4e8d66e1088de2159ed0e6b7d79">XELL_FOOTER_OFFSET</a>],<a class="code hl_define" href="xenon__syscalls_8c.html#a659d1c82d28c27fd2d014883ffda276e">XELL_FOOTER</a>, <a class="code hl_define" href="xenon__syscalls_8c.html#a70a97d7374f8fc310109ba170176cfb4">XELL_FOOTER_LENGTH</a>)){</div>
-<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>       printf(<span class="stringliteral">&quot; ! XeLL does not seem to have matching footer, Aborting update!\n&quot;</span>);</div>
-<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>       <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>     }</div>
-<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span>         </div>
-<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>         fclose(f);</div>
-<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>         memcpy(&amp;user[offsetinblock], updxell,<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>); <span class="comment">//Copy over updxell.bin</span></div>
-<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>         printf(<span class="stringliteral">&quot; * Writing to NAND!\n&quot;</span>);</div>
-<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>     <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a> = 0;</div>
-<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>         <span class="keywordflow">for</span> (i = startblock*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>; i &lt; (startblock+blockcnt)*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>; i ++)</div>
-<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>         {</div>
-<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>         <span class="keywordflow">if</span> (!(i%<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>))</div>
-<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>        <a class="code hl_function" href="xenon__sfcx_8c.html#ad950cf7d6de1e67d00ff0ea6522db955">sfcx_erase_block</a>(i*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
-<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span> </div>
-<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>         <span class="comment">/* Copy user &amp; spare data together in a single rawpage */</span></div>
-<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>             memcpy(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>,&amp;user[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
-<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>         memcpy(&amp;<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],&amp;spare[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>],<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>);</div>
-<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span>         <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>++;</div>
-<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span> </div>
-<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>         <span class="keywordflow">if</span> (!(<a class="code hl_function" href="xenon__sfcx_8c.html#a1c861357dc394249bdaa3391ecc91009">sfcx_is_pageerased</a>(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>))) <span class="comment">// We dont need to write to erased pages</span></div>
-<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>         {</div>
-<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>             memset(&amp;<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>+0x0C],0x0, 4); <span class="comment">//zero only EDC bytes</span></div>
-<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span>             <a class="code hl_function" href="xenon__sfcx_8c.html#aad85a7620ee666d1494e34fd20dfdd38">sfcx_calcecc</a>((<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *)<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>);       <span class="comment">//recalc EDC bytes</span></div>
-<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>             <a class="code hl_function" href="xenon__sfcx_8c.html#a389a60c2f48c863f3b023a7dc1815bfb">sfcx_write_page</a>(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>, i*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
-<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>         }</div>
-<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>         }</div>
-<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span>         printf(<span class="stringliteral">&quot; * XeLL flashed! Reboot the xbox to enjoy the new build\n&quot;</span>);</div>
-<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>     <span class="keywordflow">for</span>(;;);</div>
-<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>    </div>
-<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span>      }</div>
-<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span>    }</div>
-<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>    printf(<span class="stringliteral">&quot; ! Couldn&#39;t locate XeLL binary in NAND. Aborting!\n&quot;</span>);</div>
-<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>    <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>}</div>
-<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span> </div>
-<div class="line"><a id="l00596" name="l00596"></a><span class="lineno"><a class="line" href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">  596</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">xenon_get_DVE</a>()</div>
-<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>{</div>
-<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> DVEversion, tmp;</div>
-<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span>    <a class="code hl_function" href="xenon__smc_8c.html#adacb4f8dbd7eceeaa48a3fd2aea60b6f">xenon_smc_ana_read</a>(0xfe, &amp;DVEversion);</div>
-<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>    tmp = DVEversion;</div>
-<div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>    tmp = (tmp &amp; ~0xF0) | ((DVEversion &gt;&gt; 12) &amp; 0xF0);</div>
-<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>    <span class="keywordflow">return</span> (tmp &amp; 0xFF);</div>
-<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span>}</div>
-<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span> </div>
-<div class="line"><a id="l00605" name="l00605"></a><span class="lineno"><a class="line" href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">  605</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">xenon_get_PCIBridgeRevisionID</a>()</div>
-<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>{</div>
-<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>    <span class="keywordflow">return</span> ((read32(0xd0000008) &lt;&lt; 24) &gt;&gt; 24);</div>
-<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span>}</div>
-<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span> </div>
-<div class="line"><a id="l00610" name="l00610"></a><span class="lineno"><a class="line" href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">  610</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">xenon_get_CPU_PVR</a>()</div>
-<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>{</div>
-<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> PVR;</div>
-<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>    <span class="keyword">asm</span> <span class="keyword">volatile</span>(<span class="stringliteral">&quot;mfpvr %0&quot;</span> : <span class="stringliteral">&quot;=r&quot;</span> (PVR));</div>
-<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>    <span class="keywordflow">return</span> PVR;</div>
-<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>}</div>
-<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span> </div>
-<div class="line"><a id="l00617" name="l00617"></a><span class="lineno"><a class="line" href="xb360_8c.html#aa7d172ea6d5d77c1924231ee3765880e">  617</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aa7d172ea6d5d77c1924231ee3765880e">xenon_get_XenosID</a>()</div>
-<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span>{</div>
-<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>    <span class="keywordflow">return</span> ((read32(0xd0010000) &gt;&gt; 16) &amp; 0xFFFF);</div>
-<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>}</div>
-<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span> </div>
-<div class="line"><a id="l00622" name="l00622"></a><span class="lineno"><a class="line" href="xb360_8c.html#af7e69aba3ba2b8110bb7f3b1571e71f6">  622</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#af7e69aba3ba2b8110bb7f3b1571e71f6">xenon_get_console_type</a>()</div>
-<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span>{</div>
-<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> PVR, PCIBridgeRevisionID, DVEversion;</div>
-<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>     </div>
-<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>    PCIBridgeRevisionID = <a class="code hl_function" href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">xenon_get_PCIBridgeRevisionID</a>();</div>
-<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>    DVEversion = <a class="code hl_function" href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">xenon_get_DVE</a>();</div>
-<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>    PVR = <a class="code hl_function" href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">xenon_get_CPU_PVR</a>();</div>
-<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span> </div>
-<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>    <span class="keywordflow">if</span>(PVR &lt;= 0x710300) <span class="comment">// DD3 or older CPU, must be a Xenon or Zephyr</span></div>
-<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span>    {</div>
-<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>        <span class="keywordflow">if</span>(DVEversion &gt;= 0x11) <span class="comment">// We&#39;ve got HANA, this must be a zephyr</span></div>
-<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>        {</div>
-<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a41e4fdc56c36d734cabefbf7a1d8f6a0">REV_ZEPHYR</a>;</div>
-<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span>        }</div>
-<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>        {</div>
-<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a30e833f82a68c4e7b7742781864525e8">REV_XENON</a>;</div>
-<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span>        }</div>
-<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span>    }</div>
-<div class="line"><a id="l00641" name="l00641"></a><span class="lineno">  641</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(PVR &lt;= 0x710500) <span class="comment">// Loki CPU, must be a Falcon or Jasper</span></div>
-<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>    {</div>
-<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span>        <span class="keywordflow">if</span>(PCIBridgeRevisionID &gt;= 0x60)</div>
-<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>        {</div>
-<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#aa8a226b7bd24e8206e9153893ec29a51">REV_JASPER</a>;</div>
-<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>        }</div>
-<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span>        {</div>
-<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#aa80d7fe314b0ff280dc47b435525f7f6">REV_FALCON</a>;</div>
-<div class="line"><a id="l00650" name="l00650"></a><span class="lineno">  650</span>        }</div>
-<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span>    }</div>
-<div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(PVR &lt;= 0x710800) <span class="comment">// Vejle CPU, must be Trinity or Corona</span></div>
-<div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span>    {</div>
-<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span>        <span class="keywordflow">if</span> (DVEversion &gt;= 0x20)</div>
-<div class="line"><a id="l00655" name="l00655"></a><span class="lineno">  655</span>        {</div>
-<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span>            <span class="keywordflow">if</span> (PCIBridgeRevisionID &gt;= 0x70 &amp;&amp; <a class="code hl_function" href="xenon__sfcx_8c.html#a10350fe52a7d7b4d0b4a3393cf0ae035">sfcx_readreg</a>(<a class="code hl_define" href="xenon__sfcx_8h.html#ad2f19a1a3aba26bf2bedd2e7c82d6463">SFCX_PHISON</a>) != 0)</div>
-<div class="line"><a id="l00657" name="l00657"></a><span class="lineno">  657</span>                <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a4606f4332f9c86c02041c402c55a2474">REV_CORONA_PHISON</a>;</div>
-<div class="line"><a id="l00658" name="l00658"></a><span class="lineno">  658</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a338cd3c88d512ec498fb00de1a56c8e9">REV_CORONA</a>;</div>
-<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>        }</div>
-<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a94e265f60f8c511142e7ac1e4cf20e96">REV_TRINITY</a>;</div>
-<div class="line"><a id="l00662" name="l00662"></a><span class="lineno">  662</span>    }</div>
-<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(PVR &lt;= 0x710A00) <span class="comment">// Oban CPU, must be Winchester</span></div>
-<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span>    {</div>
-<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>        <span class="keywordflow">if</span> (PCIBridgeRevisionID &gt;= 0x70 &amp;&amp; <a class="code hl_function" href="xenon__sfcx_8c.html#a10350fe52a7d7b4d0b4a3393cf0ae035">sfcx_readreg</a>(<a class="code hl_define" href="xenon__sfcx_8h.html#ad2f19a1a3aba26bf2bedd2e7c82d6463">SFCX_PHISON</a>) != 0)</div>
-<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a7413e0df76ed7afa88ed51bebef91cfc">REV_WINCHESTER_MMC</a>;</div>
-<div class="line"><a id="l00667" name="l00667"></a><span class="lineno">  667</span>        <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#aaf7eaf753cf874a48f25f5ccfc9217ef">REV_WINCHESTER</a>;</div>
-<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>    }</div>
-<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span> </div>
-<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span>    <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#ae804c329a53fbcc7102bd80142c203b4">REV_UNKNOWN</a>;</div>
-<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>}</div>
-<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span> </div>
-<div class="line"><a id="l00673" name="l00673"></a><span class="lineno"><a class="line" href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">  673</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">xenon_logical_nand_data_ok</a>()</div>
-<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span>{</div>
-<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> tmp;</div>
-<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>    memcpy(&amp;tmp, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)(0x80000200C8000000ULL), 2);</div>
-<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>    <span class="keywordflow">if</span> (tmp != 0xFF4F)</div>
-<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>}</div>
-<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span> </div>
-<div class="line"><a id="l00682" name="l00682"></a><span class="lineno"><a class="line" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">  682</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(<span class="keywordtype">void</span>* buf, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> len)</div>
-<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>{</div>
-<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">xenon_logical_nand_data_ok</a>() == 0)</div>
-<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>        memcpy(buf, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)(0x80000200C8000000ULL + offset), len);</div>
-<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>        <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>}</div>
-<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span> </div>
-<div class="line"><a id="l00691" name="l00691"></a><span class="lineno"><a class="line" href="xb360_8c.html#aeb5ba11cf4b5077f3ac9fc741f50398b">  691</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aeb5ba11cf4b5077f3ac9fc741f50398b">xenon_get_kv_size</a>()</div>
-<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>{</div>
-<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ret;</div>
-<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;ret, 0x60, 4) == 0)</div>
-<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>        <span class="keywordflow">return</span> ret;</div>
-<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>}</div>
-<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span> </div>
-<div class="line"><a id="l00699" name="l00699"></a><span class="lineno"><a class="line" href="xb360_8c.html#a94053a7b048136373dcc77497fda5dda">  699</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a94053a7b048136373dcc77497fda5dda">xenon_get_kv_offset</a>()</div>
-<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>{</div>
-<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ret;</div>
-<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;ret, 0x6C, 4) == 0)</div>
-<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>        <span class="keywordflow">return</span> ret;</div>
-<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>}</div>
-<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span> </div>
-<div class="line"><a id="l00707" name="l00707"></a><span class="lineno"><a class="line" href="xb360_8c.html#aac12059770370c15414be8ee4b500926">  707</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aac12059770370c15414be8ee4b500926">xenon_get_ram_size</a>()</div>
-<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>{</div>
-<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>   <span class="comment">// 0xE1040000 is the host bridge register where HWINIT stores a little endian uint32</span></div>
-<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>   <span class="comment">// representing the amount of memory (in bytes) installed on the system. CB_B looks</span></div>
-<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>   <span class="comment">// here to determine whether or not to throw panic 0xAF (UNSUPPORTED_RAM_SIZE)</span></div>
-<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>    <span class="keywordflow">return</span> __builtin_bswap32(*(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *)0xE1040000);</div>
-<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>}</div>
+<div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span>        <span class="keywordflow">if</span>(xelloffsets[<a class="code hl_variable" href="xenos__edid_8h.html#adb6f3c87384808b3b79f7d8e3c2345f6">k</a>] != 0x0)</div>
+<div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>        {</div>
+<div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>            <span class="comment">// Try one of the known XeLL offsets</span></div>
+<div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span>            current = xelloffsets[<a class="code hl_variable" href="xenos__edid_8h.html#adb6f3c87384808b3b79f7d8e3c2345f6">k</a>];</div>
+<div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span>        }</div>
+<div class="line"><a id="l00522" name="l00522"></a><span class="lineno">  522</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00523" name="l00523"></a><span class="lineno">  523</span>        {</div>
+<div class="line"><a id="l00524" name="l00524"></a><span class="lineno">  524</span>            <span class="comment">// If XeLL wasn&#39;t found at one of the known offsets,</span></div>
+<div class="line"><a id="l00525" name="l00525"></a><span class="lineno">  525</span>            <span class="comment">// this is likely a 16 or 64mb XDK flash where XeLL</span></div>
+<div class="line"><a id="l00526" name="l00526"></a><span class="lineno">  526</span>            <span class="comment">// is the first file in the flashfs, meaning it starts</span></div>
+<div class="line"><a id="l00527" name="l00527"></a><span class="lineno">  527</span>            <span class="comment">// directly after the last patch slot</span></div>
+<div class="line"><a id="l00528" name="l00528"></a><span class="lineno">  528</span> </div>
+<div class="line"><a id="l00529" name="l00529"></a><span class="lineno">  529</span>            <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotOffset = 0;</div>
+<div class="line"><a id="l00530" name="l00530"></a><span class="lineno">  530</span>            <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> patchSlotSize = 0;</div>
+<div class="line"><a id="l00531" name="l00531"></a><span class="lineno">  531</span>            <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> patchSlotCount = 0;</div>
+<div class="line"><a id="l00532" name="l00532"></a><span class="lineno">  532</span> </div>
+<div class="line"><a id="l00533" name="l00533"></a><span class="lineno">  533</span>            <span class="comment">// Patch slot offset = DWORD at 0x64</span></div>
+<div class="line"><a id="l00534" name="l00534"></a><span class="lineno">  534</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotOffset, 0x64, <span class="keyword">sizeof</span>(patchSlotOffset)) == -1)</div>
+<div class="line"><a id="l00535" name="l00535"></a><span class="lineno">  535</span>            {</div>
+<div class="line"><a id="l00536" name="l00536"></a><span class="lineno">  536</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00537" name="l00537"></a><span class="lineno">  537</span>            }</div>
+<div class="line"><a id="l00538" name="l00538"></a><span class="lineno">  538</span> </div>
+<div class="line"><a id="l00539" name="l00539"></a><span class="lineno">  539</span>            <span class="comment">// Patch slot count  = WORD at 0x68</span></div>
+<div class="line"><a id="l00540" name="l00540"></a><span class="lineno">  540</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotCount, 0x68, <span class="keyword">sizeof</span>(patchSlotCount)) == -1)</div>
+<div class="line"><a id="l00541" name="l00541"></a><span class="lineno">  541</span>            {</div>
+<div class="line"><a id="l00542" name="l00542"></a><span class="lineno">  542</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00543" name="l00543"></a><span class="lineno">  543</span>            }</div>
+<div class="line"><a id="l00544" name="l00544"></a><span class="lineno">  544</span> </div>
+<div class="line"><a id="l00545" name="l00545"></a><span class="lineno">  545</span>            <span class="comment">// Patch slot size = DWORD at 0x70</span></div>
+<div class="line"><a id="l00546" name="l00546"></a><span class="lineno">  546</span>            <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;patchSlotSize, 0x70, <span class="keyword">sizeof</span>(patchSlotSize)) == -1)</div>
+<div class="line"><a id="l00547" name="l00547"></a><span class="lineno">  547</span>            {</div>
+<div class="line"><a id="l00548" name="l00548"></a><span class="lineno">  548</span>                <span class="keywordflow">continue</span>;</div>
+<div class="line"><a id="l00549" name="l00549"></a><span class="lineno">  549</span>            }</div>
+<div class="line"><a id="l00550" name="l00550"></a><span class="lineno">  550</span> </div>
+<div class="line"><a id="l00551" name="l00551"></a><span class="lineno">  551</span>            <span class="comment">// XeBuild has a bug where the patch slot size is set to zero for</span></div>
+<div class="line"><a id="l00552" name="l00552"></a><span class="lineno">  552</span>            <span class="comment">// Falcon/Zephyr/Xenon DevGL and Glitch2m images. In this case, use</span></div>
+<div class="line"><a id="l00553" name="l00553"></a><span class="lineno">  553</span>            <span class="comment">// the expected patch slot size of 0x10000 bytes.</span></div>
+<div class="line"><a id="l00554" name="l00554"></a><span class="lineno">  554</span>            <span class="keywordflow">if</span>( 0 == patchSlotSize )</div>
+<div class="line"><a id="l00555" name="l00555"></a><span class="lineno">  555</span>            {</div>
+<div class="line"><a id="l00556" name="l00556"></a><span class="lineno">  556</span>                patchSlotSize = 0x10000;</div>
+<div class="line"><a id="l00557" name="l00557"></a><span class="lineno">  557</span>            }</div>
+<div class="line"><a id="l00558" name="l00558"></a><span class="lineno">  558</span> </div>
+<div class="line"><a id="l00559" name="l00559"></a><span class="lineno">  559</span>            current = patchSlotOffset + (patchSlotSize * patchSlotCount);</div>
+<div class="line"><a id="l00560" name="l00560"></a><span class="lineno">  560</span>        }</div>
+<div class="line"><a id="l00561" name="l00561"></a><span class="lineno">  561</span> </div>
+<div class="line"><a id="l00562" name="l00562"></a><span class="lineno">  562</span>        offsetinblock = current % <a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>;</div>
+<div class="line"><a id="l00563" name="l00563"></a><span class="lineno">  563</span>        startblock = current/<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>;</div>
+<div class="line"><a id="l00564" name="l00564"></a><span class="lineno">  564</span>        blockcnt = offsetinblock ? (<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>/<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>)+1 : (<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>/<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>);</div>
+<div class="line"><a id="l00565" name="l00565"></a><span class="lineno">  565</span> </div>
+<div class="line"><a id="l00566" name="l00566"></a><span class="lineno">  566</span>        spare = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)malloc(blockcnt*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>);</div>
+<div class="line"><a id="l00567" name="l00567"></a><span class="lineno">  567</span>        <span class="keywordflow">if</span>(!spare){</div>
+<div class="line"><a id="l00568" name="l00568"></a><span class="lineno">  568</span>            printf(<span class="stringliteral">&quot; ! Error while memallocating filebuffer (spare)\n&quot;</span>);</div>
+<div class="line"><a id="l00569" name="l00569"></a><span class="lineno">  569</span>            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00570" name="l00570"></a><span class="lineno">  570</span>        }</div>
+<div class="line"><a id="l00571" name="l00571"></a><span class="lineno">  571</span>        user = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)malloc(blockcnt*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>);</div>
+<div class="line"><a id="l00572" name="l00572"></a><span class="lineno">  572</span>        <span class="keywordflow">if</span>(!user){</div>
+<div class="line"><a id="l00573" name="l00573"></a><span class="lineno">  573</span>          printf(<span class="stringliteral">&quot; ! Error while memallocating filebuffer (user)\n&quot;</span>);</div>
+<div class="line"><a id="l00574" name="l00574"></a><span class="lineno">  574</span>          <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00575" name="l00575"></a><span class="lineno">  575</span>        }</div>
+<div class="line"><a id="l00576" name="l00576"></a><span class="lineno">  576</span>        <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a> = 0;</div>
+<div class="line"><a id="l00577" name="l00577"></a><span class="lineno">  577</span>        <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_define" href="xenon__sfcx_8h.html#afb7ac115f5ff7eef4d943131a20e6014">MAX_PAGE_SZ</a>];</div>
+<div class="line"><a id="l00578" name="l00578"></a><span class="lineno">  578</span> </div>
+<div class="line"><a id="l00579" name="l00579"></a><span class="lineno">  579</span>        <span class="keywordflow">for</span> (i = (startblock*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>); i&lt; (startblock+blockcnt)*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>; i++)</div>
+<div class="line"><a id="l00580" name="l00580"></a><span class="lineno">  580</span>        {</div>
+<div class="line"><a id="l00581" name="l00581"></a><span class="lineno">  581</span>            <a class="code hl_function" href="xenon__sfcx_8c.html#a3468446df0bcdfc4e24221bbbad1db8f">sfcx_read_page</a>(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>, (i*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>), 1);</div>
+<div class="line"><a id="l00582" name="l00582"></a><span class="lineno">  582</span>            <span class="comment">//Split rawpage into user &amp; spare</span></div>
+<div class="line"><a id="l00583" name="l00583"></a><span class="lineno">  583</span>            memcpy(&amp;user[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>,<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
+<div class="line"><a id="l00584" name="l00584"></a><span class="lineno">  584</span>            memcpy(&amp;spare[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>],&amp;<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>);</div>
+<div class="line"><a id="l00585" name="l00585"></a><span class="lineno">  585</span>            <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>++;</div>
+<div class="line"><a id="l00586" name="l00586"></a><span class="lineno">  586</span>        }</div>
+<div class="line"><a id="l00587" name="l00587"></a><span class="lineno">  587</span> </div>
+<div class="line"><a id="l00588" name="l00588"></a><span class="lineno">  588</span>        <span class="keywordflow">if</span> (memcmp(&amp;user[offsetinblock+(<a class="code hl_define" href="xenon__syscalls_8c.html#ae640a4e8d66e1088de2159ed0e6b7d79">XELL_FOOTER_OFFSET</a>)],<a class="code hl_define" href="xenon__syscalls_8c.html#a659d1c82d28c27fd2d014883ffda276e">XELL_FOOTER</a>,<a class="code hl_define" href="xenon__syscalls_8c.html#a70a97d7374f8fc310109ba170176cfb4">XELL_FOOTER_LENGTH</a>) == 0){</div>
+<div class="line"><a id="l00589" name="l00589"></a><span class="lineno">  589</span>            printf(<span class="stringliteral">&quot; * XeLL Binary in NAND found @ 0x%08X\n&quot;</span>, (startblock*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aae34eb2e3aed7d5147b2207d33b88a6b">block_sz</a>)+offsetinblock);</div>
+<div class="line"><a id="l00590" name="l00590"></a><span class="lineno">  590</span> </div>
+<div class="line"><a id="l00591" name="l00591"></a><span class="lineno">  591</span>            updxell = (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)malloc(<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>);</div>
+<div class="line"><a id="l00592" name="l00592"></a><span class="lineno">  592</span>            <span class="keywordflow">if</span>(!updxell){</div>
+<div class="line"><a id="l00593" name="l00593"></a><span class="lineno">  593</span>                printf(<span class="stringliteral">&quot; ! Error while memallocating filebuffer (updxell)\n&quot;</span>);</div>
+<div class="line"><a id="l00594" name="l00594"></a><span class="lineno">  594</span>                <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00595" name="l00595"></a><span class="lineno">  595</span>            }</div>
+<div class="line"><a id="l00596" name="l00596"></a><span class="lineno">  596</span> </div>
+<div class="line"><a id="l00597" name="l00597"></a><span class="lineno">  597</span>            <a class="code hl_variable" href="ehci__defs_8h.html#a088e3e37581e2ecb5079c1d75067923f">status</a> = fread(updxell,1,<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>,f);</div>
+<div class="line"><a id="l00598" name="l00598"></a><span class="lineno">  598</span>            <span class="keywordflow">if</span> (<a class="code hl_variable" href="ehci__defs_8h.html#a088e3e37581e2ecb5079c1d75067923f">status</a> != <a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>){</div>
+<div class="line"><a id="l00599" name="l00599"></a><span class="lineno">  599</span>                fclose(f);</div>
+<div class="line"><a id="l00600" name="l00600"></a><span class="lineno">  600</span>                printf(<span class="stringliteral">&quot; ! Error reading file from %s\n&quot;</span>, path);</div>
+<div class="line"><a id="l00601" name="l00601"></a><span class="lineno">  601</span>                <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00602" name="l00602"></a><span class="lineno">  602</span>            }</div>
+<div class="line"><a id="l00603" name="l00603"></a><span class="lineno">  603</span> </div>
+<div class="line"><a id="l00604" name="l00604"></a><span class="lineno">  604</span>            <span class="keywordflow">if</span> (memcmp(&amp;updxell[<a class="code hl_define" href="xenon__syscalls_8c.html#ae640a4e8d66e1088de2159ed0e6b7d79">XELL_FOOTER_OFFSET</a>],<a class="code hl_define" href="xenon__syscalls_8c.html#a659d1c82d28c27fd2d014883ffda276e">XELL_FOOTER</a>, <a class="code hl_define" href="xenon__syscalls_8c.html#a70a97d7374f8fc310109ba170176cfb4">XELL_FOOTER_LENGTH</a>)){</div>
+<div class="line"><a id="l00605" name="l00605"></a><span class="lineno">  605</span>                printf(<span class="stringliteral">&quot; ! XeLL does not seem to have matching footer, Aborting update!\n&quot;</span>);</div>
+<div class="line"><a id="l00606" name="l00606"></a><span class="lineno">  606</span>                <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00607" name="l00607"></a><span class="lineno">  607</span>            }</div>
+<div class="line"><a id="l00608" name="l00608"></a><span class="lineno">  608</span> </div>
+<div class="line"><a id="l00609" name="l00609"></a><span class="lineno">  609</span>            fclose(f);</div>
+<div class="line"><a id="l00610" name="l00610"></a><span class="lineno">  610</span>            memcpy(&amp;user[offsetinblock], updxell,<a class="code hl_define" href="xb360_8h.html#a07af43cfda52dec1e6cf430b4633d305">XELL_SIZE</a>); <span class="comment">//Copy over updxell.bin</span></div>
+<div class="line"><a id="l00611" name="l00611"></a><span class="lineno">  611</span>            printf(<span class="stringliteral">&quot; * Writing to NAND!\n&quot;</span>);</div>
+<div class="line"><a id="l00612" name="l00612"></a><span class="lineno">  612</span> </div>
+<div class="line"><a id="l00613" name="l00613"></a><span class="lineno">  613</span>            <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a> = 0;</div>
+<div class="line"><a id="l00614" name="l00614"></a><span class="lineno">  614</span>            <span class="keywordflow">for</span> (i = startblock*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>; i &lt; (startblock+blockcnt)*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>; i ++)</div>
+<div class="line"><a id="l00615" name="l00615"></a><span class="lineno">  615</span>            {</div>
+<div class="line"><a id="l00616" name="l00616"></a><span class="lineno">  616</span>                <span class="keywordflow">if</span> (!(i%<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#acc282588afeeaa521d721892c1046a5d">pages_in_block</a>))</div>
+<div class="line"><a id="l00617" name="l00617"></a><span class="lineno">  617</span>                    <a class="code hl_function" href="xenon__sfcx_8c.html#ad950cf7d6de1e67d00ff0ea6522db955">sfcx_erase_block</a>(i*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
+<div class="line"><a id="l00618" name="l00618"></a><span class="lineno">  618</span> </div>
+<div class="line"><a id="l00619" name="l00619"></a><span class="lineno">  619</span>                <span class="comment">/* Copy user &amp; spare data together in a single rawpage */</span></div>
+<div class="line"><a id="l00620" name="l00620"></a><span class="lineno">  620</span>                memcpy(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>,&amp;user[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
+<div class="line"><a id="l00621" name="l00621"></a><span class="lineno">  621</span>                memcpy(&amp;<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>],&amp;spare[<a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>],<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#aa521591bf4cbbf486e71b8a9faf59946">meta_sz</a>);</div>
+<div class="line"><a id="l00622" name="l00622"></a><span class="lineno">  622</span>                <a class="code hl_variable" href="xenos__edid_8h.html#a8a71261a266a41e4450a2f006404ea8a">j</a>++;</div>
+<div class="line"><a id="l00623" name="l00623"></a><span class="lineno">  623</span> </div>
+<div class="line"><a id="l00624" name="l00624"></a><span class="lineno">  624</span>                <span class="keywordflow">if</span> (!(<a class="code hl_function" href="xenon__sfcx_8c.html#a1c861357dc394249bdaa3391ecc91009">sfcx_is_pageerased</a>(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>))) <span class="comment">// We dont need to write to erased pages</span></div>
+<div class="line"><a id="l00625" name="l00625"></a><span class="lineno">  625</span>                {</div>
+<div class="line"><a id="l00626" name="l00626"></a><span class="lineno">  626</span>                    memset(&amp;<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>[<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>+0x0C],0x0, 4); <span class="comment">//zero only EDC bytes</span></div>
+<div class="line"><a id="l00627" name="l00627"></a><span class="lineno">  627</span>                    <a class="code hl_function" href="xenon__sfcx_8c.html#aad85a7620ee666d1494e34fd20dfdd38">sfcx_calcecc</a>((<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *)<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>);    <span class="comment">//recalc EDC bytes</span></div>
+<div class="line"><a id="l00628" name="l00628"></a><span class="lineno">  628</span>                    <a class="code hl_function" href="xenon__sfcx_8c.html#a389a60c2f48c863f3b023a7dc1815bfb">sfcx_write_page</a>(<a class="code hl_variable" href="xenon__config_8c.html#afea9587d3ba793551e07c01c1746afca">pagebuf</a>, i*<a class="code hl_struct" href="structsfc.html">sfc</a>.<a class="code hl_variable" href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">page_sz</a>);</div>
+<div class="line"><a id="l00629" name="l00629"></a><span class="lineno">  629</span>                }</div>
+<div class="line"><a id="l00630" name="l00630"></a><span class="lineno">  630</span>            }</div>
+<div class="line"><a id="l00631" name="l00631"></a><span class="lineno">  631</span> </div>
+<div class="line"><a id="l00632" name="l00632"></a><span class="lineno">  632</span>            printf(<span class="stringliteral">&quot; * XeLL flashed! Reboot the xbox to enjoy the new build\n&quot;</span>);</div>
+<div class="line"><a id="l00633" name="l00633"></a><span class="lineno">  633</span>            <span class="keywordflow">for</span>(;;);</div>
+<div class="line"><a id="l00634" name="l00634"></a><span class="lineno">  634</span>        }</div>
+<div class="line"><a id="l00635" name="l00635"></a><span class="lineno">  635</span>    }</div>
+<div class="line"><a id="l00636" name="l00636"></a><span class="lineno">  636</span> </div>
+<div class="line"><a id="l00637" name="l00637"></a><span class="lineno">  637</span>    printf(<span class="stringliteral">&quot; ! Couldn&#39;t locate XeLL binary in NAND. Aborting!\n&quot;</span>);</div>
+<div class="line"><a id="l00638" name="l00638"></a><span class="lineno">  638</span>    <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00639" name="l00639"></a><span class="lineno">  639</span>}</div>
+<div class="line"><a id="l00640" name="l00640"></a><span class="lineno">  640</span> </div>
+<div class="line"><a id="l00641" name="l00641"></a><span class="lineno"><a class="line" href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">  641</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">xenon_get_DVE</a>()</div>
+<div class="line"><a id="l00642" name="l00642"></a><span class="lineno">  642</span>{</div>
+<div class="line"><a id="l00643" name="l00643"></a><span class="lineno">  643</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> DVEversion, tmp;</div>
+<div class="line"><a id="l00644" name="l00644"></a><span class="lineno">  644</span>    <a class="code hl_function" href="xenon__smc_8c.html#adacb4f8dbd7eceeaa48a3fd2aea60b6f">xenon_smc_ana_read</a>(0xfe, &amp;DVEversion);</div>
+<div class="line"><a id="l00645" name="l00645"></a><span class="lineno">  645</span>    tmp = DVEversion;</div>
+<div class="line"><a id="l00646" name="l00646"></a><span class="lineno">  646</span>    tmp = (tmp &amp; ~0xF0) | ((DVEversion &gt;&gt; 12) &amp; 0xF0);</div>
+<div class="line"><a id="l00647" name="l00647"></a><span class="lineno">  647</span>    <span class="keywordflow">return</span> (tmp &amp; 0xFF);</div>
+<div class="line"><a id="l00648" name="l00648"></a><span class="lineno">  648</span>}</div>
+<div class="line"><a id="l00649" name="l00649"></a><span class="lineno">  649</span> </div>
+<div class="line"><a id="l00650" name="l00650"></a><span class="lineno"><a class="line" href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">  650</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">xenon_get_PCIBridgeRevisionID</a>()</div>
+<div class="line"><a id="l00651" name="l00651"></a><span class="lineno">  651</span>{</div>
+<div class="line"><a id="l00652" name="l00652"></a><span class="lineno">  652</span>    <span class="keywordflow">return</span> ((read32(0xd0000008) &lt;&lt; 24) &gt;&gt; 24);</div>
+<div class="line"><a id="l00653" name="l00653"></a><span class="lineno">  653</span>}</div>
+<div class="line"><a id="l00654" name="l00654"></a><span class="lineno">  654</span> </div>
+<div class="line"><a id="l00655" name="l00655"></a><span class="lineno"><a class="line" href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">  655</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">xenon_get_CPU_PVR</a>()</div>
+<div class="line"><a id="l00656" name="l00656"></a><span class="lineno">  656</span>{</div>
+<div class="line"><a id="l00657" name="l00657"></a><span class="lineno">  657</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> PVR;</div>
+<div class="line"><a id="l00658" name="l00658"></a><span class="lineno">  658</span>    <span class="keyword">asm</span> <span class="keyword">volatile</span>(<span class="stringliteral">&quot;mfpvr %0&quot;</span> : <span class="stringliteral">&quot;=r&quot;</span> (PVR));</div>
+<div class="line"><a id="l00659" name="l00659"></a><span class="lineno">  659</span>    <span class="keywordflow">return</span> PVR;</div>
+<div class="line"><a id="l00660" name="l00660"></a><span class="lineno">  660</span>}</div>
+<div class="line"><a id="l00661" name="l00661"></a><span class="lineno">  661</span> </div>
+<div class="line"><a id="l00662" name="l00662"></a><span class="lineno"><a class="line" href="xb360_8c.html#aa7d172ea6d5d77c1924231ee3765880e">  662</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aa7d172ea6d5d77c1924231ee3765880e">xenon_get_XenosID</a>()</div>
+<div class="line"><a id="l00663" name="l00663"></a><span class="lineno">  663</span>{</div>
+<div class="line"><a id="l00664" name="l00664"></a><span class="lineno">  664</span>    <span class="keywordflow">return</span> ((read32(0xd0010000) &gt;&gt; 16) &amp; 0xFFFF);</div>
+<div class="line"><a id="l00665" name="l00665"></a><span class="lineno">  665</span>}</div>
+<div class="line"><a id="l00666" name="l00666"></a><span class="lineno">  666</span> </div>
+<div class="line"><a id="l00667" name="l00667"></a><span class="lineno"><a class="line" href="xb360_8c.html#af7e69aba3ba2b8110bb7f3b1571e71f6">  667</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#af7e69aba3ba2b8110bb7f3b1571e71f6">xenon_get_console_type</a>()</div>
+<div class="line"><a id="l00668" name="l00668"></a><span class="lineno">  668</span>{</div>
+<div class="line"><a id="l00669" name="l00669"></a><span class="lineno">  669</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> PVR, PCIBridgeRevisionID, DVEversion;</div>
+<div class="line"><a id="l00670" name="l00670"></a><span class="lineno">  670</span> </div>
+<div class="line"><a id="l00671" name="l00671"></a><span class="lineno">  671</span>    PCIBridgeRevisionID = <a class="code hl_function" href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">xenon_get_PCIBridgeRevisionID</a>();</div>
+<div class="line"><a id="l00672" name="l00672"></a><span class="lineno">  672</span>    DVEversion = <a class="code hl_function" href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">xenon_get_DVE</a>();</div>
+<div class="line"><a id="l00673" name="l00673"></a><span class="lineno">  673</span>    PVR = <a class="code hl_function" href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">xenon_get_CPU_PVR</a>();</div>
+<div class="line"><a id="l00674" name="l00674"></a><span class="lineno">  674</span> </div>
+<div class="line"><a id="l00675" name="l00675"></a><span class="lineno">  675</span>    <span class="keywordflow">if</span>(PVR &lt;= 0x710300) <span class="comment">// DD3 or older CPU, must be a Xenon or Zephyr</span></div>
+<div class="line"><a id="l00676" name="l00676"></a><span class="lineno">  676</span>    {</div>
+<div class="line"><a id="l00677" name="l00677"></a><span class="lineno">  677</span>        <span class="keywordflow">if</span>(DVEversion &gt;= 0x11) <span class="comment">// We&#39;ve got HANA, this must be a zephyr</span></div>
+<div class="line"><a id="l00678" name="l00678"></a><span class="lineno">  678</span>        {</div>
+<div class="line"><a id="l00679" name="l00679"></a><span class="lineno">  679</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a41e4fdc56c36d734cabefbf7a1d8f6a0">REV_ZEPHYR</a>;</div>
+<div class="line"><a id="l00680" name="l00680"></a><span class="lineno">  680</span>        }</div>
+<div class="line"><a id="l00681" name="l00681"></a><span class="lineno">  681</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00682" name="l00682"></a><span class="lineno">  682</span>        {</div>
+<div class="line"><a id="l00683" name="l00683"></a><span class="lineno">  683</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a30e833f82a68c4e7b7742781864525e8">REV_XENON</a>;</div>
+<div class="line"><a id="l00684" name="l00684"></a><span class="lineno">  684</span>        }</div>
+<div class="line"><a id="l00685" name="l00685"></a><span class="lineno">  685</span>    }</div>
+<div class="line"><a id="l00686" name="l00686"></a><span class="lineno">  686</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(PVR &lt;= 0x710500) <span class="comment">// Loki CPU, must be a Falcon or Jasper</span></div>
+<div class="line"><a id="l00687" name="l00687"></a><span class="lineno">  687</span>    {</div>
+<div class="line"><a id="l00688" name="l00688"></a><span class="lineno">  688</span>        <span class="keywordflow">if</span>(PCIBridgeRevisionID &gt;= 0x60)</div>
+<div class="line"><a id="l00689" name="l00689"></a><span class="lineno">  689</span>        {</div>
+<div class="line"><a id="l00690" name="l00690"></a><span class="lineno">  690</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#aa8a226b7bd24e8206e9153893ec29a51">REV_JASPER</a>;</div>
+<div class="line"><a id="l00691" name="l00691"></a><span class="lineno">  691</span>        }</div>
+<div class="line"><a id="l00692" name="l00692"></a><span class="lineno">  692</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00693" name="l00693"></a><span class="lineno">  693</span>        {</div>
+<div class="line"><a id="l00694" name="l00694"></a><span class="lineno">  694</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#aa80d7fe314b0ff280dc47b435525f7f6">REV_FALCON</a>;</div>
+<div class="line"><a id="l00695" name="l00695"></a><span class="lineno">  695</span>        }</div>
+<div class="line"><a id="l00696" name="l00696"></a><span class="lineno">  696</span>    }</div>
+<div class="line"><a id="l00697" name="l00697"></a><span class="lineno">  697</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(PVR &lt;= 0x710800) <span class="comment">// Vejle CPU, must be Trinity or Corona</span></div>
+<div class="line"><a id="l00698" name="l00698"></a><span class="lineno">  698</span>    {</div>
+<div class="line"><a id="l00699" name="l00699"></a><span class="lineno">  699</span>        <span class="keywordflow">if</span> (DVEversion &gt;= 0x20)</div>
+<div class="line"><a id="l00700" name="l00700"></a><span class="lineno">  700</span>        {</div>
+<div class="line"><a id="l00701" name="l00701"></a><span class="lineno">  701</span>            <span class="keywordflow">if</span> (PCIBridgeRevisionID &gt;= 0x70 &amp;&amp; <a class="code hl_function" href="xenon__sfcx_8c.html#a10350fe52a7d7b4d0b4a3393cf0ae035">sfcx_readreg</a>(<a class="code hl_define" href="xenon__sfcx_8h.html#ad2f19a1a3aba26bf2bedd2e7c82d6463">SFCX_PHISON</a>) != 0)</div>
+<div class="line"><a id="l00702" name="l00702"></a><span class="lineno">  702</span>                <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a4606f4332f9c86c02041c402c55a2474">REV_CORONA_PHISON</a>;</div>
+<div class="line"><a id="l00703" name="l00703"></a><span class="lineno">  703</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a338cd3c88d512ec498fb00de1a56c8e9">REV_CORONA</a>;</div>
+<div class="line"><a id="l00704" name="l00704"></a><span class="lineno">  704</span>        }</div>
+<div class="line"><a id="l00705" name="l00705"></a><span class="lineno">  705</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00706" name="l00706"></a><span class="lineno">  706</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a94e265f60f8c511142e7ac1e4cf20e96">REV_TRINITY</a>;</div>
+<div class="line"><a id="l00707" name="l00707"></a><span class="lineno">  707</span>    }</div>
+<div class="line"><a id="l00708" name="l00708"></a><span class="lineno">  708</span>    <span class="keywordflow">else</span> <span class="keywordflow">if</span>(PVR &lt;= 0x710A00) <span class="comment">// Oban CPU, must be Winchester</span></div>
+<div class="line"><a id="l00709" name="l00709"></a><span class="lineno">  709</span>    {</div>
+<div class="line"><a id="l00710" name="l00710"></a><span class="lineno">  710</span>        <span class="keywordflow">if</span> (PCIBridgeRevisionID &gt;= 0x70 &amp;&amp; <a class="code hl_function" href="xenon__sfcx_8c.html#a10350fe52a7d7b4d0b4a3393cf0ae035">sfcx_readreg</a>(<a class="code hl_define" href="xenon__sfcx_8h.html#ad2f19a1a3aba26bf2bedd2e7c82d6463">SFCX_PHISON</a>) != 0)</div>
+<div class="line"><a id="l00711" name="l00711"></a><span class="lineno">  711</span>            <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#a7413e0df76ed7afa88ed51bebef91cfc">REV_WINCHESTER_MMC</a>;</div>
+<div class="line"><a id="l00712" name="l00712"></a><span class="lineno">  712</span>        <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#aaf7eaf753cf874a48f25f5ccfc9217ef">REV_WINCHESTER</a>;</div>
+<div class="line"><a id="l00713" name="l00713"></a><span class="lineno">  713</span>    }</div>
+<div class="line"><a id="l00714" name="l00714"></a><span class="lineno">  714</span> </div>
+<div class="line"><a id="l00715" name="l00715"></a><span class="lineno">  715</span>    <span class="keywordflow">return</span> <a class="code hl_define" href="xb360_8h.html#ae804c329a53fbcc7102bd80142c203b4">REV_UNKNOWN</a>;</div>
+<div class="line"><a id="l00716" name="l00716"></a><span class="lineno">  716</span>}</div>
+<div class="line"><a id="l00717" name="l00717"></a><span class="lineno">  717</span> </div>
+<div class="line"><a id="l00718" name="l00718"></a><span class="lineno"><a class="line" href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">  718</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">xenon_logical_nand_data_ok</a>()</div>
+<div class="line"><a id="l00719" name="l00719"></a><span class="lineno">  719</span>{</div>
+<div class="line"><a id="l00720" name="l00720"></a><span class="lineno">  720</span>    <a class="code hl_typedef" href="libfdt__env_8h.html#a7726bb008ed64ac831de880078ee7764">uint16_t</a> tmp;</div>
+<div class="line"><a id="l00721" name="l00721"></a><span class="lineno">  721</span>    memcpy(&amp;tmp, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)(0x80000200C8000000ULL), 2);</div>
+<div class="line"><a id="l00722" name="l00722"></a><span class="lineno">  722</span>    <span class="keywordflow">if</span> (tmp != 0xFF4F)</div>
+<div class="line"><a id="l00723" name="l00723"></a><span class="lineno">  723</span>        <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00724" name="l00724"></a><span class="lineno">  724</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00725" name="l00725"></a><span class="lineno">  725</span>}</div>
+<div class="line"><a id="l00726" name="l00726"></a><span class="lineno">  726</span> </div>
+<div class="line"><a id="l00727" name="l00727"></a><span class="lineno"><a class="line" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">  727</a></span><span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(<span class="keywordtype">void</span>* buf, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> offset, <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> len)</div>
+<div class="line"><a id="l00728" name="l00728"></a><span class="lineno">  728</span>{</div>
+<div class="line"><a id="l00729" name="l00729"></a><span class="lineno">  729</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">xenon_logical_nand_data_ok</a>() == 0)</div>
+<div class="line"><a id="l00730" name="l00730"></a><span class="lineno">  730</span>        memcpy(buf, (<span class="keyword">const</span> <span class="keywordtype">void</span>*)(0x80000200C8000000ULL + offset), len);</div>
+<div class="line"><a id="l00731" name="l00731"></a><span class="lineno">  731</span>    <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00732" name="l00732"></a><span class="lineno">  732</span>        <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00733" name="l00733"></a><span class="lineno">  733</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00734" name="l00734"></a><span class="lineno">  734</span>}</div>
+<div class="line"><a id="l00735" name="l00735"></a><span class="lineno">  735</span> </div>
+<div class="line"><a id="l00736" name="l00736"></a><span class="lineno"><a class="line" href="xb360_8c.html#aeb5ba11cf4b5077f3ac9fc741f50398b">  736</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aeb5ba11cf4b5077f3ac9fc741f50398b">xenon_get_kv_size</a>()</div>
+<div class="line"><a id="l00737" name="l00737"></a><span class="lineno">  737</span>{</div>
+<div class="line"><a id="l00738" name="l00738"></a><span class="lineno">  738</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ret;</div>
+<div class="line"><a id="l00739" name="l00739"></a><span class="lineno">  739</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;ret, 0x60, 4) == 0)</div>
+<div class="line"><a id="l00740" name="l00740"></a><span class="lineno">  740</span>        <span class="keywordflow">return</span> ret;</div>
+<div class="line"><a id="l00741" name="l00741"></a><span class="lineno">  741</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00742" name="l00742"></a><span class="lineno">  742</span>}</div>
+<div class="line"><a id="l00743" name="l00743"></a><span class="lineno">  743</span> </div>
+<div class="line"><a id="l00744" name="l00744"></a><span class="lineno"><a class="line" href="xb360_8c.html#a94053a7b048136373dcc77497fda5dda">  744</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#a94053a7b048136373dcc77497fda5dda">xenon_get_kv_offset</a>()</div>
+<div class="line"><a id="l00745" name="l00745"></a><span class="lineno">  745</span>{</div>
+<div class="line"><a id="l00746" name="l00746"></a><span class="lineno">  746</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> ret;</div>
+<div class="line"><a id="l00747" name="l00747"></a><span class="lineno">  747</span>    <span class="keywordflow">if</span> (<a class="code hl_function" href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a>(&amp;ret, 0x6C, 4) == 0)</div>
+<div class="line"><a id="l00748" name="l00748"></a><span class="lineno">  748</span>        <span class="keywordflow">return</span> ret;</div>
+<div class="line"><a id="l00749" name="l00749"></a><span class="lineno">  749</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00750" name="l00750"></a><span class="lineno">  750</span>}</div>
+<div class="line"><a id="l00751" name="l00751"></a><span class="lineno">  751</span> </div>
+<div class="line"><a id="l00752" name="l00752"></a><span class="lineno"><a class="line" href="xb360_8c.html#aac12059770370c15414be8ee4b500926">  752</a></span><span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> <a class="code hl_function" href="xb360_8c.html#aac12059770370c15414be8ee4b500926">xenon_get_ram_size</a>()</div>
+<div class="line"><a id="l00753" name="l00753"></a><span class="lineno">  753</span>{</div>
+<div class="line"><a id="l00754" name="l00754"></a><span class="lineno">  754</span>    <span class="comment">// 0xE1040000 is the host bridge register where HWINIT stores a little endian uint32</span></div>
+<div class="line"><a id="l00755" name="l00755"></a><span class="lineno">  755</span>    <span class="comment">// representing the amount of memory (in bytes) installed on the system. CB_B looks</span></div>
+<div class="line"><a id="l00756" name="l00756"></a><span class="lineno">  756</span>    <span class="comment">// here to determine whether or not to throw panic 0xAF (UNSUPPORTED_RAM_SIZE)</span></div>
+<div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>    <span class="keywordflow">return</span> __builtin_bswap32(*(<span class="keywordtype">unsigned</span> <span class="keywordtype">int</span> *)0xE1040000);</div>
+<div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>}</div>
 <div class="ttc" id="aata_8h_html_a1892eba2086d12ac2b09005aeb09ea3b"><div class="ttname"><a href="ata_8h.html#a1892eba2086d12ac2b09005aeb09ea3b">length</a></div><div class="ttdeci">uint16_t length</div><div class="ttdef"><b>Definition:</b> <a href="ata_8h_source.html#l00004">ata.h:4</a></div></div>
 <div class="ttc" id="aehci__defs_8h_html_a088e3e37581e2ecb5079c1d75067923f"><div class="ttname"><a href="ehci__defs_8h.html#a088e3e37581e2ecb5079c1d75067923f">status</a></div><div class="ttdeci">u32 status</div><div class="ttdef"><b>Definition:</b> <a href="ehci__defs_8h_source.html#l00015">ehci_defs.h:15</a></div></div>
 <div class="ttc" id="ahmac__sha1_8c_html_a562456e5556c3ae3f3c5327cdfcc279a"><div class="ttname"><a href="hmac__sha1_8c.html#a562456e5556c3ae3f3c5327cdfcc279a">HMAC_SHA1_EndMessage</a></div><div class="ttdeci">void HMAC_SHA1_EndMessage(unsigned char *out, HMAC_SHA1_CTX *ctx)</div><div class="ttdef"><b>Definition:</b> <a href="hmac__sha1_8c_source.html#l00170">hmac_sha1.c:170</a></div></div>
@@ -812,8 +857,8 @@ $(function() {
 <div class="ttc" id="astdio_8h_html"><div class="ttname"><a href="stdio_8h.html">stdio.h</a></div></div>
 <div class="ttc" id="astructXCONFIG__SECURED__SETTINGS_html"><div class="ttname"><a href="structXCONFIG__SECURED__SETTINGS.html">XCONFIG_SECURED_SETTINGS</a></div><div class="ttdef"><b>Definition:</b> <a href="xenon__config_8h_source.html#l00027">xenon_config.h:28</a></div></div>
 <div class="ttc" id="astruct__HMAC__SHA1__CTX_html"><div class="ttname"><a href="struct__HMAC__SHA1__CTX.html">_HMAC_SHA1_CTX</a></div><div class="ttdef"><b>Definition:</b> <a href="hmac__sha1_8h_source.html#l00061">hmac_sha1.h:61</a></div></div>
-<div class="ttc" id="astructkventry_html"><div class="ttname"><a href="structkventry.html">kventry</a></div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00104">xb360.h:104</a></div></div>
-<div class="ttc" id="astructkventry_html_a430cdc0f31d6ee9f9f01bb4ac76b42b2"><div class="ttname"><a href="structkventry.html#a430cdc0f31d6ee9f9f01bb4ac76b42b2">kventry::length</a></div><div class="ttdeci">int length</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00107">xb360.h:107</a></div></div>
+<div class="ttc" id="astructkventry_html"><div class="ttname"><a href="structkventry.html">kventry</a></div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00103">xb360.h:103</a></div></div>
+<div class="ttc" id="astructkventry_html_a430cdc0f31d6ee9f9f01bb4ac76b42b2"><div class="ttname"><a href="structkventry.html#a430cdc0f31d6ee9f9f01bb4ac76b42b2">kventry::length</a></div><div class="ttdeci">int length</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00106">xb360.h:106</a></div></div>
 <div class="ttc" id="astructsfc_html"><div class="ttname"><a href="structsfc.html">sfc</a></div><div class="ttdef"><b>Definition:</b> <a href="xenon__sfcx_8h_source.html#l00085">xenon_sfcx.h:86</a></div></div>
 <div class="ttc" id="astructsfc_html_a05e6cc85887f5495f733ab646b01ce6e"><div class="ttname"><a href="structsfc.html#a05e6cc85887f5495f733ab646b01ce6e">sfc::page_sz_phys</a></div><div class="ttdeci">int page_sz_phys</div><div class="ttdef"><b>Definition:</b> <a href="xenon__sfcx_8h_source.html#l00092">xenon_sfcx.h:92</a></div></div>
 <div class="ttc" id="astructsfc_html_a35bb066e86ebc0602d368ce6a76e1bf9"><div class="ttname"><a href="structsfc.html#a35bb066e86ebc0602d368ce6a76e1bf9">sfc::page_sz</a></div><div class="ttdeci">int page_sz</div><div class="ttdef"><b>Definition:</b> <a href="xenon__sfcx_8h_source.html#l00090">xenon_sfcx.h:90</a></div></div>
@@ -823,26 +868,26 @@ $(function() {
 <div class="ttc" id="astructsfc_html_acc282588afeeaa521d721892c1046a5d"><div class="ttname"><a href="structsfc.html#acc282588afeeaa521d721892c1046a5d">sfc::pages_in_block</a></div><div class="ttdeci">int pages_in_block</div><div class="ttdef"><b>Definition:</b> <a href="xenon__sfcx_8h_source.html#l00094">xenon_sfcx.h:94</a></div></div>
 <div class="ttc" id="atime_8c_html_aa47a89344c2cc034a7bf33bdff821f75"><div class="ttname"><a href="time_8c.html#aa47a89344c2cc034a7bf33bdff821f75">delay</a></div><div class="ttdeci">void delay(int u)</div><div class="ttdef"><b>Definition:</b> <a href="time_8c_source.html#l00022">time.c:22</a></div></div>
 <div class="ttc" id="atime_8h_html"><div class="ttname"><a href="time_8h.html">time.h</a></div></div>
-<div class="ttc" id="axb360_8c_html_a0a5e3714adb52b41260e41749fc9af9f"><div class="ttname"><a href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a></div><div class="ttdeci">int xenon_get_logical_nand_data(void *buf, unsigned int offset, unsigned int len)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00682">xb360.c:682</a></div></div>
-<div class="ttc" id="axb360_8c_html_a209e38b220e94420cc8007dbae01905e"><div class="ttname"><a href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">xenon_get_CPU_PVR</a></div><div class="ttdeci">unsigned int xenon_get_CPU_PVR()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00610">xb360.c:610</a></div></div>
+<div class="ttc" id="axb360_8c_html_a0a5e3714adb52b41260e41749fc9af9f"><div class="ttname"><a href="xb360_8c.html#a0a5e3714adb52b41260e41749fc9af9f">xenon_get_logical_nand_data</a></div><div class="ttdeci">int xenon_get_logical_nand_data(void *buf, unsigned int offset, unsigned int len)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00727">xb360.c:727</a></div></div>
+<div class="ttc" id="axb360_8c_html_a209e38b220e94420cc8007dbae01905e"><div class="ttname"><a href="xb360_8c.html#a209e38b220e94420cc8007dbae01905e">xenon_get_CPU_PVR</a></div><div class="ttdeci">unsigned int xenon_get_CPU_PVR()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00655">xb360.c:655</a></div></div>
 <div class="ttc" id="axb360_8c_html_a2d23c02e64cdea15adaf115f161dbcdb"><div class="ttname"><a href="xb360_8c.html#a2d23c02e64cdea15adaf115f161dbcdb">kv_get_cserial</a></div><div class="ttdeci">int kv_get_cserial(unsigned char *serial)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00327">xb360.c:327</a></div></div>
 <div class="ttc" id="axb360_8c_html_a43d67ff039dc10b0eb1a311d4ed746c0"><div class="ttname"><a href="xb360_8c.html#a43d67ff039dc10b0eb1a311d4ed746c0">kv_print_hash_failure</a></div><div class="ttdeci">void kv_print_hash_failure()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00277">xb360.c:277</a></div></div>
 <div class="ttc" id="axb360_8c_html_a448ab19a1cbdb31b96900bbebe52d6d1"><div class="ttname"><a href="xb360_8c.html#a448ab19a1cbdb31b96900bbebe52d6d1">print_key</a></div><div class="ttdeci">void print_key(char *name, unsigned char *data)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00087">xb360.c:87</a></div></div>
 <div class="ttc" id="axb360_8c_html_a66932f80e4cd351a9910210b13756302"><div class="ttname"><a href="xb360_8c.html#a66932f80e4cd351a9910210b13756302">get_virtual_cpukey</a></div><div class="ttdeci">int get_virtual_cpukey(unsigned char *data)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00112">xb360.c:112</a></div></div>
 <div class="ttc" id="axb360_8c_html_a690a9bb1f50fbcf793bd7dfc21656941"><div class="ttname"><a href="xb360_8c.html#a690a9bb1f50fbcf793bd7dfc21656941">updateXeLL</a></div><div class="ttdeci">int updateXeLL(char *path)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00477">xb360.c:477</a></div></div>
-<div class="ttc" id="axb360_8c_html_a8a669b10be9e5d7e7e403335544efa69"><div class="ttname"><a href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">xenon_get_PCIBridgeRevisionID</a></div><div class="ttdeci">unsigned int xenon_get_PCIBridgeRevisionID()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00605">xb360.c:605</a></div></div>
-<div class="ttc" id="axb360_8c_html_a94053a7b048136373dcc77497fda5dda"><div class="ttname"><a href="xb360_8c.html#a94053a7b048136373dcc77497fda5dda">xenon_get_kv_offset</a></div><div class="ttdeci">unsigned int xenon_get_kv_offset()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00699">xb360.c:699</a></div></div>
-<div class="ttc" id="axb360_8c_html_aa7d172ea6d5d77c1924231ee3765880e"><div class="ttname"><a href="xb360_8c.html#aa7d172ea6d5d77c1924231ee3765880e">xenon_get_XenosID</a></div><div class="ttdeci">unsigned int xenon_get_XenosID()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00617">xb360.c:617</a></div></div>
+<div class="ttc" id="axb360_8c_html_a8a669b10be9e5d7e7e403335544efa69"><div class="ttname"><a href="xb360_8c.html#a8a669b10be9e5d7e7e403335544efa69">xenon_get_PCIBridgeRevisionID</a></div><div class="ttdeci">unsigned int xenon_get_PCIBridgeRevisionID()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00650">xb360.c:650</a></div></div>
+<div class="ttc" id="axb360_8c_html_a94053a7b048136373dcc77497fda5dda"><div class="ttname"><a href="xb360_8c.html#a94053a7b048136373dcc77497fda5dda">xenon_get_kv_offset</a></div><div class="ttdeci">unsigned int xenon_get_kv_offset()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00744">xb360.c:744</a></div></div>
+<div class="ttc" id="axb360_8c_html_aa7d172ea6d5d77c1924231ee3765880e"><div class="ttname"><a href="xb360_8c.html#aa7d172ea6d5d77c1924231ee3765880e">xenon_get_XenosID</a></div><div class="ttdeci">unsigned int xenon_get_XenosID()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00662">xb360.c:662</a></div></div>
 <div class="ttc" id="axb360_8c_html_aaa806d5a086fcacb27f25ca57f6ab63b"><div class="ttname"><a href="xb360_8c.html#aaa806d5a086fcacb27f25ca57f6ab63b">kv_read</a></div><div class="ttdeci">int kv_read(unsigned char *data, int virtualcpukey)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00209">xb360.c:209</a></div></div>
 <div class="ttc" id="axb360_8c_html_aabbc4fa210a2cf3ad16c7490df2b2a85"><div class="ttname"><a href="xb360_8c.html#aabbc4fa210a2cf3ad16c7490df2b2a85">print_cpu_dvd_keys</a></div><div class="ttdeci">void print_cpu_dvd_keys(void)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00358">xb360.c:358</a></div></div>
-<div class="ttc" id="axb360_8c_html_aac12059770370c15414be8ee4b500926"><div class="ttname"><a href="xb360_8c.html#aac12059770370c15414be8ee4b500926">xenon_get_ram_size</a></div><div class="ttdeci">unsigned int xenon_get_ram_size()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00707">xb360.c:707</a></div></div>
+<div class="ttc" id="axb360_8c_html_aac12059770370c15414be8ee4b500926"><div class="ttname"><a href="xb360_8c.html#aac12059770370c15414be8ee4b500926">xenon_get_ram_size</a></div><div class="ttdeci">unsigned int xenon_get_ram_size()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00752">xb360.c:752</a></div></div>
 <div class="ttc" id="axb360_8c_html_aaf07e44d90c2a8042166c7cbf3faddb1"><div class="ttname"><a href="xb360_8c.html#aaf07e44d90c2a8042166c7cbf3faddb1">secured_settings</a></div><div class="ttdeci">struct XCONFIG_SECURED_SETTINGS secured_settings</div><div class="ttdef"><b>Definition:</b> <a href="xenon__config_8c_source.html#l00017">xenon_config.c:17</a></div></div>
 <div class="ttc" id="axb360_8c_html_ab0cc2f5aa116fc5ad512e89a03dec3fd"><div class="ttname"><a href="xb360_8c.html#ab0cc2f5aa116fc5ad512e89a03dec3fd">kv_get_key</a></div><div class="ttdeci">int kv_get_key(unsigned char keyid, unsigned char *keybuf, int *keybuflen, unsigned char *keyvault)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00193">xb360.c:193</a></div></div>
-<div class="ttc" id="axb360_8c_html_ac4bbf26f5a6fe276342ebd5ff5950cf6"><div class="ttname"><a href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">xenon_get_DVE</a></div><div class="ttdeci">unsigned int xenon_get_DVE()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00596">xb360.c:596</a></div></div>
-<div class="ttc" id="axb360_8c_html_aeb5ba11cf4b5077f3ac9fc741f50398b"><div class="ttname"><a href="xb360_8c.html#aeb5ba11cf4b5077f3ac9fc741f50398b">xenon_get_kv_size</a></div><div class="ttdeci">unsigned int xenon_get_kv_size()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00691">xb360.c:691</a></div></div>
-<div class="ttc" id="axb360_8c_html_aecb9a0002a742c4099c978741185cf7a"><div class="ttname"><a href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">xenon_logical_nand_data_ok</a></div><div class="ttdeci">int xenon_logical_nand_data_ok()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00673">xb360.c:673</a></div></div>
+<div class="ttc" id="axb360_8c_html_ac4bbf26f5a6fe276342ebd5ff5950cf6"><div class="ttname"><a href="xb360_8c.html#ac4bbf26f5a6fe276342ebd5ff5950cf6">xenon_get_DVE</a></div><div class="ttdeci">unsigned int xenon_get_DVE()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00641">xb360.c:641</a></div></div>
+<div class="ttc" id="axb360_8c_html_aeb5ba11cf4b5077f3ac9fc741f50398b"><div class="ttname"><a href="xb360_8c.html#aeb5ba11cf4b5077f3ac9fc741f50398b">xenon_get_kv_size</a></div><div class="ttdeci">unsigned int xenon_get_kv_size()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00736">xb360.c:736</a></div></div>
+<div class="ttc" id="axb360_8c_html_aecb9a0002a742c4099c978741185cf7a"><div class="ttname"><a href="xb360_8c.html#aecb9a0002a742c4099c978741185cf7a">xenon_logical_nand_data_ok</a></div><div class="ttdeci">int xenon_logical_nand_data_ok()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00718">xb360.c:718</a></div></div>
 <div class="ttc" id="axb360_8c_html_af0df5de0fc1916d8d06024d6d18f45c0"><div class="ttname"><a href="xb360_8c.html#af0df5de0fc1916d8d06024d6d18f45c0">print_cserial</a></div><div class="ttdeci">void print_cserial(char *name, unsigned char *data)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00096">xb360.c:96</a></div></div>
-<div class="ttc" id="axb360_8c_html_af7e69aba3ba2b8110bb7f3b1571e71f6"><div class="ttname"><a href="xb360_8c.html#af7e69aba3ba2b8110bb7f3b1571e71f6">xenon_get_console_type</a></div><div class="ttdeci">int xenon_get_console_type()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00622">xb360.c:622</a></div></div>
+<div class="ttc" id="axb360_8c_html_af7e69aba3ba2b8110bb7f3b1571e71f6"><div class="ttname"><a href="xb360_8c.html#af7e69aba3ba2b8110bb7f3b1571e71f6">xenon_get_console_type</a></div><div class="ttdeci">int xenon_get_console_type()</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00667">xb360.c:667</a></div></div>
 <div class="ttc" id="axb360_8c_html_afd56a93a08b55ddcad4b1a6bbe5671b8"><div class="ttname"><a href="xb360_8c.html#afd56a93a08b55ddcad4b1a6bbe5671b8">cpu_get_key</a></div><div class="ttdeci">int cpu_get_key(unsigned char *data)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00105">xb360.c:105</a></div></div>
 <div class="ttc" id="axb360_8c_html_afde7589efb6735642a7aa32d981d0be9"><div class="ttname"><a href="xb360_8c.html#afde7589efb6735642a7aa32d981d0be9">kv_get_dvd_key</a></div><div class="ttdeci">int kv_get_dvd_key(unsigned char *dvd_key)</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8c_source.html#l00296">xb360.c:296</a></div></div>
 <div class="ttc" id="axb360_8h_html"><div class="ttname"><a href="xb360_8h.html">xb360.h</a></div></div>
@@ -856,15 +901,15 @@ $(function() {
 <div class="ttc" id="axb360_8h_html_a245c968ce8310065b51ff7db93a98f4d"><div class="ttname"><a href="xb360_8h.html#a245c968ce8310065b51ff7db93a98f4d">KV_FLASH_OFFSET</a></div><div class="ttdeci">#define KV_FLASH_OFFSET</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00072">xb360.h:72</a></div></div>
 <div class="ttc" id="axb360_8h_html_a2f55f241051fe9af8d7c2aae2babe0c9"><div class="ttname"><a href="xb360_8h.html#a2f55f241051fe9af8d7c2aae2babe0c9">XEKEY_KEY_OBFUSCATION_KEY</a></div><div class="ttdeci">#define XEKEY_KEY_OBFUSCATION_KEY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00034">xb360.h:34</a></div></div>
 <div class="ttc" id="axb360_8h_html_a2f7241171039e28fbf207b32f6bca272"><div class="ttname"><a href="xb360_8h.html#a2f7241171039e28fbf207b32f6bca272">XEKEY_RESERVED_BYTE3</a></div><div class="ttdeci">#define XEKEY_RESERVED_BYTE3</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00013">xb360.h:13</a></div></div>
-<div class="ttc" id="axb360_8h_html_a30e833f82a68c4e7b7742781864525e8"><div class="ttname"><a href="xb360_8h.html#a30e833f82a68c4e7b7742781864525e8">REV_XENON</a></div><div class="ttdeci">#define REV_XENON</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00093">xb360.h:93</a></div></div>
+<div class="ttc" id="axb360_8h_html_a30e833f82a68c4e7b7742781864525e8"><div class="ttname"><a href="xb360_8h.html#a30e833f82a68c4e7b7742781864525e8">REV_XENON</a></div><div class="ttdeci">#define REV_XENON</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00092">xb360.h:92</a></div></div>
 <div class="ttc" id="axb360_8h_html_a31d2e5fd41f0bb5dc31c70e47df99271"><div class="ttname"><a href="xb360_8h.html#a31d2e5fd41f0bb5dc31c70e47df99271">XEKEY_GLOBAL_DEVICE_2DES_KEY1</a></div><div class="ttdeci">#define XEKEY_GLOBAL_DEVICE_2DES_KEY1</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00039">xb360.h:39</a></div></div>
 <div class="ttc" id="axb360_8h_html_a31d4c684da1e442fb16a0def21abf418"><div class="ttname"><a href="xb360_8h.html#a31d4c684da1e442fb16a0def21abf418">XEKEY_ROAMABLE_OBFUSCATION_KEY</a></div><div class="ttdeci">#define XEKEY_ROAMABLE_OBFUSCATION_KEY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00035">xb360.h:35</a></div></div>
-<div class="ttc" id="axb360_8h_html_a338cd3c88d512ec498fb00de1a56c8e9"><div class="ttname"><a href="xb360_8h.html#a338cd3c88d512ec498fb00de1a56c8e9">REV_CORONA</a></div><div class="ttdeci">#define REV_CORONA</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00098">xb360.h:98</a></div></div>
+<div class="ttc" id="axb360_8h_html_a338cd3c88d512ec498fb00de1a56c8e9"><div class="ttname"><a href="xb360_8h.html#a338cd3c88d512ec498fb00de1a56c8e9">REV_CORONA</a></div><div class="ttdeci">#define REV_CORONA</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00097">xb360.h:97</a></div></div>
 <div class="ttc" id="axb360_8h_html_a367e9441403052e2b7616d964c8e8595"><div class="ttname"><a href="xb360_8h.html#a367e9441403052e2b7616d964c8e8595">VFUSES_SIZE</a></div><div class="ttdeci">#define VFUSES_SIZE</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00075">xb360.h:75</a></div></div>
 <div class="ttc" id="axb360_8h_html_a36e36a80af6b1ddaada74abed08aca41"><div class="ttname"><a href="xb360_8h.html#a36e36a80af6b1ddaada74abed08aca41">XEKEY_WIRELESS_CONTROLLER_MS_2DES_KEY1</a></div><div class="ttdeci">#define XEKEY_WIRELESS_CONTROLLER_MS_2DES_KEY1</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00041">xb360.h:41</a></div></div>
 <div class="ttc" id="axb360_8h_html_a370ca159ab79e8709973f222918a8d12"><div class="ttname"><a href="xb360_8h.html#a370ca159ab79e8709973f222918a8d12">VFUSES_OFFSET</a></div><div class="ttdeci">#define VFUSES_OFFSET</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00076">xb360.h:76</a></div></div>
-<div class="ttc" id="axb360_8h_html_a41e4fdc56c36d734cabefbf7a1d8f6a0"><div class="ttname"><a href="xb360_8h.html#a41e4fdc56c36d734cabefbf7a1d8f6a0">REV_ZEPHYR</a></div><div class="ttdeci">#define REV_ZEPHYR</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00094">xb360.h:94</a></div></div>
-<div class="ttc" id="axb360_8h_html_a4606f4332f9c86c02041c402c55a2474"><div class="ttname"><a href="xb360_8h.html#a4606f4332f9c86c02041c402c55a2474">REV_CORONA_PHISON</a></div><div class="ttdeci">#define REV_CORONA_PHISON</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00099">xb360.h:99</a></div></div>
+<div class="ttc" id="axb360_8h_html_a41e4fdc56c36d734cabefbf7a1d8f6a0"><div class="ttname"><a href="xb360_8h.html#a41e4fdc56c36d734cabefbf7a1d8f6a0">REV_ZEPHYR</a></div><div class="ttdeci">#define REV_ZEPHYR</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00093">xb360.h:93</a></div></div>
+<div class="ttc" id="axb360_8h_html_a4606f4332f9c86c02041c402c55a2474"><div class="ttname"><a href="xb360_8h.html#a4606f4332f9c86c02041c402c55a2474">REV_CORONA_PHISON</a></div><div class="ttdeci">#define REV_CORONA_PHISON</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00098">xb360.h:98</a></div></div>
 <div class="ttc" id="axb360_8h_html_a4648f5f2846df7c6d9a2da44ae8fe530"><div class="ttname"><a href="xb360_8h.html#a4648f5f2846df7c6d9a2da44ae8fe530">XEKEY_PRIMARY_ACTIVATION_KEY</a></div><div class="ttdeci">#define XEKEY_PRIMARY_ACTIVATION_KEY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00037">xb360.h:37</a></div></div>
 <div class="ttc" id="axb360_8h_html_a475de0c77bedd6264e95aff1d6436310"><div class="ttname"><a href="xb360_8h.html#a475de0c77bedd6264e95aff1d6436310">XEKEY_RESERVED_DWORD4</a></div><div class="ttdeci">#define XEKEY_RESERVED_DWORD4</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00019">xb360.h:19</a></div></div>
 <div class="ttc" id="axb360_8h_html_a4ebec1bdf9938a46d98ae572feb54f43"><div class="ttname"><a href="xb360_8h.html#a4ebec1bdf9938a46d98ae572feb54f43">XEKEY_WIRELESS_CONTROLLER_MS_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_WIRELESS_CONTROLLER_MS_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00042">xb360.h:42</a></div></div>
@@ -880,7 +925,7 @@ $(function() {
 <div class="ttc" id="axb360_8h_html_a650603963eaa30ebe94aaf15aab0f342"><div class="ttname"><a href="xb360_8h.html#a650603963eaa30ebe94aaf15aab0f342">XEKEY_RESERVED_RANDOM_KEY1</a></div><div class="ttdeci">#define XEKEY_RESERVED_RANDOM_KEY1</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00028">xb360.h:28</a></div></div>
 <div class="ttc" id="axb360_8h_html_a651f620df4f472b3bd6fd24a6bb17cb7"><div class="ttname"><a href="xb360_8h.html#a651f620df4f472b3bd6fd24a6bb17cb7">XEKEY_OTHER_XSM3_DEVICE_MS_2DES_KEY1</a></div><div class="ttdeci">#define XEKEY_OTHER_XSM3_DEVICE_MS_2DES_KEY1</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00049">xb360.h:49</a></div></div>
 <div class="ttc" id="axb360_8h_html_a7182dbd4fc69fa98067924e002403bd5"><div class="ttname"><a href="xb360_8h.html#a7182dbd4fc69fa98067924e002403bd5">XEKEY_MEMORY_UNIT_MS_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_MEMORY_UNIT_MS_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00048">xb360.h:48</a></div></div>
-<div class="ttc" id="axb360_8h_html_a7413e0df76ed7afa88ed51bebef91cfc"><div class="ttname"><a href="xb360_8h.html#a7413e0df76ed7afa88ed51bebef91cfc">REV_WINCHESTER_MMC</a></div><div class="ttdeci">#define REV_WINCHESTER_MMC</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00101">xb360.h:101</a></div></div>
+<div class="ttc" id="axb360_8h_html_a7413e0df76ed7afa88ed51bebef91cfc"><div class="ttname"><a href="xb360_8h.html#a7413e0df76ed7afa88ed51bebef91cfc">REV_WINCHESTER_MMC</a></div><div class="ttdeci">#define REV_WINCHESTER_MMC</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00100">xb360.h:100</a></div></div>
 <div class="ttc" id="axb360_8h_html_a7714a580cfd1e091d9887a5aedac9d7e"><div class="ttname"><a href="xb360_8h.html#a7714a580cfd1e091d9887a5aedac9d7e">XEKEY_MANUFACTURING_MODE</a></div><div class="ttdeci">#define XEKEY_MANUFACTURING_MODE</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00010">xb360.h:10</a></div></div>
 <div class="ttc" id="axb360_8h_html_a791dbb9a1e467b8b19259a7eb48577df"><div class="ttname"><a href="xb360_8h.html#a791dbb9a1e467b8b19259a7eb48577df">XEKEY_MEMORY_UNIT_MS_2DES_KEY1</a></div><div class="ttdeci">#define XEKEY_MEMORY_UNIT_MS_2DES_KEY1</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00047">xb360.h:47</a></div></div>
 <div class="ttc" id="axb360_8h_html_a7aa75a7559b7c3659d2fa040c3f42f60"><div class="ttname"><a href="xb360_8h.html#a7aa75a7559b7c3659d2fa040c3f42f60">XEKEY_WIRED_CONTROLLER_MS_2DES_KEY1</a></div><div class="ttdeci">#define XEKEY_WIRED_CONTROLLER_MS_2DES_KEY1</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00045">xb360.h:45</a></div></div>
@@ -894,14 +939,14 @@ $(function() {
 <div class="ttc" id="axb360_8h_html_a907667faee2eec9c306788a2933d58a5"><div class="ttname"><a href="xb360_8h.html#a907667faee2eec9c306788a2933d58a5">XEKEY_RESTRICTED_PRIVILEDGES</a></div><div class="ttdeci">#define XEKEY_RESTRICTED_PRIVILEDGES</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00020">xb360.h:20</a></div></div>
 <div class="ttc" id="axb360_8h_html_a91ed47fd5d33e25f70c89764dc260643"><div class="ttname"><a href="xb360_8h.html#a91ed47fd5d33e25f70c89764dc260643">XEKEY_DVD_KEY</a></div><div class="ttdeci">#define XEKEY_DVD_KEY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00036">xb360.h:36</a></div></div>
 <div class="ttc" id="axb360_8h_html_a92c475a7a6ef3428f0ca0fa98f7425e8"><div class="ttname"><a href="xb360_8h.html#a92c475a7a6ef3428f0ca0fa98f7425e8">XEKEY_WIRELESS_CONTROLLER_3P_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_WIRELESS_CONTROLLER_3P_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00052">xb360.h:52</a></div></div>
-<div class="ttc" id="axb360_8h_html_a94e265f60f8c511142e7ac1e4cf20e96"><div class="ttname"><a href="xb360_8h.html#a94e265f60f8c511142e7ac1e4cf20e96">REV_TRINITY</a></div><div class="ttdeci">#define REV_TRINITY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00097">xb360.h:97</a></div></div>
+<div class="ttc" id="axb360_8h_html_a94e265f60f8c511142e7ac1e4cf20e96"><div class="ttname"><a href="xb360_8h.html#a94e265f60f8c511142e7ac1e4cf20e96">REV_TRINITY</a></div><div class="ttdeci">#define REV_TRINITY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00096">xb360.h:96</a></div></div>
 <div class="ttc" id="axb360_8h_html_a9787007f15257e968cbd8811a7618736"><div class="ttname"><a href="xb360_8h.html#a9787007f15257e968cbd8811a7618736">XEKEY_WIRED_WEBCAM_3P_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_WIRED_WEBCAM_3P_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00054">xb360.h:54</a></div></div>
 <div class="ttc" id="axb360_8h_html_a9b7ca18fd32848c1c3332e419e1437b6"><div class="ttname"><a href="xb360_8h.html#a9b7ca18fd32848c1c3332e419e1437b6">XEKEY_CONSOLE_CERTIFICATE</a></div><div class="ttdeci">#define XEKEY_CONSOLE_CERTIFICATE</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00064">xb360.h:64</a></div></div>
 <div class="ttc" id="axb360_8h_html_aa149e3a01fc20753b4aa6a2e4905ec4d"><div class="ttname"><a href="xb360_8h.html#aa149e3a01fc20753b4aa6a2e4905ec4d">XEKEY_RESERVED_DWORD2</a></div><div class="ttdeci">#define XEKEY_RESERVED_DWORD2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00017">xb360.h:17</a></div></div>
-<div class="ttc" id="axb360_8h_html_aa80d7fe314b0ff280dc47b435525f7f6"><div class="ttname"><a href="xb360_8h.html#aa80d7fe314b0ff280dc47b435525f7f6">REV_FALCON</a></div><div class="ttdeci">#define REV_FALCON</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00095">xb360.h:95</a></div></div>
-<div class="ttc" id="axb360_8h_html_aa8a226b7bd24e8206e9153893ec29a51"><div class="ttname"><a href="xb360_8h.html#aa8a226b7bd24e8206e9153893ec29a51">REV_JASPER</a></div><div class="ttdeci">#define REV_JASPER</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00096">xb360.h:96</a></div></div>
+<div class="ttc" id="axb360_8h_html_aa80d7fe314b0ff280dc47b435525f7f6"><div class="ttname"><a href="xb360_8h.html#aa80d7fe314b0ff280dc47b435525f7f6">REV_FALCON</a></div><div class="ttdeci">#define REV_FALCON</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00094">xb360.h:94</a></div></div>
+<div class="ttc" id="axb360_8h_html_aa8a226b7bd24e8206e9153893ec29a51"><div class="ttname"><a href="xb360_8h.html#aa8a226b7bd24e8206e9153893ec29a51">REV_JASPER</a></div><div class="ttdeci">#define REV_JASPER</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00095">xb360.h:95</a></div></div>
 <div class="ttc" id="axb360_8h_html_aa96425446115ea42db24b80c98cc4ce9"><div class="ttname"><a href="xb360_8h.html#aa96425446115ea42db24b80c98cc4ce9">XEKEY_RESERVED_DWORD3</a></div><div class="ttdeci">#define XEKEY_RESERVED_DWORD3</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00018">xb360.h:18</a></div></div>
-<div class="ttc" id="axb360_8h_html_aaf7eaf753cf874a48f25f5ccfc9217ef"><div class="ttname"><a href="xb360_8h.html#aaf7eaf753cf874a48f25f5ccfc9217ef">REV_WINCHESTER</a></div><div class="ttdeci">#define REV_WINCHESTER</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00100">xb360.h:100</a></div></div>
+<div class="ttc" id="axb360_8h_html_aaf7eaf753cf874a48f25f5ccfc9217ef"><div class="ttname"><a href="xb360_8h.html#aaf7eaf753cf874a48f25f5ccfc9217ef">REV_WINCHESTER</a></div><div class="ttdeci">#define REV_WINCHESTER</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00099">xb360.h:99</a></div></div>
 <div class="ttc" id="axb360_8h_html_ab2bdcc5f569ca7d68e978cd43ac04efb"><div class="ttname"><a href="xb360_8h.html#ab2bdcc5f569ca7d68e978cd43ac04efb">XEKEY_RESERVED_QWORD4</a></div><div class="ttdeci">#define XEKEY_RESERVED_QWORD4</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00023">xb360.h:23</a></div></div>
 <div class="ttc" id="axb360_8h_html_ab2e1b90614ad14ad6c2f7db48284ba44"><div class="ttname"><a href="xb360_8h.html#ab2e1b90614ad14ad6c2f7db48284ba44">XEKEY_CONSOLE_PRIVATE_KEY</a></div><div class="ttdeci">#define XEKEY_CONSOLE_PRIVATE_KEY</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00061">xb360.h:61</a></div></div>
 <div class="ttc" id="axb360_8h_html_ab5299061db81a21b90df09cf5b2dc11f"><div class="ttname"><a href="xb360_8h.html#ab5299061db81a21b90df09cf5b2dc11f">XEKEY_WIRED_WEBCAM_MS_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_WIRED_WEBCAM_MS_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00044">xb360.h:44</a></div></div>
@@ -913,7 +958,7 @@ $(function() {
 <div class="ttc" id="axb360_8h_html_adc23c0239fa4db9fc669708985cbbb25"><div class="ttname"><a href="xb360_8h.html#adc23c0239fa4db9fc669708985cbbb25">XEKEY_RESERVED_KEY2</a></div><div class="ttdeci">#define XEKEY_RESERVED_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00025">xb360.h:25</a></div></div>
 <div class="ttc" id="axb360_8h_html_ae41bca622f106e89767d9e4026877bd8"><div class="ttname"><a href="xb360_8h.html#ae41bca622f106e89767d9e4026877bd8">XEKEY_OTHER_XSM3_DEVICE_3P_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_OTHER_XSM3_DEVICE_3P_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00060">xb360.h:60</a></div></div>
 <div class="ttc" id="axb360_8h_html_ae73136954a599ae3f48b49224c6b6490"><div class="ttname"><a href="xb360_8h.html#ae73136954a599ae3f48b49224c6b6490">XEKEY_OTHER_XSM3_DEVICE_MS_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_OTHER_XSM3_DEVICE_MS_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00050">xb360.h:50</a></div></div>
-<div class="ttc" id="axb360_8h_html_ae804c329a53fbcc7102bd80142c203b4"><div class="ttname"><a href="xb360_8h.html#ae804c329a53fbcc7102bd80142c203b4">REV_UNKNOWN</a></div><div class="ttdeci">#define REV_UNKNOWN</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00102">xb360.h:102</a></div></div>
+<div class="ttc" id="axb360_8h_html_ae804c329a53fbcc7102bd80142c203b4"><div class="ttname"><a href="xb360_8h.html#ae804c329a53fbcc7102bd80142c203b4">REV_UNKNOWN</a></div><div class="ttdeci">#define REV_UNKNOWN</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00101">xb360.h:101</a></div></div>
 <div class="ttc" id="axb360_8h_html_ae8cbe45f941b60f51e008245a3471ed4"><div class="ttname"><a href="xb360_8h.html#ae8cbe45f941b60f51e008245a3471ed4">XEKEY_RESERVED_BYTE2</a></div><div class="ttdeci">#define XEKEY_RESERVED_BYTE2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00012">xb360.h:12</a></div></div>
 <div class="ttc" id="axb360_8h_html_aec6f57fbfe85f008c49a6e41e76b0be7"><div class="ttname"><a href="xb360_8h.html#aec6f57fbfe85f008c49a6e41e76b0be7">XEKEY_GLOBAL_DEVICE_2DES_KEY2</a></div><div class="ttdeci">#define XEKEY_GLOBAL_DEVICE_2DES_KEY2</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00040">xb360.h:40</a></div></div>
 <div class="ttc" id="axb360_8h_html_af362d9b9f4fe59dcd992d08f6a0b8aea"><div class="ttname"><a href="xb360_8h.html#af362d9b9f4fe59dcd992d08f6a0b8aea">XEKEY_MOBO_SERIAL_NUMBER</a></div><div class="ttdeci">#define XEKEY_MOBO_SERIAL_NUMBER</div><div class="ttdef"><b>Definition:</b> <a href="xb360_8h_source.html#l00031">xb360.h:31</a></div></div>

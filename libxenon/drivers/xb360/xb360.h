@@ -80,15 +80,14 @@ unsigned int xenon_get_kv_offset();
 #define XELL_FOOTER_LENGTH 16
 #define XELL_FOOTER "xxxxxxxxxxxxxxxx"
 
-#define XELL_OFFSET_COUNT         8
+#define XELL_OFFSET_COUNT         7
 static const unsigned int xelloffsets[XELL_OFFSET_COUNT] = {0x70000, // ggBoot main xell-gggggg
 															0x95060,   // FreeBOOT Single-NAND main xell-2f
 															0x100000,  // XeLL-Only Image (Main)
 															0xC0000,   // XeLL-Only Image (Backup)
 															0xE0000,
-															0xF0000,   // DevGL/Glitch2m xell-gggggg in flashfs (16mb)
-															0xF4000,   // DevGL xell-gggggg in flashfs (64mb)
-															0xB80000}; // DevGL/Glitch2m xell-gggggg in flashfs (BB 256/512mb)
+															0xB80000,  // DevGL/Glitch2m xell-gggggg in flashfs (BB 256/512mb)
+															0x0};      // Special indicator: DevGL/Glitch2m xell-gggggg in flashfs for 16mb/64mb
 
 #define REV_XENON 0
 #define REV_ZEPHYR 1

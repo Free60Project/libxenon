@@ -99,6 +99,8 @@ usb_drvlist_t usb_drivers[] = {
     {CLASS_ANY, 0x045e,0x2b0,   &dummy_driver}, // Kinect, not handled so we load a dummy drive
     {CLASS_ANY,	0x1bad,0xf900,	&usbctrl_driver}, // PDP Afterglow controller
     {CLASS_ANY,	0x045e,0x28f,	&dummy_driver}, // play and charge kit, not a controller - let's ignore it
+    {CLASS_ANY,	0x1430,0x4748,	&usbctrl_driver}, // Xplorer Guitar
+    {CLASS_ANY,	0x1bad,0x0002,	&usbctrl_driver}, // RB Guitar
 
     /*
      * Mass storage devices

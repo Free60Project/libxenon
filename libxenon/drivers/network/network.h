@@ -18,6 +18,8 @@ void network_print_config();
 
 extern struct netif netif;
 
+#define network_link_up() (netif.flags & NETIF_FLAG_LINK_UP)
+
 #ifdef __cplusplus
 }
 #endif

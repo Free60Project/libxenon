@@ -273,10 +273,13 @@ static int enet_open(struct netif *netif)
 		};
 	}
 
-	if (phy_read(1) & 4)
+	if (phy_read(1) & 4) {
 		printf("link up!\n");
-	else
+		netif_set_link_up(netif);
+	} else {
 		printf("link still down.\n");
+		netif_set_link_down(netif);
+	}
 #endif
 
 

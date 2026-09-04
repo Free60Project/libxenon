@@ -62,9 +62,14 @@ int network_init()
 	//dhcp_set_struct(&netif, &netif_dhcp);
 	dhcp_start(&netif);
 
+	// Don't timeout for as long if the link is down.
+	int timeout = 60;
+	if (!(netif.flags & NETIF_FLAG_LINK_UP))
+		timeout = 10;
+
 	dhcp_wait=mftb();
 	int i = 0;
-	while (netif.ip_addr.addr==0 && i < 60) {
+	while (netif.ip_addr.addr==0 && i < timeout) {
 		network_poll();
 		now2=mftb();
 		if (tb_diff_msec(now2, dhcp_wait) >= 250){

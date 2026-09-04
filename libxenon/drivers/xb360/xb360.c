@@ -726,6 +726,8 @@ int xenon_logical_nand_data_ok()
 
 int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len)
 {
+	if ((offset + len) >= 0x4000000)
+		return -1;
 	if (xenon_logical_nand_data_ok() == 0)
 		memcpy(buf, (const void*)(0x80000200C8000000ULL + offset), len);
 	else

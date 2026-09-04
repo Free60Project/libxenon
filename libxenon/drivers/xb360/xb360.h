@@ -100,6 +100,14 @@ static const unsigned int xelloffsets[XELL_OFFSET_COUNT] = {0x70000, // ggBoot m
 #define REV_WINCHESTER_MMC 8
 #define REV_UNKNOWN (-1)
 
+#define HACK_NONE -1		// Stock retail/devkit console
+#define HACK_UNKNOWN 0		// Unable to detect hack type
+#define HACK_UNK_HARDMOD 1	// Unknown, but hardmodded (e.g. XeLL on NAND)
+#define HACK_SMC_JTAG 2		// JTAG    (SMC Hack w/ 4532/4548 kernel)
+#define HACK_RGH_GLITCH2 3	// Glitch2 (RGH1.2 / RGH2 / EXT_CLK)
+#define HACK_RGH_GLITCH3 4	// Glitch3 (RGH3 / RGH1.3 / EXT+3)
+#define HACK_RGH_GLITCH 5	// Glitch  (RGH1)
+
 typedef struct kventry {
   char id;
   int offset;
@@ -123,6 +131,7 @@ unsigned int xenon_get_XenosID();
 unsigned int xenon_get_ram_size();
 
 int xenon_get_console_type(void);
+int xenon_get_hack_type(void);
 
 int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len);
 int xenon_logical_nand_data_ok();

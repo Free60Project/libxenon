@@ -8,6 +8,9 @@ WORKDIR /build
 COPY . .
 
 WORKDIR /build/toolchain
+ARG FREE60_DOCKER_BUILD=true
+ENV FREE60_DOCKER_BUILD=$FREE60_DOCKER_BUILD
+
 RUN echo "[+] Installing libxenon"
 RUN ./build-xenon-toolchain libxenon || (cat build.log; exit 1)
 

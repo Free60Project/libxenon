@@ -437,11 +437,10 @@ rm -f $LOGFILE
 
 if [ "$1" == "toolchain" ]; then
 
-    if command -v apt > /dev/null || command -v dnf > /dev/null; then
-        echo "Info: a package manager has been detected. Root privilages are required to install dependencies."
-    fi
-
-    if command -v apt-get &> /dev/null; then
+    if [ "$FREE60_DOCKER_BUILD" = "true" ]; then
+        echo "Info: running in Docker, not installing dependencies."
+    elif command -v apt &> /dev/null; then
+        echo "Info: apt has been detected. Root privileges are required to install dependencies."
         pkgs="build-essential flex bison libgmp-dev libmpfr-dev libmpc-dev texinfo git wget"
         if [ "$(uname -m)" = "x86_64" ]; then
             pkgs="$pkgs gcc-multilib"
@@ -451,6 +450,7 @@ if [ "$1" == "toolchain" ]; then
             exit 1
         }
     elif command -v dnf &> /dev/null; then
+        echo "Info: dnf has been detected. Root privileges are required to install dependencies."
         sudo dnf -y install gcc g++ flex bison glibc-devel.i686 libstdc++-devel.i686 gmp-devel mpfr-devel libmpc-devel texinfo git wget || {
             echo "Failed to install required packages!"
             exit 1

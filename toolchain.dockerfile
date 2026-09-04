@@ -13,6 +13,9 @@ WORKDIR /build
 COPY toolchain ./toolchain
 
 WORKDIR /root
+ARG FREE60_DOCKER_BUILD=true
+ENV FREE60_DOCKER_BUILD=$FREE60_DOCKER_BUILD
+
 RUN echo "[+] Installing toolchain"
 RUN (cd /build/toolchain && ./build-xenon-toolchain toolchain && cd / && rm -rf /build) || (cat build.log; exit 1)
 

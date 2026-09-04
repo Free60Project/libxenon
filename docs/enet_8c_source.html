@@ -352,166 +352,169 @@ $(function() {
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>        };</div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>    }</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span> </div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keywordflow">if</span> (phy_read(1) &amp; 4)</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>    <span class="keywordflow">if</span> (phy_read(1) &amp; 4) {</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>        printf(<span class="stringliteral">&quot;link up!\n&quot;</span>);</div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>    <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        printf(<span class="stringliteral">&quot;link still down.\n&quot;</span>);</div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span> </div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span> </div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="comment">//  write32n(0xea001428, 0x01805508);</span></div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>    write32n(0xea001428, 0x01005508);</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>    write32n(0xea001410, __builtin_bswap32(0x00101c11));    <span class="comment">// enable RX</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>    write32n(0xea001400, __builtin_bswap32(0x00001c01));    <span class="comment">// enable TX</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>}</div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>        <a class="code hl_function" href="netif_8c.html#ae0d2975f189277990e9d5276fdd9e9ea">netif_set_link_up</a>(<a class="code hl_struct" href="structnetif.html">netif</a>);</div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span>        printf(<span class="stringliteral">&quot;link still down.\n&quot;</span>);</div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>        <a class="code hl_function" href="netif_8c.html#a34e37a1e8e358760dc1c43887922c7db">netif_set_link_down</a>(<a class="code hl_struct" href="structnetif.html">netif</a>);</div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    }</div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span> </div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span> </div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="comment">//  write32n(0xea001428, 0x01805508);</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>    write32n(0xea001428, 0x01005508);</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    write32n(0xea001410, __builtin_bswap32(0x00101c11));    <span class="comment">// enable RX</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span>    write32n(0xea001400, __builtin_bswap32(0x00001c01));    <span class="comment">// enable TX</span></div>
 <div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span> </div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="keyword">static</span> <span class="keyword">struct </span><a class="code hl_struct" href="structpbuf.html">pbuf</a> *enet_linkinput(<span class="keyword">struct</span> <a class="code hl_struct" href="structenet__context.html">enet_context</a> *context)</div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>{</div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span>    <span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> *d = context-&gt;<a class="code hl_variable" href="structenet__context.html#af193482c5ab027d1b85e770dd191ccab">rx_descriptor_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> * 4;</div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#a5eae904392d068c9cc77ee74382f8c02">memdcbf</a>((<span class="keywordtype">void</span>*)d, 0x10);</div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keywordflow">if</span> (__builtin_bswap32(d[1]) &amp; 0x80000000) <span class="comment">/* check ownership */</span></div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    {</div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">//      printf(&quot;no data!\n&quot;);</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    }</div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span> </div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="comment">//  printf(&quot;RX descriptor %d contains data!\n&quot;, context-&gt;rx_descriptor_rptr);</span></div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="comment">//  printf(&quot;%08x %08x %08x %08x\n&quot;,</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="comment">//      __builtin_bswap32(d[0]),</span></div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment">//      __builtin_bswap32(d[1]),</span></div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">//      __builtin_bswap32(d[2]),</span></div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">//      __builtin_bswap32(d[3]));</span></div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span> </div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a> = __builtin_bswap32(d[0]) &amp; 0xFFFF;</div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span>    <span class="keywordtype">void</span> *phys_addr = context-&gt;<a class="code hl_variable" href="structenet__context.html#a7f9748aaab75b5a1d15fffc077c2f376">rx_receive_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> * <a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a>;</div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#a5eae904392d068c9cc77ee74382f8c02">memdcbf</a>(phys_addr, <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a>);</div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="comment">// hexdump(phys_addr, size);</span></div>
-<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span> </div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structpbuf.html">pbuf</a> *p = <a class="code hl_function" href="pbuf_8c.html#a8bb9c5d54a06995b1c67ce695ead9969">pbuf_alloc</a>(<a class="code hl_enumvalue" href="pbuf_8h.html#aee1baa59bb2f85ba575b5a8619ac1ebfa21116654fbab6d5a4dfeb87a1bb8f0ba">PBUF_RAW</a>, <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a>, <a class="code hl_enumvalue" href="pbuf_8h.html#ab7e0e32fcc292c0d7107721766ed92fbae969347127387b9b59a23ccd24b76d21">PBUF_POOL</a>), *q;</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="keywordflow">if</span> (p != <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>) {</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>        <span class="keywordtype">int</span> rptr = 0;</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>        <span class="comment">/* We iterate over the pbuf chain until we have read the entire</span></div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span><span class="comment">         packet into the pbuf. */</span></div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        <span class="keywordflow">for</span>(q = p; q != <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>; q = q-&gt;next) {</div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>                <span class="comment">/* Read enough bytes to fill this pbuf in the chain. The</span></div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="comment">                     available data in the pbuf is given by the q-&gt;len</span></div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span><span class="comment">                     variable. */</span></div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>            memcpy(q-&gt;payload, phys_addr + rptr, q-&gt;len);</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>            rptr += q-&gt;len;</div>
-<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span>        }</div>
-<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span><span class="preprocessor">#ifdef LINK_STATS</span></div>
-<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>        lwip_stats.link.recv++;</div>
-<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span><span class="preprocessor">#endif </span><span class="comment">/* LINK_STATS */</span><span class="preprocessor"></span></div>
-<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span>    } <span class="keywordflow">else</span> {</div>
-<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span><span class="preprocessor">#ifdef LINK_STATS</span></div>
-<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span>        lwip_stats.link.memerr++;</div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>        lwip_stats.link.drop++;</div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><span class="preprocessor">#endif </span><span class="comment">/* LINK_STATS */</span><span class="preprocessor"></span></div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>    }</div>
-<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>        <span class="comment">/* reclaim descriptor */</span></div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    d[2] = __builtin_bswap32(virt_to_phys(context-&gt;<a class="code hl_variable" href="structenet__context.html#a7f9748aaab75b5a1d15fffc077c2f376">rx_receive_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> * <a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a>));</div>
-<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span>    d[3] = __builtin_bswap32(<a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a> | ((context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> == <a class="code hl_define" href="enet_8c.html#a368e3565ba17af3cb4703a689060863d">RX_DESCRIPTOR_NUM</a> - 1) ? 0x80000000 : 0));</div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    d[0] = __builtin_bswap32(0);</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    d[1] = __builtin_bswap32(0xc0000000);</div>
-<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#aba1f348d227a5d3d25d183b9317c5349">memdcbst</a>((<span class="keywordtype">void</span>*)d, 0x10);</div>
-<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span> </div>
-<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a>++;</div>
-<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> %= <a class="code hl_define" href="enet_8c.html#a368e3565ba17af3cb4703a689060863d">RX_DESCRIPTOR_NUM</a>;</div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>}</div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span> </div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="keyword">static</span> <span class="keyword">struct </span><a class="code hl_struct" href="structpbuf.html">pbuf</a> *enet_linkinput(<span class="keyword">struct</span> <a class="code hl_struct" href="structenet__context.html">enet_context</a> *context)</div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>{</div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    <span class="keyword">volatile</span> <a class="code hl_typedef" href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a> *d = context-&gt;<a class="code hl_variable" href="structenet__context.html#af193482c5ab027d1b85e770dd191ccab">rx_descriptor_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> * 4;</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#a5eae904392d068c9cc77ee74382f8c02">memdcbf</a>((<span class="keywordtype">void</span>*)d, 0x10);</div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="keywordflow">if</span> (__builtin_bswap32(d[1]) &amp; 0x80000000) <span class="comment">/* check ownership */</span></div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span>    {</div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span><span class="comment">//      printf(&quot;no data!\n&quot;);</span></div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span>        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    }</div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span> </div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment">//  printf(&quot;RX descriptor %d contains data!\n&quot;, context-&gt;rx_descriptor_rptr);</span></div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">//  printf(&quot;%08x %08x %08x %08x\n&quot;,</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">//      __builtin_bswap32(d[0]),</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="comment">//      __builtin_bswap32(d[1]),</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="comment">//      __builtin_bswap32(d[2]),</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="comment">//      __builtin_bswap32(d[3]));</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span> </div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a> = __builtin_bswap32(d[0]) &amp; 0xFFFF;</div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="keywordtype">void</span> *phys_addr = context-&gt;<a class="code hl_variable" href="structenet__context.html#a7f9748aaab75b5a1d15fffc077c2f376">rx_receive_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> * <a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a>;</div>
+<div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#a5eae904392d068c9cc77ee74382f8c02">memdcbf</a>(phys_addr, <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a>);</div>
+<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span> </div>
+<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span>    <span class="comment">// hexdump(phys_addr, size);</span></div>
+<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span> </div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structpbuf.html">pbuf</a> *p = <a class="code hl_function" href="pbuf_8c.html#a8bb9c5d54a06995b1c67ce695ead9969">pbuf_alloc</a>(<a class="code hl_enumvalue" href="pbuf_8h.html#aee1baa59bb2f85ba575b5a8619ac1ebfa21116654fbab6d5a4dfeb87a1bb8f0ba">PBUF_RAW</a>, <a class="code hl_variable" href="iso9660_8c.html#acfd6273064c5acdcfc39a23a69dd4343">size</a>, <a class="code hl_enumvalue" href="pbuf_8h.html#ab7e0e32fcc292c0d7107721766ed92fbae969347127387b9b59a23ccd24b76d21">PBUF_POOL</a>), *q;</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="keywordflow">if</span> (p != <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>) {</div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>        <span class="keywordtype">int</span> rptr = 0;</div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>        <span class="comment">/* We iterate over the pbuf chain until we have read the entire</span></div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span><span class="comment">         packet into the pbuf. */</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>        <span class="keywordflow">for</span>(q = p; q != <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>; q = q-&gt;next) {</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>                <span class="comment">/* Read enough bytes to fill this pbuf in the chain. The</span></div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span><span class="comment">                     available data in the pbuf is given by the q-&gt;len</span></div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span><span class="comment">                     variable. */</span></div>
+<div class="line"><a id="l00327" name="l00327"></a><span class="lineno">  327</span>            memcpy(q-&gt;payload, phys_addr + rptr, q-&gt;len);</div>
+<div class="line"><a id="l00328" name="l00328"></a><span class="lineno">  328</span>            rptr += q-&gt;len;</div>
+<div class="line"><a id="l00329" name="l00329"></a><span class="lineno">  329</span>        }</div>
+<div class="line"><a id="l00330" name="l00330"></a><span class="lineno">  330</span><span class="preprocessor">#ifdef LINK_STATS</span></div>
+<div class="line"><a id="l00331" name="l00331"></a><span class="lineno">  331</span>        lwip_stats.link.recv++;</div>
+<div class="line"><a id="l00332" name="l00332"></a><span class="lineno">  332</span><span class="preprocessor">#endif </span><span class="comment">/* LINK_STATS */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span><span class="preprocessor">#ifdef LINK_STATS</span></div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span>        lwip_stats.link.memerr++;</div>
+<div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span>        lwip_stats.link.drop++;</div>
+<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span><span class="preprocessor">#endif </span><span class="comment">/* LINK_STATS */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    }</div>
+<div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
+<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>        <span class="comment">/* reclaim descriptor */</span></div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    d[2] = __builtin_bswap32(virt_to_phys(context-&gt;<a class="code hl_variable" href="structenet__context.html#a7f9748aaab75b5a1d15fffc077c2f376">rx_receive_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> * <a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a>));</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span>    d[3] = __builtin_bswap32(<a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a> | ((context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> == <a class="code hl_define" href="enet_8c.html#a368e3565ba17af3cb4703a689060863d">RX_DESCRIPTOR_NUM</a> - 1) ? 0x80000000 : 0));</div>
+<div class="line"><a id="l00343" name="l00343"></a><span class="lineno">  343</span>    d[0] = __builtin_bswap32(0);</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    d[1] = __builtin_bswap32(0xc0000000);</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#aba1f348d227a5d3d25d183b9317c5349">memdcbst</a>((<span class="keywordtype">void</span>*)d, 0x10);</div>
 <div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="keywordflow">return</span> p;</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>}</div>
+<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a>++;</div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    context-&gt;<a class="code hl_variable" href="structenet__context.html#abb804b2f52672a7db5cc9ed066b509a2">rx_descriptor_rptr</a> %= <a class="code hl_define" href="enet_8c.html#a368e3565ba17af3cb4703a689060863d">RX_DESCRIPTOR_NUM</a>;</div>
 <div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
-<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span><span class="keyword">static</span> <a class="code hl_typedef" href="err_8h.html#af02d9da80fd66b4f986d2c53d7231ddb">err_t</a> enet_linkoutput(<span class="keyword">struct</span> <a class="code hl_struct" href="structnetif.html">netif</a> *<a class="code hl_struct" href="structnetif.html">netif</a>, <span class="keyword">struct</span> <a class="code hl_struct" href="structpbuf.html">pbuf</a> *p)</div>
-<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>{</div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structpbuf.html">pbuf</a> *q;</div>
-<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *context = (<span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *) <a class="code hl_struct" href="structnetif.html">netif</a>-&gt;<a class="code hl_variable" href="structnetif.html#a809cc57c0dff09c5c9ae45b02c2002f3">state</a>;</div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span> </div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span><span class="comment">//  printf(&quot;enet linkoutput\n&quot;);</span></div>
-<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span> </div>
-<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <span class="keywordtype">void</span> *dstptr = context-&gt;<a class="code hl_variable" href="structenet__context.html#ad96c31c8aa663929dc6159ec7ffa04de">tx_buffer_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#affec687f54cb93dd3cd50fffb6d5106b">tx_descriptor_wptr</a> * <a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a>;</div>
-<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span>    <span class="keywordtype">int</span> offset = 0;</div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    <span class="keywordflow">return</span> p;</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span>}</div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span> </div>
+<div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span><span class="keyword">static</span> <a class="code hl_typedef" href="err_8h.html#af02d9da80fd66b4f986d2c53d7231ddb">err_t</a> enet_linkoutput(<span class="keyword">struct</span> <a class="code hl_struct" href="structnetif.html">netif</a> *<a class="code hl_struct" href="structnetif.html">netif</a>, <span class="keyword">struct</span> <a class="code hl_struct" href="structpbuf.html">pbuf</a> *p)</div>
+<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>{</div>
+<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structpbuf.html">pbuf</a> *q;</div>
+<div class="line"><a id="l00356" name="l00356"></a><span class="lineno">  356</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *context = (<span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *) <a class="code hl_struct" href="structnetif.html">netif</a>-&gt;<a class="code hl_variable" href="structnetif.html#a809cc57c0dff09c5c9ae45b02c2002f3">state</a>;</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span> </div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span><span class="comment">//  printf(&quot;enet linkoutput\n&quot;);</span></div>
 <div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span> </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordflow">for</span>(q = p; q != <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>; q = q-&gt;<a class="code hl_variable" href="structpbuf.html#a5e5763c94fd18d78937b0b58ce7df341">next</a>) {</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>        memcpy(dstptr + offset, q-&gt;<a class="code hl_variable" href="structpbuf.html#a8d32dc3e964369d4eec638fc37fbc460">payload</a>, q-&gt;<a class="code hl_variable" href="structpbuf.html#a6f82449625e36e294f5d210268c0703f">len</a>);</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>        offset += q-&gt;<a class="code hl_variable" href="structpbuf.html#a6f82449625e36e294f5d210268c0703f">len</a>;</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    }</div>
-<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span> </div>
-<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#aba1f348d227a5d3d25d183b9317c5349">memdcbst</a>((<span class="keywordtype">void</span>*)dstptr, p-&gt;<a class="code hl_variable" href="structpbuf.html#a5259e7ec29bab9c0999b64f2e86b411f">tot_len</a>);</div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    tx_data(context, dstptr, p-&gt;<a class="code hl_variable" href="structpbuf.html#a5259e7ec29bab9c0999b64f2e86b411f">tot_len</a>);</div>
+<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordtype">void</span> *dstptr = context-&gt;<a class="code hl_variable" href="structenet__context.html#ad96c31c8aa663929dc6159ec7ffa04de">tx_buffer_base</a> + context-&gt;<a class="code hl_variable" href="structenet__context.html#affec687f54cb93dd3cd50fffb6d5106b">tx_descriptor_wptr</a> * <a class="code hl_define" href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a>;</div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordtype">int</span> offset = 0;</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span> </div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>    <span class="keywordflow">for</span>(q = p; q != <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>; q = q-&gt;<a class="code hl_variable" href="structpbuf.html#a5e5763c94fd18d78937b0b58ce7df341">next</a>) {</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>        memcpy(dstptr + offset, q-&gt;<a class="code hl_variable" href="structpbuf.html#a8d32dc3e964369d4eec638fc37fbc460">payload</a>, q-&gt;<a class="code hl_variable" href="structpbuf.html#a6f82449625e36e294f5d210268c0703f">len</a>);</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span>        offset += q-&gt;<a class="code hl_variable" href="structpbuf.html#a6f82449625e36e294f5d210268c0703f">len</a>;</div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    }</div>
 <div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="comment">//  printf(&quot;ok, data transmitted!\n&quot;);</span></div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span> </div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span>    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>}</div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>    <a class="code hl_function" href="drivers_2ppc_2cache_8h.html#aba1f348d227a5d3d25d183b9317c5349">memdcbst</a>((<span class="keywordtype">void</span>*)dstptr, p-&gt;<a class="code hl_variable" href="structpbuf.html#a5259e7ec29bab9c0999b64f2e86b411f">tot_len</a>);</div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span>    tx_data(context, dstptr, p-&gt;<a class="code hl_variable" href="structpbuf.html#a5259e7ec29bab9c0999b64f2e86b411f">tot_len</a>);</div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span> </div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span><span class="comment">//  printf(&quot;ok, data transmitted!\n&quot;);</span></div>
 <div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span><span class="comment">/*</span></div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span><span class="comment">static err_t</span></div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span><span class="comment">enet_output(struct netif *netif, struct pbuf *p,</span></div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="comment">            struct ip_addr_t *ipaddr)</span></div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span><span class="comment">{</span></div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span><span class="comment">//  printf(&quot;ENET OUTPUT\n&quot;);</span></div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span><span class="comment">  //return etharp_output(netif, ipaddr, p);</span></div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="comment">  return etharp_output(netif, p, ipaddr); //lwip 1.3.0</span></div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span><span class="comment">}</span></div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span><span class="comment">*/</span></div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span> </div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span><span class="keyword">static</span> <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>enet_input(<span class="keyword">struct</span> <a class="code hl_struct" href="structnetif.html">netif</a> *<a class="code hl_struct" href="structnetif.html">netif</a>)</div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>{</div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *context = (<span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *) <a class="code hl_struct" href="structnetif.html">netif</a>-&gt;<a class="code hl_variable" href="structnetif.html#a809cc57c0dff09c5c9ae45b02c2002f3">state</a>;</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>    <span class="keyword">struct</span> eth_hdr *ethhdr;</div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>    <span class="keyword">struct</span> <a class="code hl_struct" href="structpbuf.html">pbuf</a> *p;</div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span> </div>
-<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>    p = enet_linkinput(context);</div>
-<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span> </div>
-<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span>    <span class="keywordflow">if</span> (p == <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>)</div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>}</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span> </div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="comment">/*</span></div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span><span class="comment">static err_t</span></div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span><span class="comment">enet_output(struct netif *netif, struct pbuf *p,</span></div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span><span class="comment">            struct ip_addr_t *ipaddr)</span></div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span><span class="comment">{</span></div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span><span class="comment">//  printf(&quot;ENET OUTPUT\n&quot;);</span></div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span><span class="comment">  //return etharp_output(netif, ipaddr, p);</span></div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span><span class="comment">  return etharp_output(netif, p, ipaddr); //lwip 1.3.0</span></div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span><span class="comment">}</span></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span><span class="keyword">static</span> <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>enet_input(<span class="keyword">struct</span> <a class="code hl_struct" href="structnetif.html">netif</a> *<a class="code hl_struct" href="structnetif.html">netif</a>)</div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>{</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>    <span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *context = (<span class="keyword">struct </span><a class="code hl_struct" href="structenet__context.html">enet_context</a> *) <a class="code hl_struct" href="structnetif.html">netif</a>-&gt;<a class="code hl_variable" href="structnetif.html#a809cc57c0dff09c5c9ae45b02c2002f3">state</a>;</div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span>    <span class="keyword">struct</span> eth_hdr *ethhdr;</div>
+<div class="line"><a id="l00392" name="l00392"></a><span class="lineno">  392</span>    <span class="keyword">struct</span> <a class="code hl_struct" href="structpbuf.html">pbuf</a> *p;</div>
+<div class="line"><a id="l00393" name="l00393"></a><span class="lineno">  393</span> </div>
+<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>    p = enet_linkinput(context);</div>
 <div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span> </div>
-<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span><span class="preprocessor">#if LINK_STATS</span></div>
-<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>    lwip_stats.link.recv++;</div>
-<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span><span class="preprocessor">#endif </span><span class="comment">/* LINK_STATS */</span><span class="preprocessor"></span></div>
-<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span> </div>
-<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    ethhdr = p-&gt;<a class="code hl_variable" href="structpbuf.html#a8d32dc3e964369d4eec638fc37fbc460">payload</a>;</div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span> </div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>    <span class="comment">/* pass to network layer */</span></div>
-<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    <span class="keywordflow">if</span> (ethernet_input(p, <a class="code hl_struct" href="structnetif.html">netif</a>) != <a class="code hl_define" href="err_8h.html#a98c763adfeea8e9831c46ec269e47ae9">ERR_OK</a>) {</div>
-<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>        <a class="code hl_function" href="pbuf_8c.html#ab0dd696fb4b6bc65e548944584f1738b">pbuf_free</a>(p);</div>
-<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>        p = <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>;</div>
-<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    }</div>
-<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>}</div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span> </div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno"><a class="line" href="enet_8c.html#a9cfbb269728dc4185236d28be58d9eab">  409</a></span><span class="keywordtype">int</span> <a class="code hl_variable" href="enet_8c.html#a9cfbb269728dc4185236d28be58d9eab">cnt</a>;</div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span> </div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span><span class="keywordtype">void</span></div>
-<div class="line"><a id="l00412" name="l00412"></a><span class="lineno"><a class="line" href="enet_8c.html#a00bdd3aa8816e84bcba4951de3244708">  412</a></span><a class="code hl_function" href="enet_8c.html#a00bdd3aa8816e84bcba4951de3244708">enet_poll</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structnetif.html">netif</a> *<a class="code hl_struct" href="structnetif.html">netif</a>)</div>
-<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>{</div>
-<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span><span class="comment">//  printf(&quot;\r%08x&quot;, mfdec());</span></div>
-<div class="line"><a id="l00415" name="l00415"></a><span class="lineno">  415</span>    enet_input(<a class="code hl_struct" href="structnetif.html">netif</a>);</div>
-<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>}</div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span> </div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span> </div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno"><a class="line" href="enet_8c.html#a7076dc6e6ae13b3eea54a6a9251cd55d">  419</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="enet_8c.html#a7076dc6e6ae13b3eea54a6a9251cd55d">enet_quiesce</a>(<span class="keywordtype">void</span>)</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>{</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>    write32n(0xea001400, 0);</div>
-<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    write32n(0xea001410, 0);</div>
-<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>}</div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>    <span class="keywordflow">if</span> (p == <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>)</div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>        <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00398" name="l00398"></a><span class="lineno">  398</span> </div>
+<div class="line"><a id="l00399" name="l00399"></a><span class="lineno">  399</span><span class="preprocessor">#if LINK_STATS</span></div>
+<div class="line"><a id="l00400" name="l00400"></a><span class="lineno">  400</span>    lwip_stats.link.recv++;</div>
+<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span><span class="preprocessor">#endif </span><span class="comment">/* LINK_STATS */</span><span class="preprocessor"></span></div>
+<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span> </div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>    ethhdr = p-&gt;<a class="code hl_variable" href="structpbuf.html#a8d32dc3e964369d4eec638fc37fbc460">payload</a>;</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span> </div>
+<div class="line"><a id="l00405" name="l00405"></a><span class="lineno">  405</span>    <span class="comment">/* pass to network layer */</span></div>
+<div class="line"><a id="l00406" name="l00406"></a><span class="lineno">  406</span>    <span class="keywordflow">if</span> (ethernet_input(p, <a class="code hl_struct" href="structnetif.html">netif</a>) != <a class="code hl_define" href="err_8h.html#a98c763adfeea8e9831c46ec269e47ae9">ERR_OK</a>) {</div>
+<div class="line"><a id="l00407" name="l00407"></a><span class="lineno">  407</span>        <a class="code hl_function" href="pbuf_8c.html#ab0dd696fb4b6bc65e548944584f1738b">pbuf_free</a>(p);</div>
+<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        p = <a class="code hl_define" href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a>;</div>
+<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>    }</div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>}</div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span> </div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno"><a class="line" href="enet_8c.html#a9cfbb269728dc4185236d28be58d9eab">  412</a></span><span class="keywordtype">int</span> <a class="code hl_variable" href="enet_8c.html#a9cfbb269728dc4185236d28be58d9eab">cnt</a>;</div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span> </div>
+<div class="line"><a id="l00414" name="l00414"></a><span class="lineno">  414</span><span class="keywordtype">void</span></div>
+<div class="line"><a id="l00415" name="l00415"></a><span class="lineno"><a class="line" href="enet_8c.html#a00bdd3aa8816e84bcba4951de3244708">  415</a></span><a class="code hl_function" href="enet_8c.html#a00bdd3aa8816e84bcba4951de3244708">enet_poll</a>(<span class="keyword">struct</span> <a class="code hl_struct" href="structnetif.html">netif</a> *<a class="code hl_struct" href="structnetif.html">netif</a>)</div>
+<div class="line"><a id="l00416" name="l00416"></a><span class="lineno">  416</span>{</div>
+<div class="line"><a id="l00417" name="l00417"></a><span class="lineno">  417</span><span class="comment">//  printf(&quot;\r%08x&quot;, mfdec());</span></div>
+<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>    enet_input(<a class="code hl_struct" href="structnetif.html">netif</a>);</div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>}</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span> </div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span> </div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno"><a class="line" href="enet_8c.html#a7076dc6e6ae13b3eea54a6a9251cd55d">  422</a></span><span class="keywordtype">void</span> <a class="code hl_function" href="enet_8c.html#a7076dc6e6ae13b3eea54a6a9251cd55d">enet_quiesce</a>(<span class="keywordtype">void</span>)</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span>{</div>
+<div class="line"><a id="l00424" name="l00424"></a><span class="lineno">  424</span>    write32n(0xea001400, 0);</div>
+<div class="line"><a id="l00425" name="l00425"></a><span class="lineno">  425</span>    write32n(0xea001410, 0);</div>
+<div class="line"><a id="l00426" name="l00426"></a><span class="lineno">  426</span>}</div>
 <div class="ttc" id="aconsole_8c_html_a6542a2bd356f5c5a12e03135a66e2dae"><div class="ttname"><a href="console_8c.html#a6542a2bd356f5c5a12e03135a66e2dae">base</a></div><div class="ttdeci">#define base</div></div>
 <div class="ttc" id="adef_8h_html"><div class="ttname"><a href="def_8h.html">def.h</a></div></div>
 <div class="ttc" id="adef_8h_html_a070d2ce7b6bb7e5c05602aa8c308d0c4"><div class="ttname"><a href="def_8h.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></div><div class="ttdeci">#define NULL</div><div class="ttdef"><b>Definition:</b> <a href="def_8h_source.html#l00047">def.h:47</a></div></div>
 <div class="ttc" id="adrivers_2ppc_2cache_8h_html"><div class="ttname"><a href="drivers_2ppc_2cache_8h.html">cache.h</a></div></div>
 <div class="ttc" id="adrivers_2ppc_2cache_8h_html_a5eae904392d068c9cc77ee74382f8c02"><div class="ttname"><a href="drivers_2ppc_2cache_8h.html#a5eae904392d068c9cc77ee74382f8c02">memdcbf</a></div><div class="ttdeci">void memdcbf(void *addr, int len)</div></div>
 <div class="ttc" id="adrivers_2ppc_2cache_8h_html_aba1f348d227a5d3d25d183b9317c5349"><div class="ttname"><a href="drivers_2ppc_2cache_8h.html#aba1f348d227a5d3d25d183b9317c5349">memdcbst</a></div><div class="ttdeci">void memdcbst(void *addr, int len)</div></div>
-<div class="ttc" id="aenet_8c_html_a00bdd3aa8816e84bcba4951de3244708"><div class="ttname"><a href="enet_8c.html#a00bdd3aa8816e84bcba4951de3244708">enet_poll</a></div><div class="ttdeci">void enet_poll(struct netif *netif)</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00412">enet.c:412</a></div></div>
+<div class="ttc" id="aenet_8c_html_a00bdd3aa8816e84bcba4951de3244708"><div class="ttname"><a href="enet_8c.html#a00bdd3aa8816e84bcba4951de3244708">enet_poll</a></div><div class="ttdeci">void enet_poll(struct netif *netif)</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00415">enet.c:415</a></div></div>
 <div class="ttc" id="aenet_8c_html_a0ff29830fde482fdf175988774b78edb"><div class="ttname"><a href="enet_8c.html#a0ff29830fde482fdf175988774b78edb">MTU</a></div><div class="ttdeci">#define MTU</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00019">enet.c:19</a></div></div>
 <div class="ttc" id="aenet_8c_html_a113c373de8104f9612787e8bafe85ed9"><div class="ttname"><a href="enet_8c.html#a113c373de8104f9612787e8bafe85ed9">enet_init</a></div><div class="ttdeci">err_t enet_init(struct netif *netif)</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00158">enet.c:158</a></div></div>
 <div class="ttc" id="aenet_8c_html_a368e3565ba17af3cb4703a689060863d"><div class="ttname"><a href="enet_8c.html#a368e3565ba17af3cb4703a689060863d">RX_DESCRIPTOR_NUM</a></div><div class="ttdeci">#define RX_DESCRIPTOR_NUM</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00018">enet.c:18</a></div></div>
-<div class="ttc" id="aenet_8c_html_a7076dc6e6ae13b3eea54a6a9251cd55d"><div class="ttname"><a href="enet_8c.html#a7076dc6e6ae13b3eea54a6a9251cd55d">enet_quiesce</a></div><div class="ttdeci">void enet_quiesce(void)</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00419">enet.c:419</a></div></div>
-<div class="ttc" id="aenet_8c_html_a9cfbb269728dc4185236d28be58d9eab"><div class="ttname"><a href="enet_8c.html#a9cfbb269728dc4185236d28be58d9eab">cnt</a></div><div class="ttdeci">int cnt</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00409">enet.c:409</a></div></div>
+<div class="ttc" id="aenet_8c_html_a7076dc6e6ae13b3eea54a6a9251cd55d"><div class="ttname"><a href="enet_8c.html#a7076dc6e6ae13b3eea54a6a9251cd55d">enet_quiesce</a></div><div class="ttdeci">void enet_quiesce(void)</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00422">enet.c:422</a></div></div>
+<div class="ttc" id="aenet_8c_html_a9cfbb269728dc4185236d28be58d9eab"><div class="ttname"><a href="enet_8c.html#a9cfbb269728dc4185236d28be58d9eab">cnt</a></div><div class="ttdeci">int cnt</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00412">enet.c:412</a></div></div>
 <div class="ttc" id="aenet_8c_html_ae62598c720cbf8575cc3080f03058d5d"><div class="ttname"><a href="enet_8c.html#ae62598c720cbf8575cc3080f03058d5d">MEM</a></div><div class="ttdeci">#define MEM(x)</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00020">enet.c:20</a></div></div>
 <div class="ttc" id="aenet_8c_html_aeb91d9f1eed8108ce61aa6633e2d4a25"><div class="ttname"><a href="enet_8c.html#aeb91d9f1eed8108ce61aa6633e2d4a25">TX_DESCRIPTOR_NUM</a></div><div class="ttdeci">#define TX_DESCRIPTOR_NUM</div><div class="ttdef"><b>Definition:</b> <a href="enet_8c_source.html#l00017">enet.c:17</a></div></div>
 <div class="ttc" id="aerr_8h_html_a6ab63185cc5dff3c50c61d99bdf98369"><div class="ttname"><a href="err_8h.html#a6ab63185cc5dff3c50c61d99bdf98369">ERR_MEM</a></div><div class="ttdeci">#define ERR_MEM</div><div class="ttdef"><b>Definition:</b> <a href="err_8h_source.html#l00053">err.h:53</a></div></div>
@@ -524,6 +527,8 @@ $(function() {
 <div class="ttc" id="alibfdt__env_8h_html_a3d46c47fd044b914a2304157c63b5095"><div class="ttname"><a href="libfdt__env_8h.html#a3d46c47fd044b914a2304157c63b5095">uint32_t</a></div><div class="ttdeci">u32 uint32_t</div><div class="ttdef"><b>Definition:</b> <a href="libfdt__env_8h_source.html#l00011">libfdt_env.h:11</a></div></div>
 <div class="ttc" id="amem_8c_html_a52ce222aebe4b7dce7f25cd536b6e650"><div class="ttname"><a href="mem_8c.html#a52ce222aebe4b7dce7f25cd536b6e650">mem_malloc</a></div><div class="ttdeci">void * mem_malloc(mem_size_t size)</div><div class="ttdef"><b>Definition:</b> <a href="mem_8c_source.html#l00494">mem.c:494</a></div></div>
 <div class="ttc" id="amem_8h_html"><div class="ttname"><a href="mem_8h.html">mem.h</a></div></div>
+<div class="ttc" id="anetif_8c_html_a34e37a1e8e358760dc1c43887922c7db"><div class="ttname"><a href="netif_8c.html#a34e37a1e8e358760dc1c43887922c7db">netif_set_link_down</a></div><div class="ttdeci">void netif_set_link_down(struct netif *netif)</div><div class="ttdef"><b>Definition:</b> <a href="netif_8c_source.html#l00574">netif.c:574</a></div></div>
+<div class="ttc" id="anetif_8c_html_ae0d2975f189277990e9d5276fdd9e9ea"><div class="ttname"><a href="netif_8c.html#ae0d2975f189277990e9d5276fdd9e9ea">netif_set_link_up</a></div><div class="ttdeci">void netif_set_link_up(struct netif *netif)</div><div class="ttdef"><b>Definition:</b> <a href="netif_8c_source.html#l00535">netif.c:535</a></div></div>
 <div class="ttc" id="anetif_8h_html_a92448dc510bc8d700c09e5c971ef0676"><div class="ttname"><a href="netif_8h.html#a92448dc510bc8d700c09e5c971ef0676">NETIF_FLAG_ETHARP</a></div><div class="ttdeci">#define NETIF_FLAG_ETHARP</div><div class="ttdef"><b>Definition:</b> <a href="netif_8h_source.html#l00088">netif.h:88</a></div></div>
 <div class="ttc" id="anetif_8h_html_aef64fe15c82bc7b235366923e517104e"><div class="ttname"><a href="netif_8h.html#aef64fe15c82bc7b235366923e517104e">NETIF_FLAG_BROADCAST</a></div><div class="ttdeci">#define NETIF_FLAG_BROADCAST</div><div class="ttdef"><b>Definition:</b> <a href="netif_8h_source.html#l00072">netif.h:72</a></div></div>
 <div class="ttc" id="aopt_8h_html"><div class="ttname"><a href="opt_8h.html">opt.h</a></div></div>

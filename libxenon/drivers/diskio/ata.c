@@ -233,9 +233,9 @@ xenon_ata_dumpinfo(struct xenon_ata_device *dev, char *info) {
 	}
 
 	/* The device information was read, dump it for debugging.  */
-	strncpy(text, data + 20, 20);
-	text[20] = 0;
-	printf("  * Serial: %s\n", text);
+	strncpy(dev->serial, data + 20, 20);
+	dev->serial[20] = 0;
+	printf("  * Serial: %s\n", dev->serial);
 
 	strncpy(dev->rev, data + 46, 8);
 	dev->rev[8] = 0;

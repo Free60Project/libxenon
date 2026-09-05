@@ -82,6 +82,7 @@ extern "C" {
 		struct xenon_ata_dma_prd * prds;
 
 		char model[0x30];
+		char serial[21];
 		char rev[9];
 	};
 

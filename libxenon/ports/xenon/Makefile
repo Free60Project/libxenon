@@ -21,6 +21,7 @@ CFLAGS = -g -mcpu=cell -mtune=cell -Os \
 	-maltivec \
 	-ffunction-sections -fdata-sections \
 	-Wall -Wno-format -Wno-attributes -I. -DBYTE_ORDER=BIG_ENDIAN \
+	-Wno-error=int-conversion -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types \
 	-m32 -fno-pic -mpowerpc64 \
 	-D_CFE_=1 -DENDIAN_BIG=1 \
 	$(INCLUDES)

@@ -156,7 +156,7 @@ static inline __attribute__((always_inline)) void elf_smc_set_led(int override,
 
 // Stage 2 of prepare run: This function is called in real-mode.
 static void
-    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2")))
+    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2", "no-tree-loop-distribute-patterns")))
     elf_prepare_run_s2(void *self, uint32_t entry, int mem_size) {
   // GCC is allowed to optimize away writes to 0, so do a stupid trick.
   volatile void* volatile zero = 0x0;
@@ -190,7 +190,7 @@ static void
 // to the relocation
 // This function is RELOCATED! You CANNOT call regular functions from here!
 static void
-    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2")))
+    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2", "no-tree-loop-distribute-patterns")))
     elf_prepare_run(void *addr, uint32_t size) {
   Elf32_Ehdr *ehdr;
   Elf32_Shdr *shdr;

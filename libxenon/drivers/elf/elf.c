@@ -155,8 +155,12 @@ static inline __attribute__((always_inline)) void elf_smc_set_led(int override,
 }
 
 // Stage 2 of prepare run: This function is called in real-mode.
+// WARNING: elf_prepare_run_s2 is relocated and you CANNOT call regular functions from here! The application *will* trap.
+// As a consequence of the relocation, the following optimizations are required to prevent function calls that will fail:
+// - optimize("O2") is required to prevent calls to _savegpr
+// - optimize("no-tree-loop-distribute-patterns") prevents GCC from replacing loops with calls to library functions
 static void
-    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2")))
+    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2", "no-tree-loop-distribute-patterns")))
     elf_prepare_run_s2(void *self, uint32_t entry, int mem_size) {
   // GCC is allowed to optimize away writes to 0, so do a stupid trick.
   volatile void* volatile zero = 0x0;
@@ -186,11 +190,12 @@ static void
     ;
 }
 
-// optimize("O2") is required to prevent call to _savegpr, which would fail due
-// to the relocation
-// This function is RELOCATED! You CANNOT call regular functions from here!
+// WARNING: elf_prepare_run is relocated and you CANNOT call regular functions from here! The application *will* trap.
+// As a consequence of the relocation, the following optimizations are required to prevent function calls that will fail:
+// - optimize("O2") is required to prevent calls to _savegpr
+// - optimize("no-tree-loop-distribute-patterns") prevents GCC from replacing loops with calls to library functions
 static void
-    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2")))
+    __attribute__((section(".elfldr"), used, noreturn, flatten, optimize("O2", "no-tree-loop-distribute-patterns")))
     elf_prepare_run(void *addr, uint32_t size) {
   Elf32_Ehdr *ehdr;
   Elf32_Shdr *shdr;

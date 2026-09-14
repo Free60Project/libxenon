@@ -191,7 +191,7 @@ toolchain_install()
             --with-gmp=/opt/local --with-mpfr=/opt/local --disable-decimal-float --disable-libquadmath \
             --enable-languages=c,c++ --disable-libssp --disable-libsanitizer --with-newlib --enable-cxx-flags="-G0" \
             --disable-libmudflap --disable-nls --disable-shared --disable-linux-futex --enable-altivec \
-            --disable-libatomic --disable-threads --disable-libgomp --disable-libitm --disable-libstdcxx-time -v >> $LOGFILE 2>&1 || fail_with_info
+            --disable-libatomic --disable-threads --disable-libgomp --disable-libitm --disable-libstdcxx-time --disable-initfini-array -v >> $LOGFILE 2>&1 || fail_with_info
         echo -e "Building $GCC - (2nd pass), this could take a while..."
         make $PARALLEL 2>&1 >> $LOGFILE || fail_with_info
         echo -e "Installing $GCC (2nd pass)..."

@@ -177,14 +177,16 @@ diff -ENwbur ../gcc-16.2.0/gcc/config/rs6000/altivec.md gcc-16.2.0/gcc/config/rs
    "vsumsws %0,%1,%2"
    [(set_attr "type" "veccomplex")])
 
-diff -ENwbur ../gcc-16.2.0/gcc/config/rs6000/altivec.md gcc-16.2.0/gcc/config/rs6000/altivec.md
---- ../gcc-16.2.0/libstdc++-v3/configure	2026-08-07 03:46:10.784761700 -0400
-+++ gcc-16.2.0/libstdc++-v3/configure	2026-09-11 23:29:46.303862500 -0400
-@@ -11962,6 +11962,7 @@
+diff -ENwbur ../gcc-16.2.0/libstdc++-v3/configure gcc-16.2.0/libstdc++-v3/configure
+--- ../gcc-16.2.0/libstdc++-v3/configure        2026-08-07 03:46:10.784761700 -0400
++++ gcc-16.2.0/libstdc++-v3/configure   2026-09-13 20:10:13.896399500 -0400
+@@ -11962,6 +11962,9 @@
    finish_cmds='PATH="\$PATH:/sbin" ldconfig -n $libdir'
    shlibpath_var=LD_LIBRARY_PATH
    shlibpath_overrides_runpath=no
 +  lt_cv_shlibpath_overrides_runpath=no
- 
++  glibcxx_cv_getentropy=no
++  glibcxx_cv_arc4random=no
+
    # Some binutils ld are patched to set DT_RUNPATH
    if ${lt_cv_shlibpath_overrides_runpath+:} false; then :

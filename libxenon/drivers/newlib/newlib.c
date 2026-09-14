@@ -272,12 +272,6 @@ int gethostname(char *name, size_t len) {
 }
 //---------------------------------------------------------------------------------
 
-int getentropy(void *buffer, size_t length)
-{
-	errno = ENOSYS;
-	return -1;
-}
-
 /*
 int
 _DEFUN(wait, (status),

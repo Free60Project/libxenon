@@ -17,9 +17,11 @@ INCLUDES = -I ../../drivers -I ../../include \
 	-I ../../drivers/nocfe \
 	-I ../../drivers/lwip/include/ -I ../../drivers/lwip/xenon/include/ -I ../../drivers/lwip/include/$(LWIP_MODE)/
 
+# Note: -fwrapv is required since newer GCC versions optimize away
+# integer overflow/underflow UB which breaks things like edram init
 CFLAGS = -g -mcpu=cell -mtune=cell -Os \
 	-maltivec \
-	-ffunction-sections -fdata-sections \
+	-ffunction-sections -fdata-sections -fwrapv \
 	-Wall -Wno-format -Wno-attributes -I. -DBYTE_ORDER=BIG_ENDIAN \
 	-Wno-error=int-conversion -Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types \
 	-m32 -fno-pic -mpowerpc64 \

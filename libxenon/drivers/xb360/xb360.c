@@ -19,6 +19,10 @@
 
 #include "xb360.h"
 
+#define XELL_FOOTER_OFFSET (256*1024-16)
+#define XELL_FOOTER_LENGTH 16
+#define XELL_FOOTER "xxxxxxxxxxxxxxxx"
+
 extern struct XCONFIG_SECURED_SETTINGS secured_settings;
 
 extern struct sfc sfc;
@@ -733,6 +737,91 @@ int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len
 	else
 		return -1;
 	return 0;
+}
+
+int xenon_get_hack_type(void)
+{
+	int detected = HACK_UNKNOWN;
+	unsigned char nandData[0x10];
+	int xell_on_flash = 0, has_45xx_bl = 0, has_split_cb = 0, has_third_cb = 0, modded_nand = 0;
+
+	// Check if we have XeLL on the flash
+	for (int i = 0; i < XELL_OFFSET_COUNT; i++)
+	{
+		// TODO: Clean this up. We're checking XeLL-on-flash in 3 different places now...
+		if (xelloffsets[i] != 0)
+		{
+			if (xenon_get_logical_nand_data(nandData, xelloffsets[i] + XELL_FOOTER_OFFSET, sizeof(nandData)) == -1)
+				goto finish;
+
+			if (memcmp(nandData, XELL_FOOTER, XELL_FOOTER_LENGTH) == 0)
+			{
+				xell_on_flash = 1;
+				modded_nand = 1;
+				break;
+			}
+		}
+	}
+
+	// Read the NAND header. This fails on eMMC consoles if eMMC was initialised by kernel.
+	if (xenon_get_logical_nand_data(nandData, 0, sizeof(nandData)) == -1)
+		goto finish;
+	// Read the header of CB
+	unsigned int cb_offset = *(unsigned int *)(nandData + 0x8);
+	if (xenon_get_logical_nand_data(nandData, cb_offset, sizeof(nandData)) == -1)
+		goto finish;
+	// ..and check if we have CB_B
+	unsigned int cb_length = *(unsigned int *)(nandData + 0xC);
+	if (xenon_get_logical_nand_data(nandData, cb_offset + cb_length, sizeof(nandData)) == -1)
+		goto finish;
+	has_split_cb = (*(unsigned short *)(nandData) & 0xFFF) == 0x342;
+	// ..and if we have CB_B, check for RGH3/RGH1.3 CB_X/CB_Y
+	if (has_split_cb)
+	{
+		cb_offset = cb_offset + cb_length;
+		cb_length = *(unsigned int *)(nandData + 0xC);
+		if (xenon_get_logical_nand_data(nandData, cb_offset + cb_length, sizeof(nandData)) == -1)
+			goto finish;
+		has_third_cb = (*(unsigned short *)(nandData) & 0xFFF) == 0x342;
+		if (has_third_cb)
+			modded_nand = 1;
+	}
+
+	// Check patch slot versions
+	unsigned int patch_slot_offset = 0, patch_slot_size = 0;
+	unsigned short patch_slot_count = 0;
+	if (xenon_get_logical_nand_data(&patch_slot_offset, 0x64, sizeof(unsigned int)) == -1)
+		goto finish;
+	if (xenon_get_logical_nand_data(&patch_slot_count, 0x68, sizeof(unsigned short)) == -1)
+		goto finish;
+	if (xenon_get_logical_nand_data(&patch_slot_size, 0x70, sizeof(unsigned int)) == -1)
+		goto finish;
+	if (patch_slot_count == 2)
+	{
+		unsigned short version = 0;
+		// Check the version of the first patch slot CF
+		if (xenon_get_logical_nand_data(nandData, patch_slot_offset, sizeof(nandData)) == -1)
+			goto finish;
+		version = *(unsigned short *)(nandData + 0x2);
+		if (version == 4532 || version == 4548)
+			has_45xx_bl = 1;
+		// We shouldn't need to check second patch slot;
+		//  imgbuild and XeBuild both only touch the first patch slot.
+	}
+
+	if (has_third_cb)
+		detected = HACK_RGH_GLITCH3;
+	else if (has_split_cb && xell_on_flash)
+		detected = HACK_RGH_GLITCH2;
+	else if (has_45xx_bl && xell_on_flash)
+		detected = HACK_SMC_JTAG;
+	else if (modded_nand)
+		detected = HACK_UNK_HARDMOD;
+	else
+		detected = HACK_NONE;
+
+finish:
+	return detected;
 }
 
 unsigned int xenon_get_kv_size()

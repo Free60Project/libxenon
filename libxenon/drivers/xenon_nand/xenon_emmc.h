@@ -72,5 +72,6 @@ void emmc_setup_dma(); //prepare DMA transfer
 
 // high level API
 int emmc_rawflash_writeImage(int len, int f);
+int xenon_get_logical_emmc_data(void* buf, unsigned int offset, unsigned int len);
 
 #endif

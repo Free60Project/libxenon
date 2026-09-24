@@ -113,13 +113,13 @@ int emmc_cmd(uint8_t cmd, uint32_t argument, int flags){
     }
 
     start_time = mftb();
-    if((flags&EMMC_FLAG_PIO_READ) || (flags&EMMC_FLAG_PIO_WRITE)){
+    if((flags&EMMC_FLAG_PIO_READ) || (flags&EMMC_FLAG_PIO_WRITE) || (flags&EMMC_FLAG_DMA_READ)){
         //printf("emmc_transfer_wait\n");
         uint32_t status = sfcx_readreg(EMMC_STATUS_REG);
         while((status & 3) != 0){
             status = sfcx_readreg(EMMC_STATUS_REG);
             if(tb_diff_msec(mftb(), start_time) > EMMC_TIMEOUT_MS){
-                printf("emmc cmd%d arg %08X pio transfer timeout: stat=%08X\n", cmd, argument, status);
+                printf("emmc cmd%d arg %08X transfer timeout: stat=%08X\n", cmd, argument, status);
                 return -3;
             }
         }
@@ -187,6 +187,46 @@ int emmc_init(){
     memset((void*)emmc_dma_buffer, 0, EMMC_DMA_TRANSFER_BUF_SZ);
 
     emmc_init_status = 1;
+
+    return 0;
+}
+
+int xenon_get_logical_emmc_data(void* buf, unsigned int offset, unsigned int len)
+{
+
+    if(emmc_init_status <= 0){
+        emmc_init();
+    }
+
+    char* dmabuf = (char*)get_emmc_dma_buffer();
+    
+    unsigned int end = offset + len;
+    unsigned int cur = offset & ~(EMMC_DMA_TRANSFER_BUF_SZ - 1);
+
+    while(cur < end){
+        if(emmc_cmd(EMMC_CMD_SET_BLOCK_COUNT, EMMC_DMA_TRANSFER_BUF_SZ >> 9, EMMC_FLAG_NONE) < 0){
+            printf("... eMMC failed to SET_BLOCK_COUNT for read");
+            return -1; 
+        }
+        emmc_setup_dma();
+        if(emmc_cmd(EMMC_CMD_READ_MULTIPLE_BLOCK, cur >> 9, EMMC_FLAG_DMA_READ) < 0){
+            printf("... eMMC failed to READ_MULIPLE_BLOCK, retry\n");
+            return -1;
+        }
+        asm volatile("sync");
+
+        unsigned int src = 0;
+        if(cur < offset)
+            src = offset - cur;
+        unsigned int copy_len = end - (cur + src);
+        if(copy_len > (EMMC_DMA_TRANSFER_BUF_SZ - src))
+            copy_len = EMMC_DMA_TRANSFER_BUF_SZ - src;
+
+        for(unsigned int i = 0; i < copy_len; i++)
+            ((char*)buf)[cur + src - offset + i] = dmabuf[src + i];
+
+        cur += EMMC_DMA_TRANSFER_BUF_SZ;
+    }
 
     return 0;
 }

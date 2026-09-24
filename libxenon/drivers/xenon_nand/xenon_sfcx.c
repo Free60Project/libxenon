@@ -591,7 +591,7 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
       delay(10);
    }
 
-	if(xenon_get_console_type() != REV_CORONA_PHISON){
+	if(!xenon_is_emmc_console()){
 		if((size == (RAW_NAND_64*4)) || (size == (RAW_NAND_64*8))) // 256 or 512M NAND image, only flash 64M
 			size = RAW_NAND_64;
 		else if((size != 0x1080000)&& (size != RAW_NAND_64)) // 16 M size
@@ -612,7 +612,7 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
     delay(15);
 
 	int result;
-	if(xenon_get_console_type() != REV_CORONA_PHISON){
+	if(!xenon_is_emmc_console()){
 		printf(" * Checking NAND File to be of matching type...\n");
 
    if (rawflash_checkImage(f) != 0)

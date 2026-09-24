@@ -715,6 +715,12 @@ int xenon_get_console_type()
 	return REV_UNKNOWN;
 }
 
+bool xenon_is_emmc_console()
+{
+	int ctype = xenon_get_console_type();
+	return (ctype == REV_CORONA_PHISON || ctype == REV_WINCHESTER_MMC);
+}
+
 int xenon_logical_nand_data_ok()
 {
 	uint16_t tmp;

@@ -127,6 +127,7 @@ bool xenon_is_emmc_console(void);
 
 int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len);
 int xenon_logical_nand_data_ok();
+int xenon_memory_mapped_nand_data_ok();
 #define MMC_FLASH_SIZE 0x3000000
 
 #endif /* XB360_H_ */

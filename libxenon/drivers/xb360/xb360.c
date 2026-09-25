@@ -722,25 +722,46 @@ bool xenon_is_emmc_console()
 	return (ctype == REV_CORONA_PHISON || ctype == REV_WINCHESTER_MMC);
 }
 
-int xenon_logical_nand_data_ok()
+int xenon_memory_mapped_nand_data_ok()
 {
 	char data[0x2] = { '\0' };
 
-	if(xenon_is_emmc_console())
-	{
-		xenon_get_logical_emmc_data(&data, 0, 2);
-	}
-	else
-	{
-		memcpy(&data, (const void*)(0x80000200C8000000ULL), 2);
-	}
+	memcpy(&data, (const void*)(0x80000200C8000000ULL), 2);
 
-	// The first two bytes of NAND should be 0xFF 0x4F for
-	// a standard retail NAND, however some pre-release images
-	// may have 0x0F as the first byte or 0x3F as the second byte
-	if( (data[0] == 0xFF || data[0] == 0x0F) && (data[1] == 0x3F || data[1] == 0x4F) )
+	if(SFCX_IS_VALID_NAND_HEADER(data))
 	{
 		return 0;
+	}
+
+	return -1;
+}
+
+int xenon_emmc_nand_data_ok()
+{
+	char data[0x2] = { '\0' };
+	
+	xenon_get_logical_emmc_data(&data, 0, 2);
+
+	if(SFCX_IS_VALID_NAND_HEADER(data))
+	{
+		return 0;
+	}
+
+	return -1;
+}
+
+int xenon_logical_nand_data_ok()
+{
+	// On eMMC consoles, the memory mapped NAND interface is
+	// available if eMMC init has not occurred. If it is
+	// unavailable, we can fall back to eMMC reads
+	if(0 == xenon_memory_mapped_nand_data_ok())
+	{
+		return 0;
+	}
+	else if(xenon_is_emmc_console())
+	{
+		return xenon_emmc_nand_data_ok();
 	}
 
 	return -1;
@@ -750,14 +771,20 @@ int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len
 {
 	if ((offset + len) >= 0x4000000)
 		return -1;
-
-	if (xenon_is_emmc_console())
-		return xenon_get_logical_emmc_data(buf, offset, len);
 	
-	if (xenon_logical_nand_data_ok() == 0)
+	if (xenon_memory_mapped_nand_data_ok() == 0)
+	{
 		memcpy(buf, (const void*)(0x80000200C8000000ULL + offset), len);
+	}
+	else if(xenon_is_emmc_console() && xenon_emmc_nand_data_ok() == 0)
+	{
+		return xenon_get_logical_emmc_data(buf, offset, len);
+	}
 	else
+	{
 		return -1;
+	}
+
 	return 0;
 }
 

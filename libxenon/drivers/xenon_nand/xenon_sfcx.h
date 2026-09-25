@@ -83,6 +83,11 @@
 // define success as no ecc error and no bad block error
 #define SFCX_SUCCESS(status) ((status&STATUS_ERROR)==0)
 
+// The first two bytes of NAND should be 0xFF 0x4F for
+// a standard retail NAND, however some pre-release images
+// may have 0x0F as the first byte or 0x3F as the second byte
+#define SFCX_IS_VALID_NAND_HEADER(data) ((data[0]==0xFF||data[0]==0x0F)&&(data[1]==0x3F||data[1]==0x4F))
+
 struct sfc
 {
 	int initialized;

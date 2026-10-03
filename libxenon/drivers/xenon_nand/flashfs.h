@@ -19,10 +19,10 @@ extern "C" {
  * needed. Only one instance can be mounted at a time.
  * Returns false if no filesystem was found, the name is taken, or on OOM.
  */
-bool flashfs_mount(const char *name);
+bool flashfs_mount();
 
 /* Unregister the device `flash:` and free the parsed tables. */
-bool flashfs_unmount(const char *name);
+bool flashfs_unmount();
 
 #ifdef __cplusplus
 }

@@ -1,7 +1,6 @@
 /* flashfs_table.c - filetable parse, sanity filter, root chain, offset detect */
 #include "flashfs_priv.h"
 
-
 /* Parse one root block: append blockmap words + entries. Stops entry
  * scan at first empty/erased slot. Returns next root block in the
  * chain, or >=0x1ffb when the chain ends. */
@@ -11,7 +10,7 @@ static uint32_t root_parse(flashfs_t *fs, uint32_t blk, uint32_t map_base,
     static uint8_t data[FLASHFS_BLOCK_LEN];
     uint32_t p, blks = FLASHFS_BLOCK_LEN / FLASHFS_PAGE_LEN / 2;
 
-    if (block_read(fs, blk, data, sizeof(data)) != 0)
+    if (_flashfs_block_read(fs, blk, data, sizeof(data)) != 0)
         return FLASHFS_BLK_END;
     for (p = 0; p < blks; p++) { /* even pages: blockmap */
         const uint8_t *pg = data + (p * 2) * FLASHFS_PAGE_LEN;
@@ -54,14 +53,14 @@ static uint32_t root_parse(flashfs_t *fs, uint32_t blk, uint32_t map_base,
 
 /* Does the first entries page of root `blk` hold >= 2 sane entries?
  * Corruption filter for spare-scan candidates (not a ranking). */
-int table_sane(const flashfs_t *fs, uint32_t blk)
+int _flashfs_table_sane(const flashfs_t *fs, uint32_t blk)
 {
     static uint8_t rootblk[FLASHFS_BLOCK_LEN];
     const uint8_t *ep;
     uint32_t y, valid = 0;
     if (blk >= fs->nblocks)
         return 0;
-    if (block_read(fs, blk, rootblk, sizeof(rootblk)) != 0)
+    if (_flashfs_block_read(fs, blk, rootblk, sizeof(rootblk)) != 0)
         return 0;
     ep = rootblk + FLASHFS_PAGE_LEN;
     for (y = 0; y < 0x10; y++) {
@@ -117,7 +116,7 @@ static void detect_fs_offset(flashfs_t *fs)
         uint32_t blkidx = e->block + cands[c];
         if (blkidx >= fs->nblocks)
             continue;
-        if (block_read(fs, blkidx, blk, sizeof(blk)) != 0)
+        if (_flashfs_block_read(fs, blkidx, blk, sizeof(blk)) != 0)
             continue;
         if (blk[0] == 'X' && blk[1] == 'E' && blk[2] == 'X') {
             fs->fs_offset = cands[c];
@@ -126,14 +125,14 @@ static void detect_fs_offset(flashfs_t *fs)
     }
 }
 
-int mount_root(flashfs_t *fs, uint16_t root, int version)
+/* Load the filesystem rooted at little block `root`: follow the root chain
+ * collecting blockmap words and entries, then detect the data offset. */
+int _flashfs_mount_root(flashfs_t *fs, uint16_t root)
 {
     uint32_t nentries = 0, next = root, guard = 0, map_base = 0;
 
     if (root >= fs->nblocks)
         return -1;
-    fs->root = root;
-    fs->version = version;
     /* follow root chain (multi-block roots append maps/entries).
      * A 0 link is an unmanaged map slot, not a chain to block 0
      * (header lives there; roots chain forward) — stop on it. */

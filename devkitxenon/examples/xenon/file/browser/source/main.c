@@ -17,6 +17,7 @@
 #include <dirent.h>
 
 #include <libfat/fat.h>
+#include <xenon_nand/flashfs.h>
 
 int bdev_enum(int handle, const char **name);
 
@@ -97,6 +98,8 @@ int main(){
 	xenon_atapi_init();
 	
 	fatInitDefault();
+
+	flashfs_mount();
 
 	handle=-1;
     handle=bdev_enum(handle,&s);

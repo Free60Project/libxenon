@@ -81,6 +81,12 @@ LIBOBJS = crti.o crtn.o \
 	../../drivers/xenon_nand/xenon_emmc.o \
 	../../drivers/xenon_nand/xenon_sfcx.o \
 	../../drivers/xenon_nand/xenon_config.o \
+	../../drivers/xenon_nand/flashfs.o \
+	../../drivers/xenon_nand/flashfs_io.o \
+	../../drivers/xenon_nand/flashfs_spare.o \
+	../../drivers/xenon_nand/flashfs_table.o \
+	../../drivers/xenon_nand/flashfs_emu.o \
+	../../drivers/xenon_nand/flashfs_hw.o \
 	../../drivers/xenon_post/xenon_post.o \
 	../../drivers/xenos/ucode.o \
 	../../drivers/xenos/edram.o \

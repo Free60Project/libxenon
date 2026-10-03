@@ -62,5 +62,5 @@ void M_LoadMW(struct XenosDevice *xe, int where)
  	eMatrix44 world;
 	memcpy(world, g_ident, sizeof(eMatrix44));
 	memcpy(world, &matrix_stack[matrix_top], sizeof(eMatrix43));
-	M_Load44(xe, where, world);
+	M_Load44(xe, where, &world);
 }

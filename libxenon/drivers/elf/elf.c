@@ -39,12 +39,12 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 // Temporary buffer to hold loaded elf data.
 #define ELF_TEMP_BEGIN ((void *)0x88000000)
-#define ELF_MAX_SIZE 0x03000000
+#define ELF_MAX_SIZE 0x05FE0000
 
 // ELF file relocation address.
-#define ELF_DATA_RELOC_START ((void *)0x8B000000)
-#define ELF_ARGV_BEGIN ((void *)0x8E000000)
-#define ELF_GET_RELOCATED(x)                                                   \
+#define ELF_DATA_RELOC_START ((void *)0x8DFE0000)
+#define ELF_ARGV_BEGIN ((void *)0x93FC0000)
+#define ELF_GET_RELOCATED(x) \
   (ELF_CODE_RELOC_START + ((unsigned long)(x) - (unsigned long)elfldr_start))
 #define ELF_GET_RELOCATED_REAL(x) (void*)((uint64_t)ELF_GET_RELOCATED(x) & 0x1FFFFFFF)
 
@@ -217,6 +217,11 @@ static void
 
     phdr = (Elf32_Phdr *)(addr + ehdr->e_phoff + (i * sizeof(Elf32_Phdr)));
 
+    // Skip program headers with no size
+    // Older linked homebrew has a GNU_EH_FRAME header with a physaddr in virtual space
+    if (phdr->p_memsz == 0)
+      continue;
+
     // Track the high address (even for pages we don't load)
     if (phdr->p_paddr + phdr->p_memsz > mem_size) {
       mem_size = phdr->p_paddr + phdr->p_memsz;
@@ -369,6 +374,22 @@ static int elf_VerifyHeaders(void *addr, int size) {
   return 0;
 }
 
+static uint32_t elf_getMappedSize(uint32_t addr, int size) {
+  Elf32_Ehdr *ehdr = (Elf32_Ehdr *)addr;
+  Elf32_Phdr *phdr = (Elf32_Phdr *)addr + ehdr->e_phoff;
+  uint32_t current_max_addr = 0;
+
+  for (int i = 0; i < ehdr->e_phnum; i++) {
+    phdr = (Elf32_Phdr *)(addr + ehdr->e_phoff + (i * sizeof(Elf32_Phdr)));
+
+    if(phdr->p_paddr + phdr->p_memsz > current_max_addr && phdr->p_memsz) {
+      current_max_addr = phdr->p_paddr + phdr->p_memsz;
+    }
+  }
+
+  return current_max_addr;
+}
+
 int elf_runFromMemory(void *addr, int size) {
   uint64_t start_time;
   volatile uint32_t *elf_secondary_count_ptr =
@@ -380,8 +401,10 @@ int elf_runFromMemory(void *addr, int size) {
     return -1;
   }
 
-  if (size >= ELF_MAX_SIZE) {
-    printf(" * Elf is too large, abort! (size = 0x%.8X)\n", size);
+  uint32_t mapped_size = elf_getMappedSize(addr, size);
+
+  if (mapped_size >= ELF_MAX_SIZE) {
+    printf(" * Elf is too large, abort! (size = 0x%.8X)\n", mapped_size);
     return -1;
   }
 
@@ -391,7 +414,7 @@ int elf_runFromMemory(void *addr, int size) {
     return -1;
   }
 
-  printf(" * Executing @ 0x%.8X size 0x%.8X...\n", addr, size);
+  printf(" * Executing @ 0x%.8X size 0x%.8X...\n", addr, mapped_size);
   shutdown_drivers();
 
   // relocate our code

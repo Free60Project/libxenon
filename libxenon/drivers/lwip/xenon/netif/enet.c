@@ -122,6 +122,7 @@ struct enet_context
 	void *tx_buffer_base;
 
 	struct eth_addr *ethaddr;
+	int phy_id;
 };
 
 static int enet_open(struct netif *ctx);
@@ -129,20 +130,26 @@ static struct pbuf *enet_linkinput(struct enet_context *context);
 static err_t enet_linkoutput(struct netif *netif, struct pbuf *p);
 
 /* PHY sits at address 1 */
-static unsigned short phy_read(int addr)
+static unsigned short phy_read(struct enet_context * context, int addr)
 {
 	SIS_W32(GMIIControl, EhnMIIreq | EhnMIIread |
-		(addr << EhnMIIregShift) | (1 << EhnMIIpmdShift));
+		(addr << EhnMIIregShift) | (context->phy_id << EhnMIIpmdShift));
 	do {mdelay(1);} while (SIS_R32(GMIIControl) & EhnMIInotDone);
 	return SIS_R32(GMIIControl) >> EhnMIIdataShift;
 }
 
-static void phy_write(int addr, unsigned short data)
+static void phy_write(struct enet_context * context, int addr, unsigned short data)
 {
 	SIS_W32(GMIIControl, EhnMIIreq | EhnMIIwrite |
-		(addr << EhnMIIregShift) | (1 << EhnMIIpmdShift) |
+		(addr << EhnMIIregShift) | (context->phy_id << EhnMIIpmdShift) |
 		((uint32_t)data << EhnMIIdataShift));
 	do {mdelay(1);} while (SIS_R32(GMIIControl) & EhnMIInotDone);
+}
+
+static int phy_link_up(struct enet_context * context)
+{
+    phy_read(context, MII_BMSR);
+    return ((phy_read(context, MII_BMSR) & BMSR_LSTATUS) != 0);
 }
 
 static void wait_empty_tx(struct enet_context *context)
@@ -278,6 +285,7 @@ static int enet_open(struct netif *netif)
 	struct enet_context *context = (struct enet_context *) netif->state;
 	uint8_t *mac = netif->hwaddr;
 
+	context->phy_id = 1;
 	SIS_W32(IntrMask, 0); // disable interrupts
 	SIS_W32(IntrControl, 0x08558001);
 	udelay(100);
@@ -327,30 +335,29 @@ static int enet_open(struct netif *netif)
 	xenon_gpio_control(0,0,0x10);
 	xenon_gpio_control(4,0,0x10);
 
-	phy_write(MII_BMCR, BMCR_RESET | BMCR_ANENABLE);
-	while (phy_read(MII_BMCR) & BMCR_RESET){
+	phy_write(context, MII_BMCR, BMCR_RESET | BMCR_ANENABLE);
+	while (phy_read(context, MII_BMCR) & BMCR_RESET){
 		mdelay(500);
 		tries--;
 		if (tries<=0) break;
 	};
 
-    // phy_write(0x10, 0x8058);
-    // phy_write(4, 0x5e1);
-    // phy_write(0x14, 0x4048);
+    // phy_write(context, 0x10, 0x8058);
+    // phy_write(context, 4, 0x5e1);
+    // phy_write(context, 0x14, 0x4048);
 
-	int linkstate = phy_read(MII_BMSR);
-	if (!(linkstate & BMSR_LSTATUS))
+	if (!phy_link_up(context))
 	{
 		tries=10;
 		printf("Waiting for link...");
-		while (!(phy_read(MII_BMSR) & BMSR_LSTATUS)){
+		while (!phy_link_up(context)){
 			mdelay(500);
 			tries--;
 			if (tries<=0) break;
 		};
 	}
 
-	if (phy_read(MII_BMSR) & BMSR_LSTATUS) {
+	if (phy_link_up(context)) {
 		printf("link up!\n");
 		netif_set_link_up(netif);
 	} else {

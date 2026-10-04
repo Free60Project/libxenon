@@ -75,12 +75,20 @@ enum sis190_register_content {
 #define EhnMIIreq       0x0010
 #define EhnMIInotDone   0x0010
 
+#define PHY_MAX_ADDR    32
+
 /* Standard MII definitions */
-#define MII_BMCR        0x00
-#define MII_BMSR        0x01
-#define BMCR_RESET      0x8000
-#define BMCR_ANENABLE   0x1000
-#define BMSR_LSTATUS    0x0004
+#define MII_BMCR        0x00    /* Basic mode control register */
+#define MII_BMSR        0x01    /* Basic mode status register  */
+#define MII_PHYSID1		0x02	/* PHYS ID 1                   */
+#define MII_PHYSID2		0x03	/* PHYS ID 2                   */
+
+/* Basic mode control register */
+#define BMCR_RESET      0x8000	/* Reset to default state      */
+#define BMCR_ANENABLE   0x1000  /* Enable auto negotiation     */
+
+/* Basic mode status register. */
+#define BMSR_LSTATUS    0x0004	/* Link status                 */
 
 /* Descriptors (TxDesc / RxDesc, little-endian) */
 struct TxDesc {
@@ -122,7 +130,9 @@ struct enet_context
 	void *tx_buffer_base;
 
 	struct eth_addr *ethaddr;
+	
 	int phy_id;
+	int id[2];
 };
 
 static int enet_open(struct netif *ctx);
@@ -146,10 +156,15 @@ static void phy_write(struct enet_context * context, int addr, unsigned short da
 	do {mdelay(1);} while (SIS_R32(GMIIControl) & EhnMIInotDone);
 }
 
+static int phy_read_latched(struct enet_context * context, int reg)
+{
+    phy_read(context, reg);
+    return phy_read(context, reg);
+}
+
 static int phy_link_up(struct enet_context * context)
 {
-    phy_read(context, MII_BMSR);
-    return ((phy_read(context, MII_BMSR) & BMSR_LSTATUS) != 0);
+    return ((phy_read_latched(context, MII_BMSR) & BMSR_LSTATUS) != 0);
 }
 
 static void wait_empty_tx(struct enet_context *context)
@@ -279,13 +294,53 @@ err_t enet_init(struct netif *netif)
 	return ERR_OK;
 }
 
+static int enet_init_phy(struct enet_context *context)
+{
+    context->id[0] = phy_read(context, MII_PHYSID1);
+    context->id[1] = phy_read(context, MII_PHYSID2);
+
+    /*
+     * Do we actually care about the IDs ?
+     * 
+     * on second id, lower nibble gets masked
+     * 
+     * PHAT: {0x143, 0xbc31}, // PHAT: Broadcom PHY AC131 ?
+     * XKSB: {0x141, 0x0e22}, // >= Corona, XKSB: Marvell PHY 88E3015 ?
+     *
+     * printf("MFR ID: %x, %x\n", context->id[0], context->id[1]);
+     */
+     return 0;
+}
+
+static int enet_probe(struct enet_context *context)
+{
+    int status = 0;
+    for (int i=0; i < PHY_MAX_ADDR; i++) {
+        context->phy_id = i;
+
+        status = phy_read_latched(context, MII_BMSR);
+
+        // Try next mii if the current one is not accessible.
+		if (status == 0xffff || status == 0x0000)
+			continue;
+
+		return enet_init_phy(context);
+    }
+
+    return 1;
+}
+
 static int enet_open(struct netif *netif)
 {
 	int tries=10;
 	struct enet_context *context = (struct enet_context *) netif->state;
 	uint8_t *mac = netif->hwaddr;
 
-	context->phy_id = 1;
+	if (enet_probe(context)) {
+	    printf("enet: Failed to probe phy\n");
+		return 1;
+	}
+
 	SIS_W32(IntrMask, 0); // disable interrupts
 	SIS_W32(IntrControl, 0x08558001);
 	udelay(100);

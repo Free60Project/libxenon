@@ -152,11 +152,11 @@ Macros</h2></td></tr>
 <tr class="separator:a62b591249738911fd8dca5b95ac15fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab99b7a8cbd72906b97d97134e520c936"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#ab99b7a8cbd72906b97d97134e520c936">ELF_TEMP_BEGIN</a>&#160;&#160;&#160;((void *)0x88000000)</td></tr>
 <tr class="separator:ab99b7a8cbd72906b97d97134e520c936"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7a00207f931c5dc44d2456cd8729002"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#ac7a00207f931c5dc44d2456cd8729002">ELF_MAX_SIZE</a>&#160;&#160;&#160;0x03000000</td></tr>
+<tr class="memitem:ac7a00207f931c5dc44d2456cd8729002"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#ac7a00207f931c5dc44d2456cd8729002">ELF_MAX_SIZE</a>&#160;&#160;&#160;0x05FE0000</td></tr>
 <tr class="separator:ac7a00207f931c5dc44d2456cd8729002"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfc0034a0d6273a3bcfd5e07b8894131"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#acfc0034a0d6273a3bcfd5e07b8894131">ELF_DATA_RELOC_START</a>&#160;&#160;&#160;((void *)0x8B000000)</td></tr>
+<tr class="memitem:acfc0034a0d6273a3bcfd5e07b8894131"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#acfc0034a0d6273a3bcfd5e07b8894131">ELF_DATA_RELOC_START</a>&#160;&#160;&#160;((void *)0x8DFE0000)</td></tr>
 <tr class="separator:acfc0034a0d6273a3bcfd5e07b8894131"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f1d100b4a56a59825fdc154c0c4e80a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#a1f1d100b4a56a59825fdc154c0c4e80a">ELF_ARGV_BEGIN</a>&#160;&#160;&#160;((void *)0x8E000000)</td></tr>
+<tr class="memitem:a1f1d100b4a56a59825fdc154c0c4e80a"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#a1f1d100b4a56a59825fdc154c0c4e80a">ELF_ARGV_BEGIN</a>&#160;&#160;&#160;((void *)0x93FC0000)</td></tr>
 <tr class="separator:a1f1d100b4a56a59825fdc154c0c4e80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a36bbbd0c08ecb2169cbf9d58f2609161"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="elf_8c.html#a36bbbd0c08ecb2169cbf9d58f2609161">ELF_GET_RELOCATED</a>(x)&#160;&#160;&#160;  (<a class="el" href="elf_8c.html#ab6cb06213a759c16f4f715178969a77b">ELF_CODE_RELOC_START</a> + ((<a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> long)(x) - (<a class="el" href="lib__types_8h.html#a4089fb16419d359081465355db05f846">unsigned</a> long)<a class="el" href="elf_8c.html#af2c800ae758ee3e17205144f67f51a23">elfldr_start</a>))</td></tr>
 <tr class="separator:a36bbbd0c08ecb2169cbf9d58f2609161"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -221,7 +221,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ELF_ARGV_BEGIN&#160;&#160;&#160;((void *)0x8E000000)</td>
+          <td class="memname">#define ELF_ARGV_BEGIN&#160;&#160;&#160;((void *)0x93FC0000)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -285,7 +285,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ELF_DATA_RELOC_START&#160;&#160;&#160;((void *)0x8B000000)</td>
+          <td class="memname">#define ELF_DATA_RELOC_START&#160;&#160;&#160;((void *)0x8DFE0000)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -389,7 +389,7 @@ Variables</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define ELF_MAX_SIZE&#160;&#160;&#160;0x03000000</td>
+          <td class="memname">#define ELF_MAX_SIZE&#160;&#160;&#160;0x05FE0000</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -495,7 +495,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00290">290</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00295">295</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -515,7 +515,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00258">258</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00263">263</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -535,7 +535,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00274">274</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00279">279</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -628,7 +628,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00439">439</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00462">462</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -658,7 +658,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00372">372</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00393">393</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -700,7 +700,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00462">462</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00485">485</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -730,7 +730,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00306">306</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00311">311</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -760,7 +760,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00645">645</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00668">668</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -790,7 +790,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00607">607</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00630">630</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -820,7 +820,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00623">623</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00646">646</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>
@@ -840,7 +840,7 @@ Variables</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00637">637</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
+<p class="definition">Definition at line <a class="el" href="elf_8c_source.html#l00660">660</a> of file <a class="el" href="elf_8c_source.html">elf.c</a>.</p>
 
 </div>
 </div>

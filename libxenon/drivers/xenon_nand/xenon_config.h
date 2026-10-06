@@ -24,6 +24,25 @@ struct XCONFIG_POWER_VCS_CONTROL // 0x2
     u16 Fuse; 				// +0x0(0x2)
 };
 
+#define PEERPRESSURE_INSTALLED_MAGIC 'XBPP'
+
+struct XCONFIG_STATIC_SETTINGS
+{
+	u32 CheckSum;     // +0x0(0x4)
+	u32 Version;      // +0x4(0x4)
+	u8 Unknown[5];    // +0x8(0x5)
+	u8 SMCBlock[256]; // +0xE(0x100)
+	u8 Padding[2];    // +0x10E(0x2)
+
+	// below is unofficial, used by the Peer Pressure softmod
+	u32 PeerPressureMagic;        //+0x110(0x4)
+	u32 PeerPressureVersion;      //+0x114(0x4)
+	u32 DmaPayloadLogicalAddress; //+0x118(0x4)
+	u32 SoftmodFlags;             //+0x11C(0x4)
+
+	u8 ReservedRegion[0xE0]; // +0x120(0xE0)
+};
+
 struct XCONFIG_SECURED_SETTINGS // 0x200
 {
 	u32 CheckSum; 			// +0x0(0x4)
@@ -56,5 +75,6 @@ void xenon_config_init(void);
 int xenon_config_get_avregion(void);
 void xenon_config_get_mac_addr(unsigned char *hwaddr);
 int xenon_config_get_vid_delta();
+int xenon_config_is_softmodded();
 
 #endif /* XENON_CONFIG_H_ */

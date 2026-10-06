@@ -31,6 +31,13 @@ distribution.
 #include "xetypes.h"
 #include "diskio/disc_io.h"
 #include "usb.h"
+#include <ppc/timebase.h>
+
+/* Earliest time a failed device may be retried, per controller/port.
+   A single transient failure (media not ready yet) used to park the
+   port forever because busy stayed set with no retry path. */
+static uint64_t port_retry_after[EHCI_HCD_COUNT][EHCI_MAX_ROOT_PORTS];
+#define USB_RETRY_DELAY_MS 3000
 
 void (*mount_usb_device)(int device) = 0; // Mount callback for new devices
 
@@ -1232,6 +1239,8 @@ s32 USBStorage_Init(void) {
 retry:
 			dev->port = i;
 			if (dev->id != 0 && dev->busy == 0) {
+				if (tb_diff_msec(mftb(), port_retry_after[j][i]) < USB_RETRY_DELAY_MS)
+					continue; // cooling down after a failed attempt
 				handshake_mode = 1;
 				if (ehci_reset_port(ehci, i) >= 0) {
 
@@ -1261,6 +1270,12 @@ retry:
 #endif
 
 						//return 0;
+					} else {
+						/* release port for later retry */
+						dev->busy = 0;
+						port_retry_after[j][i] = mftb();
+						if (!(ehci_readl(&ehci->regs->port_status[i]) & PORT_CONNECT))
+							dev->id = 0; // gone, forget it
 					}
 				}
 			} else if (dev->busy == 0) {
@@ -1274,9 +1289,12 @@ retry:
 #endif
 
 				if (status & 1) {
+					if (tb_diff_msec(mftb(), port_retry_after[j][i]) < USB_RETRY_DELAY_MS)
+						continue; // cooling down after a failed attempt
 					if (ehci_reset_port2(ehci, i) < 0) {
 						ehci_msleep(100);
-						ehci_reset_port(ehci, i);
+						if (ehci_reset_port(ehci, i) < 0)
+							port_retry_after[j][i] = mftb();
 					}
 					if (retries) {
 						retries--;

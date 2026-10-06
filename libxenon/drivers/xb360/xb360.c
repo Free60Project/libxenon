@@ -12,6 +12,7 @@
 #include <time/time.h>
 #include <xenon_nand/xenon_sfcx.h>
 #include <xenon_nand/xenon_config.h>
+#include <xenon_nand/xenon_emmc.h>
 #include <xenon_soc/xenon_secotp.h>
 #include <xenon_smc/xenon_smc.h>
 #include <crypt/hmac_sha1.h>
@@ -715,23 +716,75 @@ int xenon_get_console_type()
 	return REV_UNKNOWN;
 }
 
+bool xenon_is_emmc_console()
+{
+	int ctype = xenon_get_console_type();
+	return (ctype == REV_CORONA_PHISON || ctype == REV_WINCHESTER_MMC);
+}
+
+int xenon_memory_mapped_nand_data_ok()
+{
+	char data[0x2] = { '\0' };
+
+	memcpy(&data, (const void*)(0x80000200C8000000ULL), 2);
+
+	if(SFCX_IS_VALID_NAND_HEADER(data))
+	{
+		return 0;
+	}
+
+	return -1;
+}
+
+int xenon_emmc_nand_data_ok()
+{
+	char data[0x2] = { '\0' };
+	
+	xenon_get_logical_emmc_data(&data, 0, 2);
+
+	if(SFCX_IS_VALID_NAND_HEADER(data))
+	{
+		return 0;
+	}
+
+	return -1;
+}
+
 int xenon_logical_nand_data_ok()
 {
-	uint16_t tmp;
-	memcpy(&tmp, (const void*)(0x80000200C8000000ULL), 2);
-	if (tmp != 0xFF4F)
-		return -1;
-	return 0;
+	// On eMMC consoles, the memory mapped NAND interface is
+	// available if eMMC init has not occurred. If it is
+	// unavailable, we can fall back to eMMC reads
+	if(0 == xenon_memory_mapped_nand_data_ok())
+	{
+		return 0;
+	}
+	else if(xenon_is_emmc_console())
+	{
+		return xenon_emmc_nand_data_ok();
+	}
+
+	return -1;
 }
 
 int xenon_get_logical_nand_data(void* buf, unsigned int offset, unsigned int len)
 {
 	if ((offset + len) >= 0x4000000)
 		return -1;
-	if (xenon_logical_nand_data_ok() == 0)
+	
+	if (xenon_memory_mapped_nand_data_ok() == 0)
+	{
 		memcpy(buf, (const void*)(0x80000200C8000000ULL + offset), len);
+	}
+	else if(xenon_is_emmc_console() && xenon_emmc_nand_data_ok() == 0)
+	{
+		return xenon_get_logical_emmc_data(buf, offset, len);
+	}
 	else
+	{
 		return -1;
+	}
+
 	return 0;
 }
 

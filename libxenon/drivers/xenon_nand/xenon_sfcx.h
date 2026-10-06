@@ -73,6 +73,7 @@
 // static unsigned char sfcx_page[MAX_PAGE_SZ];   //Max known hardware physical page size
 // static unsigned char sfcx_block[MAX_BLOCK_SZ]; //Max known hardware physical block size
 
+#define EMMC_NAND_48			0x3000000
 #define RAW_NAND_64				0x4200000
 
 #define SFCX_INITIALIZED		1
@@ -81,6 +82,11 @@
 //#define SFCX_SUCCESS(status) (((int) status == STATUS_PIN_BY_N) || ((int) status & STATUS_ECC_ER))
 // define success as no ecc error and no bad block error
 #define SFCX_SUCCESS(status) ((status&STATUS_ERROR)==0)
+
+// The first two bytes of NAND should be 0xFF 0x4F for
+// a standard retail NAND, however some pre-release images
+// may have 0x0F as the first byte or 0x3F as the second byte
+#define SFCX_IS_VALID_NAND_HEADER(data) ((data[0]==0xFF||data[0]==0x0F)&&(data[1]==0x3F||data[1]==0x4F))
 
 struct sfc
 {

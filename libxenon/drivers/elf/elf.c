@@ -48,7 +48,12 @@ see file COPYING or http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
   (ELF_CODE_RELOC_START + ((unsigned long)(x) - (unsigned long)elfldr_start))
 #define ELF_GET_RELOCATED_REAL(x) (void*)((uint64_t)ELF_GET_RELOCATED(x) & 0x1FFFFFFF)
 
-#define ELF_DEBUG 1
+#define ELF_DEBUG 0
+#if ELF_DEBUG
+#define elf_debug_printf printf
+#else
+#define elf_debug_printf(...)
+#endif
 
 extern void shutdown_drivers();
 
@@ -366,7 +371,7 @@ static int elf_VerifyHeaders(void *addr, int size) {
     phdr = (Elf32_Phdr *)(addr + ehdr->e_phoff + (i * sizeof(Elf32_Phdr)));
     if (phdr->p_offset + phdr->p_filesz > size) {
       printf("ELF: Program header %d exceeds file size! (0x%.8X > 0x%.8X)\n",
-             phdr->p_offset + phdr->p_filesz, size);
+             i, phdr->p_offset + phdr->p_filesz, size);
       return -1;
     }
   }
@@ -424,15 +429,13 @@ int elf_runFromMemory(void *addr, int size) {
   // relocate elf data
   memcpy(ELF_DATA_RELOC_START, addr, size);
 
-#if ELF_DEBUG
-  printf(" - Waiting for secondary threads...\n");
-#endif
+  elf_debug_printf(" - Waiting for secondary threads...\n");
 
   // get all threads to be on hold in the relocated zone
   // TODO: timeout and reset
   *elf_secondary_count_ptr = 0;
   xenon_thread_startup();
-  printf("  - ");
+  elf_debug_printf("  - ");
   for (i = 1; i < 6; ++i) {
     while (xenon_run_thread_task(i, NULL, ELF_GET_RELOCATED(elf_hold_thread)))
       ;
@@ -441,14 +444,14 @@ int elf_runFromMemory(void *addr, int size) {
       udelay(100);
     }
 
-    console_clrline();
-    printf("  - %d", i);
-  }
-  printf("\n");
-
 #if ELF_DEBUG
-  printf(" - elf_prepare_run\n");
+    console_clrline();
+    elf_debug_printf("  - %d", i);
 #endif
+  }
+  elf_debug_printf("\n");
+
+  elf_debug_printf(" - elf_prepare_run\n");
 
   // call elf_prepare_run()
   void (*call)(void *, uint32_t) = ELF_GET_RELOCATED(elf_prepare_run);
@@ -488,8 +491,7 @@ int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
   uint32_t cpufreq;
 
   if (dt_size > ELF_DEVTREE_MAX_SIZE) {
-    printf("[ELF loader] Device tree too big (> %d bytes) !\n",
-           ELF_DEVTREE_MAX_SIZE);
+    printf(" ! device tree too big (> %d bytes)\n", ELF_DEVTREE_MAX_SIZE);
     return -1;
   }
   memset(ELF_DEVTREE_START, 0, ELF_DEVTREE_MAX_SIZE);
@@ -523,7 +525,7 @@ int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
     res = fdt_setprop(ELF_DEVTREE_START, node, "linux,initrd-start", &start,
                       sizeof(start));
     if (res < 0) {
-      printf("couldn't set chosen.linux,initrd-start property\n");
+      printf(" ! couldn't set chosen.linux,initrd-start property\n");
       return res;
     }
 
@@ -531,12 +533,12 @@ int elf_runWithDeviceTree(void *elf_addr, int elf_size, void *dt_addr,
     res = fdt_setprop(ELF_DEVTREE_START, node, "linux,initrd-end", &end,
                       sizeof(end));
     if (res < 0) {
-      printf("couldn't set chosen.linux,initrd-end property\n");
+      printf(" ! couldn't set chosen.linux,initrd-end property\n");
       return res;
     }
     res = fdt_add_mem_rsv(ELF_DEVTREE_START, start, initrd_size);
     if (res < 0) {
-      printf("couldn't add reservation for the initrd\n");
+      printf(" ! couldn't add reservation for the initrd\n");
       return res;
     }
   }
@@ -653,7 +655,7 @@ void kernel_relocate_initrd(void *start, size_t size) {
   initrd_start = INITRD_RELOC_START;
   initrd_size = size;
 
-  printf("Initrd at %p/0x%lx: %ld bytes (%ldKiB)\n", initrd_start,
+  printf(" * Initrd at %p/0x%lx: %ld bytes (%ldKiB)\n", initrd_start,
          (u32)PHYSADDR((u32)initrd_start), initrd_size, initrd_size / 1024);
 }
 
@@ -677,5 +679,5 @@ void kernel_build_cmdline(const char *parameters, const char *root) {
   if (parameters)
     strlcat(bootargs, parameters, MAX_CMDLINE_SIZE);
 
-  printf("Kernel command line: '%s'\n", bootargs);
+  printf(" * Kernel command line: '%s'\n", bootargs);
 }

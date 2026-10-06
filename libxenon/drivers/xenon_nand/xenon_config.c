@@ -14,6 +14,7 @@
 #define BLOCK_OFFSET 3
 
 extern struct sfc sfc;
+struct XCONFIG_STATIC_SETTINGS static_settings = {0};
 struct XCONFIG_SECURED_SETTINGS secured_settings = {0};
 
 static int xenon_config_initialized=0;
@@ -26,7 +27,8 @@ void xenon_config_init(void)
 
 	uint32_t addr = 0;
 	
-	if (xenon_get_console_type() == REV_CORONA_PHISON)
+	// load secured config (MAC, AVregion etc)
+	if (xenon_get_console_type() == REV_CORONA_PHISON || xenon_get_console_type() == REV_WINCHESTER_MMC)
 		addr = PHISON_STATIC_CONFIG_ADDR;
 	else
 	{
@@ -40,6 +42,12 @@ void xenon_config_init(void)
 			addr = sfc.addr_config + (BLOCK_OFFSET * sfc.block_sz) + sfc.page_sz; //Get Adress based on SFC type
 	}
 	xenon_get_logical_nand_data(&secured_settings, addr, sizeof secured_settings);
+
+	// load static SMC config (SMC, peerpressure)
+	// TODO: make the addreess calc cleaner, but it's always before the secured settings
+	addr -= 0x200;
+	xenon_get_logical_nand_data(&static_settings, addr, sizeof static_settings);
+
 	xenon_config_initialized=1;
 }
 
@@ -102,4 +110,13 @@ int xenon_config_get_vid_delta()
 	if (delta==0 || delta==0xff) return -1;
 			
 	return delta;
+}
+
+int xenon_config_is_softmodded()
+{
+	if (!xenon_config_initialized)
+		return 0;
+
+	// return if the Peer Pressure softmod is installed
+	return static_settings.PeerPressureMagic == PEERPRESSURE_INSTALLED_MAGIC;
 }

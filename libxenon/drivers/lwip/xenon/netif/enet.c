@@ -17,107 +17,9 @@
 #include <ppc/cache.h>
 #include <pci/io.h>
 #include <xenon_smc/xenon_gpio.h>
+#include <xb360/xb360.h>
 
-#define TX_DESCRIPTOR_NUM 0x10
-#define RX_DESCRIPTOR_NUM 0x10
-
-#define MTU 1528
-
-#define MEM(x) (0x80000000|(long)(x))
-
-/*
- * MMIO access. The MAC is little-endian (same as SiS190), so every access
- * is byte-swapped. Values passed to SIS_W32 / returned by SIS_R32 are the
- * logical register values, directly comparable to sis190.c.
- */
-#define ENET_MMIO 0xea001400
-
-#define SIS_W32(reg, val) write32n(ENET_MMIO + (reg), __builtin_bswap32(val))
-#define SIS_R32(reg)      __builtin_bswap32(read32n(ENET_MMIO + (reg)))
-
-enum sis190_registers {
-	TxControl       = 0x00,
-	TxDescStartAddr = 0x04,
-	TxSts           = 0x0c,
-	RxControl       = 0x10,
-	RxDescStartAddr = 0x14,
-	IntrMask        = 0x24,
-	IntrControl     = 0x28,
-	StationControl  = 0x40,
-	GMIIControl     = 0x44,
-	TxMacControl    = 0x50,
-	RxMacControl    = 0x60, /* 16 bit, followed by RxMacAddr */
-	RxMacAddr       = 0x62,
-	RxHashTable     = 0x68,
-	RxMPSControl    = 0x78,
-	rsv4            = 0x7c, /* "reserved" in sis190, holds MAC bytes here */
-};
-
-enum sis190_register_content {
-	/* {Rx/Tx}CmdBits */
-	CmdReset        = 0x10, /* used as the TX kick */
-	CmdTxEnb        = 0x01,
-
-	/* RxMacControl */
-	AcceptErr       = 0x20,
-	AcceptRunt      = 0x10,
-	AcceptBroadcast = 0x0800,
-	AcceptMulticast = 0x0400,
-	AcceptMyPhys    = 0x0200,
-};
-
-/* Enhanced PHY access register bit definitions */
-#define EhnMIIread      0x0000
-#define EhnMIIwrite     0x0020
-#define EhnMIIdataShift 16
-#define EhnMIIpmdShift  6
-#define EhnMIIregShift  11
-#define EhnMIIreq       0x0010
-#define EhnMIInotDone   0x0010
-
-#define PHY_MAX_ADDR    32
-
-/* Standard MII definitions */
-#define MII_BMCR        0x00    /* Basic mode control register */
-#define MII_BMSR        0x01    /* Basic mode status register  */
-#define MII_PHYSID1		0x02	/* PHYS ID 1                   */
-#define MII_PHYSID2		0x03	/* PHYS ID 2                   */
-
-/* Basic mode control register */
-#define BMCR_RESET      0x8000	/* Reset to default state      */
-#define BMCR_ANENABLE   0x1000  /* Enable auto negotiation     */
-
-/* Basic mode status register. */
-#define BMSR_LSTATUS    0x0004	/* Link status                 */
-
-/* Descriptors (TxDesc / RxDesc, little-endian) */
-struct TxDesc {
-	uint32_t PSize;
-	uint32_t status;
-	uint32_t addr;
-	uint32_t size;
-};
-
-struct RxDesc {
-	uint32_t PSize;
-	uint32_t status;
-	uint32_t addr;
-	uint32_t size;
-};
-
-enum _DescStatusBit {
-	/* _Desc.status */
-	OWNbit      = 0x80000000,
-	INTbit      = 0x40000000,
-	CRCbit      = 0x00020000,
-	PADbit      = 0x00010000,
-	/* _Desc.size */
-	RingEnd     = 0x80000000,
-	/* TxDesc.status */
-	DEFEN       = 0x00200000,
-	/* RxDesc.PSize */
-	RxSizeMask  = 0x0000ffff,
-};
+#include "enet.h"
 
 struct enet_context
 {
@@ -130,7 +32,7 @@ struct enet_context
 	void *tx_buffer_base;
 
 	struct eth_addr *ethaddr;
-	
+
 	int phy_id;
 	int id[2];
 };
@@ -139,7 +41,6 @@ static int enet_open(struct netif *ctx);
 static struct pbuf *enet_linkinput(struct enet_context *context);
 static err_t enet_linkoutput(struct netif *netif, struct pbuf *p);
 
-/* PHY sits at address 1 */
 static unsigned short phy_read(struct enet_context * context, int addr)
 {
 	SIS_W32(GMIIControl, EhnMIIreq | EhnMIIread |
@@ -294,24 +195,6 @@ err_t enet_init(struct netif *netif)
 	return ERR_OK;
 }
 
-static int enet_init_phy(struct enet_context *context)
-{
-    context->id[0] = phy_read(context, MII_PHYSID1);
-    context->id[1] = phy_read(context, MII_PHYSID2);
-
-    /*
-     * Do we actually care about the IDs ?
-     * 
-     * on second id, lower nibble gets masked
-     * 
-     * PHAT: {0x143, 0xbc31}, // PHAT: Broadcom PHY AC131 ?
-     * XKSB: {0x141, 0x0e22}, // >= Corona, XKSB: Marvell PHY 88E3015 ?
-     *
-     * printf("MFR ID: %x, %x\n", context->id[0], context->id[1]);
-     */
-     return 0;
-}
-
 static int enet_probe(struct enet_context *context)
 {
     int status = 0;
@@ -321,13 +204,89 @@ static int enet_probe(struct enet_context *context)
         status = phy_read_latched(context, MII_BMSR);
 
         // Try next mii if the current one is not accessible.
-		if (status == 0xffff || status == 0x0000)
-			continue;
+	if (status == 0xffff || status == 0x0000)
+		continue;
 
-		return enet_init_phy(context);
+	context->id[0] = phy_read(context, MII_PHYSID1);
+	context->id[1] = phy_read(context, MII_PHYSID2);
+	return 0;
     }
 
     return 1;
+}
+
+/* PHY MDIO read-modify-write helper */
+static void phy_modify(struct enet_context *context, int reg, unsigned short clear, unsigned short set)
+{
+	phy_write(context, reg, (phy_read(context, reg) & ~clear) | set);
+}
+
+/* Atheros debug register window: write index to reg 29, access data via reg 30 */
+static void at803x_debug_modify(struct enet_context *context, int index, unsigned short clear, unsigned short set)
+{
+	phy_write(context, AT803X_DEBUG_ADDR, index);
+	phy_modify(context, AT803X_DEBUG_DATA, clear, set);
+}
+
+static void enet_phy_setup(struct enet_context *context)
+{
+	switch (context->id[0]) {
+	case PHYID_ICS:
+		/*
+		 * 0x8058 = Command Override Write Enable | PHY address 1 (read-only) | reserved
+		 * bit 4 | NRZI. It arms the next write: bit 4.10 (pause) of the advertisement
+		 * register is a command-override bit, so 0x05e1 (selector, 10/100 HD/FD, pause)
+		 * only sticks right after it. Regs 20/21 are reserved by IDT, undocumented
+		 */
+		phy_write(context, ICS1893_EXTCTRL, ICS1893_CMD_OVERRIDE |
+			(context->phy_id << ICS1893_PHYADDR_SHIFT) | 0x0010 | ICS1893_NRZI);
+		phy_write(context, MII_ADVERTISE, 0x05e1);
+		phy_write(context, ICS1893_RSVD_20, 0x4048);
+		phy_write(context, ICS1893_RSVD_21, 0xa000);
+		return;
+	case PHYID_ATHEROS:
+		at803x_debug_modify(context, AT803X_DEBUG_HIB_CTRL, AT803X_DEBUG_PS_HIB_EN, 0);
+		at803x_debug_modify(context, 0x12, 0x0008, 0);
+		at803x_debug_modify(context, 0x29, 0x0007, 0x0004);
+		break;
+	case PHYID_MRV_SLIM:
+		if (xenon_get_PCIBridgeRevisionID() == 0x90) {
+			phy_write(context, MII_BMCR, 0xa100);
+			SIS_W32(GIoCR, SIS_R32(GIoCR) | 1);
+			SIS_W32(GIoCR, SIS_R32(GIoCR) & ~1u);
+		}
+		break;
+	case PHYID_BCM_PHAT:
+	case PHYID_MICREL:
+		break;
+	default:
+		printf("enet: unknown phy id %x\n", context->id[0]);
+		break;
+	}
+	phy_modify(context, MII_ADVERTISE, 0, ADVERTISE_PAUSE);
+}
+
+/* Program MAC speed/duplex from the negotiated link partner abilities */
+static void enet_apply_link(struct enet_context *context)
+{
+	uint32_t common = phy_read(context, MII_ADVERTISE) & phy_read(context, MII_LPA);
+	uint32_t mode = StnBase;
+	int full = 0;
+
+	if (common & ADVERTISE_100FULL)      { full = 1; mode |= StnSpeed100; }
+	else if (common & ADVERTISE_100HALF) {           mode |= StnSpeed100; }
+	else if (common & ADVERTISE_10FULL)  { full = 1; mode |= StnSpeed10; }
+	else if (common & ADVERTISE_10HALF)  {           mode |= StnSpeed10; }
+
+	if (full) {
+		mode |= StnFullDuplex;
+		SIS_W32(TxLimit, TxLimitFull);
+		SIS_W32(TxMacControl, TxMacFullDuplex);
+	} else {
+		SIS_W32(TxLimit, TxLimitHalf);
+		SIS_W32(TxMacControl, TxMacHalfDuplex);
+	}
+	SIS_W32(StationControl, mode);
 }
 
 static int enet_open(struct netif *netif)
@@ -342,14 +301,15 @@ static int enet_open(struct netif *netif)
 	}
 
 	SIS_W32(IntrMask, 0); // disable interrupts
-	SIS_W32(IntrControl, 0x08558001);
+        // NIC reset, values were 0x08558001 / 0x08550001 (...5508) before only the top byte differs
+	SIS_W32(IntrControl, 0x04558001);
 	udelay(100);
-	SIS_W32(IntrControl, 0x08550001);
+	SIS_W32(IntrControl, 0x04550001);
 
 	SIS_W32(GMIIControl, 0x4);
 	udelay(100);
 	SIS_W32(GMIIControl, 0);
-	// printf("1478 before: %08x\n", read32n(0xea001478));
+
 	// Set MTU (0x05f2 = 1522)
 	SIS_W32(RxMPSControl, 0x000005f2);
 
@@ -377,9 +337,7 @@ static int enet_open(struct netif *netif)
 
 	void *base = (void*)memalign(0x10000,0x10000);
 
-	// printf("init tx\n");
 	tx_init(context, (void*)MEM(base));
-	// printf("init rx\n");
 	rx_init(context, (void*)MEM(base + 0x8000));
 
 	SIS_W32(StationControl, 0x04001001);
@@ -391,15 +349,14 @@ static int enet_open(struct netif *netif)
 	xenon_gpio_control(4,0,0x10);
 
 	phy_write(context, MII_BMCR, BMCR_RESET | BMCR_ANENABLE);
-	while (phy_read(context, MII_BMCR) & BMCR_RESET){
-		mdelay(500);
-		tries--;
-		if (tries<=0) break;
-	};
+	for (tries = 1000; tries > 0; tries--)
+	{
+		if (!phy_read(context, MII_BMCR) & BMCR_RESET)
+			break;
+		udelay(500);
+	}
 
-    // phy_write(context, 0x10, 0x8058);
-    // phy_write(context, 4, 0x5e1);
-    // phy_write(context, 0x14, 0x4048);
+	enet_phy_setup(context);
 
 	if (!phy_link_up(context))
 	{
@@ -413,6 +370,7 @@ static int enet_open(struct netif *netif)
 	}
 
 	if (phy_link_up(context)) {
+		enet_apply_link(context);
 		printf("link up!\n");
 		netif_set_link_up(netif);
 	} else {
@@ -421,7 +379,8 @@ static int enet_open(struct netif *netif)
 	}
 #endif
 
-	SIS_W32(IntrControl, 0x08550001);
+	/* reset released, same value as in the NicReset sequence above */
+	SIS_W32(IntrControl, 0x04550001);
 
 	SIS_W32(RxControl, 0x00101c01 | CmdReset); // enable RX
 	SIS_W32(TxControl, 0x00001c00 | CmdTxEnb);  // enable TX
@@ -447,7 +406,7 @@ static struct pbuf *enet_linkinput(struct enet_context *context)
 	//    __builtin_bswap32(d[1]),
 	//    __builtin_bswap32(d[2]),
 	//    __builtin_bswap32(d[3]));
-	
+
 	int size = __builtin_bswap32(d->PSize) & RxSizeMask;
 	void *phys_addr = context->rx_receive_base + context->rx_descriptor_rptr * MTU;
 

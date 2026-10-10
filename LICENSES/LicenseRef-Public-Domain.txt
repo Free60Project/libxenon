@@ -1,0 +1,21 @@
+Public domain dedication
+
+Some files in this repository have been placed in the public domain by
+their authors. They carry no copyright and may be used for any purpose
+without restriction.
+
+Files covered by this dedication:
+
+  * libxenon/drivers/crypt/sha1.c
+      "100% PUBLIC DOMAIN" SHA-1 implementation.
+      Original by Steve Reid; public-domain edition adapted by
+      Aaron D. Gifford.
+
+  * toolchain/build-xenon-toolchain
+      "originally written by Uwe Hermann <uwe@hermann-uwe.de>, released
+      as public domain. changed for xenon by Felix Domke
+      <tmbinc@elitedvb.net>, still public domain."
+
+In jurisdictions that do not recognize a public-domain dedication, the
+above works are made available under the terms of the MIT license (see
+LICENSES/MIT.txt) as a fallback.

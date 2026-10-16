@@ -123,6 +123,15 @@ diff -ENwbur ../gcc-16.2.0/gcc/config/rs6000/altivec.md gcc-16.2.0/gcc/config/rs
    "vmulosb %0,%1,%2"
    [(set_attr "type" "veccomplex")])
  
+@@ -1830,7 +1830,7 @@
+         (unspec:V4SI [(match_operand:V8HI 1 "register_operand" "v")
+                       (match_operand:V8HI 2 "register_operand" "v")]
+ 		     UNSPEC_VMULEUH))]
+-  "TARGET_ALTIVEC"
++  "(TARGET_ALTIVEC && 0)"
+   "vmuleuh %0,%1,%2"
+   [(set_attr "type" "veccomplex")])
+ 
 @@ -1839,7 +1839,7 @@
          (unspec:V4SI [(match_operand:V8HI 1 "register_operand" "v")
                        (match_operand:V8HI 2 "register_operand" "v")]
@@ -130,6 +139,15 @@ diff -ENwbur ../gcc-16.2.0/gcc/config/rs6000/altivec.md gcc-16.2.0/gcc/config/rs
 -  "TARGET_ALTIVEC"
 +  "(TARGET_ALTIVEC && 0)"
    "vmulouh %0,%1,%2"
+   [(set_attr "type" "veccomplex")])
+ 
+@@ -1848,7 +1848,7 @@
+         (unspec:V4SI [(match_operand:V8HI 1 "register_operand" "v")
+                       (match_operand:V8HI 2 "register_operand" "v")]
+ 		     UNSPEC_VMULESH))]
+-  "TARGET_ALTIVEC"
++  "(TARGET_ALTIVEC && 0)"
+   "vmulesh %0,%1,%2"
    [(set_attr "type" "veccomplex")])
  
 @@ -1857,7 +1857,7 @@

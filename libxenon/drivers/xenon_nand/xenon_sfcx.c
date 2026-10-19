@@ -6,6 +6,7 @@
 #include <time/time.h>
 #include <xb360/xb360.h>
 #include "xenon_sfcx.h"
+#include "xenon_emmc.h"
 
 struct sfc sfc = {0};
 unsigned char* blockbuf;
@@ -577,59 +578,74 @@ int try_rawflash_internal(char *filename, bool ignoreMetadataCheck)
 
 	printf(" * rawflash v5 started (by cOz, modified By Swizzy)\n");
 
-   if(ignoreMetadataCheck)
-   {
-      printf("\n" \
-             " ! ****** Warning ******\n" \
-             " ! NAND image validity checks are being skipped for this flash!\n" \
-             " ! This should only be used when intentionally flashing an image\n" \
-             " ! with mismatching metadata, e.g. a PSB image on an XSB console.\n" \
-             " ! Press power NOW to shut down and delete %s\n" \
-             " ! if you don't understand what this means!\n", filename);
-
-      delay(10);
-   }
-
-	if((size == (RAW_NAND_64*4)) || (size == (RAW_NAND_64*8))) // 256 or 512M NAND image, only flash 64M
-		size = RAW_NAND_64;
-	else if((size != 0x1080000)&& (size != RAW_NAND_64)) // 16 M size
+	if(ignoreMetadataCheck)
 	{
-		printf("error: %s - size %d is not valid image size!\n", filename, size);
-		close(f);
-		return -1;
+		printf("\n" \
+				" ! ****** Warning ******\n" \
+				" ! NAND image validity checks are being skipped for this flash!\n" \
+				" ! This should only be used when intentionally flashing an image\n" \
+				" ! with mismatching metadata, e.g. a PSB image on an XSB console.\n" \
+				" ! Press power NOW to shut down and delete %s\n" \
+				" ! if you don't understand what this means!\n", filename);
+
+		delay(10);
+	}
+
+	if(!xenon_is_emmc_console()){
+		if((size == (RAW_NAND_64*4)) || (size == (RAW_NAND_64*8))) // 256 or 512M NAND image, only flash 64M
+			size = RAW_NAND_64;
+		else if((size != 0x1080000)&& (size != RAW_NAND_64)) // 16 M size
+		{
+			printf("error: %s - size %d is not valid image size!\n", filename, size);
+			close(f);
+			return -1;
+		}
+	} else {
+		if(size != EMMC_NAND_48){
+			printf("error: %s - size %d is not valid eMMC 48MB image!\n", filename, size);
+			close(f);
+			return -1;
+		}
 	}
 
     printf("\n * found '%s'. press power NOW if you don't want to flash the NAND.\n",filename);
     delay(15);
 
-	printf(" * Checking NAND File to be of matching type...\n");
+	int result;
+	if(!xenon_is_emmc_console()){
+		printf(" * Checking NAND File to be of matching type...\n");
 
-   if (rawflash_checkImage(f) != 0)
-   {
-      printf(" ! Bad Image for this console... ");
+		if (rawflash_checkImage(f) != 0)
+		{
+			printf(" ! Bad Image for this console... ");
 
-      if(ignoreMetadataCheck)
-      {
-         printf("rawflash_checkImage result ignored, flashing the image anyway...\n");
-      }
-      else
-      {
-         printf("Please replace the file and try again...\n");
-         return -1;
-      }
-   }
-   else
-   {
-      printf(" * Image matches expected data...\n");
-   }
+			if(ignoreMetadataCheck)
+			{
+				printf("rawflash_checkImage result ignored, flashing the image anyway...\n");
+			}
+			else
+			{
+				printf("Please replace the file and try again...\n");
+				return -1;
+			}
+		}
+		else
+		{
+			printf(" * Image matches expected data...\n");
+		}
 
-	close(f); // to re-align it to the start again
-	f = open(filename, O_RDONLY);
-	if (f < 0)	
-		return f; //Can't open file!
-        
-	printf("%s opened OK, attempting to write 0x%x bytes to flash...\n",filename, size);
-	if(rawflash_writeImage(size, f) == 1)
+		close(f); // to re-align it to the start again
+		f = open(filename, O_RDONLY);
+		if (f < 0)	
+			return f; //Can't open file!
+			
+		printf("%s opened OK, attempting to write 0x%x bytes to flash...\n",filename, size);
+		result = rawflash_writeImage(size, f);
+	} else {
+		result = emmc_rawflash_writeImage(size, f);
+	}
+
+	if(result == 1)
 		printf("image written, shut down now!\n");
 	else
 		printf("failed to write image :(\n");

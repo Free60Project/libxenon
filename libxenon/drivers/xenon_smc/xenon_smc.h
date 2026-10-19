@@ -73,6 +73,19 @@ void xenon_smc_set_fan_algorithm(int algorithm);
 void xenon_smc_query_sensors(uint16_t *data);
 int xenon_smc_read_avpack(void);
 
+enum avpack_types {
+    AV_NONE = 0b111,
+    AV_VGA = 0b110,
+    AV_COMPOSITE = 0b101,
+    AV_AUDIO_ONLY = 0b100,
+    AV_COMPONENT_HD = 0b011,
+    AV_SVIDEO = 0b010,
+    AV_SCART_RGB = 0b001,
+    AV_COMPONENT_TV = 0b000
+};
+#define xenon_avpack_type(pack) ((pack >> 2) & 7)
+#define xenon_avpack_is_hdmi(pack) (!((pack >> 6) & 1))
+
 #ifdef __cplusplus
 };
 #endif

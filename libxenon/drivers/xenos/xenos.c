@@ -552,14 +552,16 @@ void xenos_autoset_mode(void)
 {
 	int mode;
 	int avpack = xenon_smc_read_avpack();
+	int dve = xenon_get_DVE();
 	printf("AV pack raw data: 0x%02x\n", avpack);
 
 	// split the multi-out connector type bits and the HDMI enable bit
 	// bits 2-4 (inclusive) are hooked up to the AV multi out connector pins
 	// bit 6 is hooked up to SMC_HDMI_HPD (thx wurthless-elektroniks!)
+	// (and is hooked up weirdly on xenon/ANA so don't check it there)
 	int multiout = xenon_avpack_type(avpack);
-	int is_hdmi = xenon_avpack_is_hdmi(avpack);
-	if (xenon_avpack_is_hdmi(avpack))
+	int is_hdmi = dve >= 0x11 && xenon_avpack_is_hdmi(avpack);
+	if (is_hdmi)
 		printf("Connected: HDMI + %s\n", av_pack_names[multiout]);
 	else
 		printf("Connected: %s\n", av_pack_names[multiout]);

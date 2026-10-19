@@ -84,6 +84,8 @@ enum avpack_types {
     AV_COMPONENT_TV = 0b000
 };
 #define xenon_avpack_type(pack) ((pack >> 2) & 7)
+
+// do not use on Xenon/ANA (DVE version 0x01 / < 0x11)
 #define xenon_avpack_is_hdmi(pack) (!((pack >> 6) & 1))
 
 #ifdef __cplusplus

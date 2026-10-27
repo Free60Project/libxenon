@@ -1,5 +1,0 @@
-there's some stuff stolen from devkitPRO (http://www.devkitpro.org/), mainly
-makefile magic.
-
-so the makefile stuff is GPLed. 
-libxenon, of course, is not; that one is BSD. example codes are BSD as well.

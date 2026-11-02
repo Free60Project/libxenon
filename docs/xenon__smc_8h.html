@@ -75,6 +75,7 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#define-members">Macros</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">xenon_smc.h File Reference</div></div>
@@ -111,6 +112,13 @@ This graph shows which files directly or indirectly include this file:</div>
 </div>
 <p><a href="xenon__smc_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a756dcd0ba635649874523195b3540426"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__smc_8h.html#a756dcd0ba635649874523195b3540426">xenon_avpack_type</a>(pack)&#160;&#160;&#160;((pack &gt;&gt; 2) &amp; 7)</td></tr>
+<tr class="separator:a756dcd0ba635649874523195b3540426"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8d585cdd2a458fa07a5fbb0f8560efd"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__smc_8h.html#ad8d585cdd2a458fa07a5fbb0f8560efd">xenon_avpack_is_hdmi</a>(pack)&#160;&#160;&#160;(!((pack &gt;&gt; 6) &amp; 1))</td></tr>
+<tr class="separator:ad8d585cdd2a458fa07a5fbb0f8560efd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ae58d2167adc79643a0f05fccef21b348"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__smc_8h.html#ae58d2167adc79643a0f05fccef21b348">ir_remote_codes</a> { <br />
@@ -171,6 +179,19 @@ Enumerations</h2></td></tr>
 <br />
  }</td></tr>
 <tr class="separator:ae58d2167adc79643a0f05fccef21b348"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab64e4a1233f88ec933b437f113c96a48"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48">avpack_types</a> { <br />
+&#160;&#160;<a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48ab506769848c25217d1a7b2ef0191e8cd">AV_NONE</a> = 0b111
+, <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48a0da599df781af5bb51ebb463c7bcd205">AV_VGA</a> = 0b110
+, <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48a3db8521f1d88c9346e03353fc6c2a8b7">AV_COMPOSITE</a> = 0b101
+, <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48ad73f58341ffc5170209d9fd2b04fbb4b">AV_AUDIO_ONLY</a> = 0b100
+, <br />
+&#160;&#160;<a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48ac630be23b781d1cd4f75620191b30a62">AV_COMPONENT_HD</a> = 0b011
+, <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48a70fe7c7cc85378f58a468bcb4df85ef7">AV_SVIDEO</a> = 0b010
+, <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48af60fdf7db7ac4b5b4d390a630c658c89">AV_SCART_RGB</a> = 0b001
+, <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48aa5b0bc5fa58375d71cf9ac2288e6904d">AV_COMPONENT_TV</a> = 0b000
+<br />
+ }</td></tr>
+<tr class="separator:ab64e4a1233f88ec933b437f113c96a48"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -211,7 +232,74 @@ Functions</h2></td></tr>
 <tr class="memitem:aa34bf61353237ca7743de4aa4943bdbb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="xenon__smc_8h.html#aa34bf61353237ca7743de4aa4943bdbb">xenon_smc_read_avpack</a> (void)</td></tr>
 <tr class="separator:aa34bf61353237ca7743de4aa4943bdbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="ad8d585cdd2a458fa07a5fbb0f8560efd" name="ad8d585cdd2a458fa07a5fbb0f8560efd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8d585cdd2a458fa07a5fbb0f8560efd">&#9670;&#160;</a></span>xenon_avpack_is_hdmi</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define xenon_avpack_is_hdmi</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">pack</td><td>)</td>
+          <td>&#160;&#160;&#160;(!((pack &gt;&gt; 6) &amp; 1))</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="xenon__smc_8h_source.html#l00089">89</a> of file <a class="el" href="xenon__smc_8h_source.html">xenon_smc.h</a>.</p>
+
+</div>
+</div>
+<a id="a756dcd0ba635649874523195b3540426" name="a756dcd0ba635649874523195b3540426"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a756dcd0ba635649874523195b3540426">&#9670;&#160;</a></span>xenon_avpack_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define xenon_avpack_type</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">pack</td><td>)</td>
+          <td>&#160;&#160;&#160;((pack &gt;&gt; 2) &amp; 7)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="xenon__smc_8h_source.html#l00086">86</a> of file <a class="el" href="xenon__smc_8h_source.html">xenon_smc.h</a>.</p>
+
+</div>
+</div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="ab64e4a1233f88ec933b437f113c96a48" name="ab64e4a1233f88ec933b437f113c96a48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab64e4a1233f88ec933b437f113c96a48">&#9670;&#160;</a></span>avpack_types</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="xenon__smc_8h.html#ab64e4a1233f88ec933b437f113c96a48">avpack_types</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48ab506769848c25217d1a7b2ef0191e8cd" name="ab64e4a1233f88ec933b437f113c96a48ab506769848c25217d1a7b2ef0191e8cd"></a>AV_NONE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48a0da599df781af5bb51ebb463c7bcd205" name="ab64e4a1233f88ec933b437f113c96a48a0da599df781af5bb51ebb463c7bcd205"></a>AV_VGA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48a3db8521f1d88c9346e03353fc6c2a8b7" name="ab64e4a1233f88ec933b437f113c96a48a3db8521f1d88c9346e03353fc6c2a8b7"></a>AV_COMPOSITE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48ad73f58341ffc5170209d9fd2b04fbb4b" name="ab64e4a1233f88ec933b437f113c96a48ad73f58341ffc5170209d9fd2b04fbb4b"></a>AV_AUDIO_ONLY&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48ac630be23b781d1cd4f75620191b30a62" name="ab64e4a1233f88ec933b437f113c96a48ac630be23b781d1cd4f75620191b30a62"></a>AV_COMPONENT_HD&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48a70fe7c7cc85378f58a468bcb4df85ef7" name="ab64e4a1233f88ec933b437f113c96a48a70fe7c7cc85378f58a468bcb4df85ef7"></a>AV_SVIDEO&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48af60fdf7db7ac4b5b4d390a630c658c89" name="ab64e4a1233f88ec933b437f113c96a48af60fdf7db7ac4b5b4d390a630c658c89"></a>AV_SCART_RGB&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="ab64e4a1233f88ec933b437f113c96a48aa5b0bc5fa58375d71cf9ac2288e6904d" name="ab64e4a1233f88ec933b437f113c96a48aa5b0bc5fa58375d71cf9ac2288e6904d"></a>AV_COMPONENT_TV&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="xenon__smc_8h_source.html#l00076">76</a> of file <a class="el" href="xenon__smc_8h_source.html">xenon_smc.h</a>.</p>
+
+</div>
+</div>
 <a id="ae58d2167adc79643a0f05fccef21b348" name="ae58d2167adc79643a0f05fccef21b348"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae58d2167adc79643a0f05fccef21b348">&#9670;&#160;</a></span>ir_remote_codes</h2>
 

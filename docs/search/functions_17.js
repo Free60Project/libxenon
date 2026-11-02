@@ -202,7 +202,7 @@ var searchData=
   ['xenos_5fdetect_5fhdmi_5fmonitor_199',['xenos_detect_hdmi_monitor',['../xenos__edid_8h.html#abeef3f41e6d15fb1cff1aaa3d186649b',1,'xenos_detect_hdmi_monitor(struct edid *edid):&#160;xenos_edid.c'],['../xenos__edid_8c.html#abeef3f41e6d15fb1cff1aaa3d186649b',1,'xenos_detect_hdmi_monitor(struct edid *edid):&#160;xenos_edid.c']]],
   ['xenos_5fdo_5fprobe_5fddc_5fedid_200',['xenos_do_probe_ddc_edid',['../xenos__edid_8c.html#abb8834fea5140992735b829d6af77dbf',1,'xenos_edid.c']]],
   ['xenos_5fget_5fedid_201',['xenos_get_edid',['../xenos__edid_8c.html#add4dcbcbacab118dd113762277124877',1,'xenos_get_edid():&#160;xenos_edid.c'],['../xenos__edid_8h.html#add4dcbcbacab118dd113762277124877',1,'xenos_get_edid():&#160;xenos_edid.c']]],
-  ['xenos_5fhdmi_5fvga_5fmode_5ffix_202',['xenos_hdmi_vga_mode_fix',['../xenos_8c.html#abace349b8d546f594455a70828f7a195',1,'xenos.c']]],
+  ['xenos_5fget_5fsd_5fvideo_5fmode_202',['xenos_get_sd_video_mode',['../xenos_8c.html#a928043284577678b4eb8e0a08640467f',1,'xenos.c']]],
   ['xenos_5finit_203',['xenos_init',['../xenos_8c.html#ac07d47c68810285602750e16897d318c',1,'xenos_init(int videoMode):&#160;xenos.c'],['../xenos_8h.html#ac07d47c68810285602750e16897d318c',1,'xenos_init(int videoMode):&#160;xenos.c']]],
   ['xenos_5finit_5fana_5fnew_204',['xenos_init_ana_new',['../xenos_8c.html#a96d0d2463605471b7c67e0e9e5ea1a5d',1,'xenos.c']]],
   ['xenos_5finit_5fphase0_205',['xenos_init_phase0',['../xenos_8c.html#af906ab3c19b0058304a1b87bb57512e0',1,'xenos.c']]],

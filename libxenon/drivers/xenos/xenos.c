@@ -507,87 +507,59 @@ void xenos_set_mode(struct mode_s *mode)
 	xenos_current_mode = mode;
 }
 
-int xenos_hdmi_vga_mode_fix(int mode)
+int xenos_get_sd_video_mode()
 {
-	struct edid * monitor_edid = xenos_get_edid();
-		// fix some non standart mode (vga + yuv or hdmi/dvi + yuv )
-		if(monitor_edid) {
-			// HDMI or DVI
-			if(monitor_edid->input&DRM_EDID_INPUT_DIGITAL)
-				return VIDEO_MODE_HDMI_720P;
-			// VGA
-			else
-				return VIDEO_MODE_VGA_1024x768;
-		}
-		return mode;
+	switch (xenon_config_get_avregion())
+	{
+	case AVREGION_NTSCJ:
+	case AVREGION_NTSCM:
+		return VIDEO_MODE_NTSC;
+	case AVREGION_PAL50:
+		return VIDEO_MODE_PAL50;
+	case AVREGION_PAL60:
+	default:
+		return VIDEO_MODE_PAL60;
+	}
 }
+
+static const char *av_pack_names[] = {
+	"Component (TV)",
+	"SCART / RGB",
+	"S-Video",
+	"Component (HD)",
+	"Audio Adapter",
+	"Composite",
+	"VGA",
+	"None"
+};
 
 void xenos_autoset_mode(void)
 {
 	int mode;
 	int avpack = xenon_smc_read_avpack();
-	//mode = VIDEO_MODE_VGA_1024x768;
+	int dve = xenon_get_DVE();
+	printf("AV pack raw data: 0x%02x\n", avpack);
 
-	switch (xenon_config_get_avregion())
-	{
-	case AVREGION_NTSCJ:
-	case AVREGION_NTSCM:
-		mode = VIDEO_MODE_NTSC;
-		break;
-	case AVREGION_PAL50:
-		mode = VIDEO_MODE_PAL50;
-		break;
-	case AVREGION_PAL60:
-		mode = VIDEO_MODE_PAL60;
-		break;
-	default:
-		mode = VIDEO_MODE_PAL60;
-		break;
-	}
+	// split the multi-out connector type bits and the HDMI enable bit
+	// bits 2-4 (inclusive) are hooked up to the AV multi out connector pins
+	// bit 6 is hooked up to SMC_HDMI_HPD (thx wurthless-elektroniks!)
+	// (and is hooked up weirdly on xenon/ANA so don't check it there)
+	int multiout = xenon_avpack_type(avpack);
+	int is_hdmi = dve >= 0x11 && xenon_avpack_is_hdmi(avpack);
+	if (is_hdmi)
+		printf("Connected: HDMI + %s\n", av_pack_names[multiout]);
+	else
+		printf("Connected: %s\n", av_pack_names[multiout]);
 
-	printf("AVPACK detected: %02x\n", avpack);
+	// set mode to SD as a fallback, most adapters use this
+	mode = xenos_get_sd_video_mode();
 
-	switch (avpack)
-	{
-	case 0x13: // HDMI_AUDIO
-	case 0x14: // HDMI_AUDIO - GHETTO MOD
-	case 0x1C: // HDMI_AUDIO - GHETTO MOD
-	case 0x1E: // HDMI
-	case 0x1F: // HDMI
+	if (is_hdmi) {
 		mode = VIDEO_MODE_HDMI_720P;
-		break;
-	case 0x43: // COMPOSITE - TV MODE
-	case 0x47: // SCART
-	case 0x54: // COMPOSITE + S-VIDEO
-	case 0x57: // NORMAL COMPOSITE
-		break;
-	case 0x0C: // COMPONENT
-	case 0x0F: // COMPONENT
-	case 0x4F: // COMPOSITE - HD MODE
+	} else if (multiout == AV_COMPONENT_HD) {
 		mode = VIDEO_MODE_YUV_720P;
-		break;
-	case 0x5B: // VGA
-	case 0x59: // also vga
-	case 0x1B: // this fixes a generic vga adapter, was under HDMI
+	} else if (multiout == AV_VGA) {
 		mode = VIDEO_MODE_VGA_1024x768;
-		break;
-	default:
-		break;
-	}
-		
-	switch (avpack)
-	{
-	case 0x43: // COMPOSITE - TV MODE
-	case 0x47: // SCART
-	case 0x54: // COMPOSITE + S-VIDEO
-	case 0x57: // NORMAL COMPOSITE
-	case 0x0C: // COMPONENT
-	case 0x0F: // COMPONENT
-	case 0x4F: // COMPOSITE - HD MODE
-		break;
-	default:
-		mode = xenos_hdmi_vga_mode_fix(mode);
-		break;
 	}
 
 	if (xenos_is_corona)

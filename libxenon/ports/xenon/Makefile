@@ -78,6 +78,7 @@ LIBOBJS = crti.o crtn.o \
 	../../drivers/xenon_soc/xenon_secotp.o \
 	../../drivers/xenon_sound/sound.o \
 	../../drivers/xenon_uart/xenon_uart.o \
+	../../drivers/xenon_nand/xenon_emmc.o \
 	../../drivers/xenon_nand/xenon_sfcx.o \
 	../../drivers/xenon_nand/xenon_config.o \
 	../../drivers/xenon_post/xenon_post.o \

@@ -37,16 +37,19 @@ static struct pbuf *enet_linkinput(struct enet_context *context);
 static err_t enet_linkoutput(struct netif *netif, struct pbuf *p);
 //static err_t enet_output(struct netif *netif, struct pbuf *p, ip_addr_t *ipaddr);
 
+// lazy lazy lazy.. just put the pre-shifted version here
+static unsigned char phy_id_bit = (1 << 6);
+
 static unsigned short phy_read(int addr)
 {
-	write32n(0xea001444, __builtin_bswap32((addr << 11) | 0x50));
+	write32n(0xea001444, __builtin_bswap32((addr << 11) | phy_id_bit | 0x10));
 	do {mdelay(1);} while (__builtin_bswap32(read32n(0xea001444)) & 0x10);
 	return __builtin_bswap32(read32n(0xea001444)) >> 16;
 }
 
 static void phy_write(int addr, unsigned short data)
 {
-	write32n(0xea001444, __builtin_bswap32((addr << 11) | 0x70 | (data << 16)));
+	write32n(0xea001444, __builtin_bswap32((addr << 11) | phy_id_bit | 0x30 | (data << 16)));
 	do {mdelay(1);} while (__builtin_bswap32(read32n(0xea001444)) & 0x10);
 }
 
@@ -247,6 +250,10 @@ static int enet_open(struct netif *netif)
 	// get PHY out of reset state
     xenon_gpio_control(0,0,0x10);
     xenon_gpio_control(4,0,0x10);
+
+	// detect corona/KSB systems that have the PHY at a different address
+	if (xenon_get_PCIBridgeRevisionID() >= 0x70)
+		phy_id_bit = 0;
 
     phy_write(0, 0x9000);
 
